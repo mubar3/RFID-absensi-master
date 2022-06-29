@@ -18,7 +18,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 		if(isset($_POST['simpan_kelas'])){
      		$aksi = $qb->insert('KELAS', [
-	          'kelas' => $_POST['kelas']
+	          'kelas' => $_POST['kelas'],
+	          'id_user' => $_SESSION['id_user']
 	        ]);
 	        if($aksi){
 	        	echo '<div class="col-lg-12 mb-4">
@@ -92,7 +93,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
      		$aksi = $qb->insert('jadwal', [
 	          'hari' => $_POST['hari'],
 	          'jam_mulai' => $_POST['jam_mulai'],
-	          'jam_akhir' => $_POST['jam_akhir']
+	          'jam_akhir' => $_POST['jam_akhir'],
+	          'id_user' => $_SESSION['id_user']
+
 	        ]);
 	        if($aksi){
 	        	echo '<div class="col-lg-12 mb-4">
@@ -164,9 +167,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
     $table='kelas';
     $data_kelas = $qb->RAW(
-    "SELECT * FROM kelas",[]);
+    "SELECT * FROM kelas where id_user=".$_SESSION['id_user'],[]);
     $data_hari_aktif = $qb->RAW(
-    "SELECT * FROM jadwal",[]);
+    "SELECT * FROM jadwal where id_user=".$_SESSION['id_user'],[]);
 
     ?>
 

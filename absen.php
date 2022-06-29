@@ -52,7 +52,7 @@
                    6 => "Sabtu"
                  ];
             $sekarang = Carbon::now('Asia/Jakarta')->dayOfWeek;
-            $hasil = $qb->RAW("SELECT * from jadwal where hari = ?", [$HARI[$sekarang]]);
+            $hasil = $qb->RAW("SELECT * from jadwal where id_user=".$_SESSION['id_user']." and hari = ?", [$HARI[$sekarang]]);
              ?>
 			<div class="row">
 				<div class="col-md-2">

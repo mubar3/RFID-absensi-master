@@ -185,11 +185,6 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 echo '<option value="'.$data_kelas->id_kelas.'">'.$data_kelas->kelas.'</option>';
                 }
             }?>
-            <!-- <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option> -->
         </select>
     </div>
     <?php $time = date("H:i:s");?>
