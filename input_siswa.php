@@ -1,6 +1,7 @@
 <?php 
 require "partials/head.php";
-require "partials/sidebar.php"; ?>
+require "partials/sidebar.php"; 
+require "asset/phpqrcode/qrlib.php"; ?>
 
 <div class="container-fluid">
         <?php
@@ -145,6 +146,15 @@ $rekapAbsen = $qb->insert('siswa', [
           'kabupaten' => $kabupaten,
           'provinsi' => $provinsi
         ]);
+
+            $nameqrcode    = $norfid.'.png';              
+            $tempdir        = "asset/qrcode/"; 
+            $isiqrcode     = $server."data?rfid=".$norfid;
+            $quality        = 'H';
+            $Ukuran         = 10;
+            $padding        = 0;
+
+            QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
 }
 
 if($rekapAbsen){
