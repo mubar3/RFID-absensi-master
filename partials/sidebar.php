@@ -1,5 +1,6 @@
 
  <?php if(empty($_SESSION['id_user'])){
+      header("Location: index.php");
   } ?>
 
 <body id="page-top">
