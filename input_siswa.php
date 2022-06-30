@@ -37,6 +37,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
   $tmp_lhr = $_POST['tmp_lhr'];
   $agama = $_POST['agama'];
   $nisn = $_POST['nisn'];
+  $nis = $_POST['nis'];
 
   $no_ibu = $_POST['no_ibu'];
   $kerj_ibu = $_POST['kerj_ibu'];
@@ -105,6 +106,7 @@ $rekapAbsen = $qb->insert('siswa', [
           'norf' => $norfid,
           'kelas' => $kelas,
           'nisn' => $nisn,
+          'nis' => $nis,
           'agama' => $agama,
           'tmp_lhr' => $tmp_lhr,
           'tgl_lhr' => $tgl_lhr,
@@ -176,6 +178,7 @@ if($rekapAbsen){
 <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
     <div class="mb-3"><label for="exampleFormControlInput1">Nama</label><input class="form-control" name="nama" type="text" placeholder="Masukkan Nama" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">NISN</label><input class="form-control" name="nisn" type="text" placeholder="Masukkan NISN" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">NIS</label><input class="form-control" name="nis" type="text" placeholder="Masukkan NIS" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Agama</label>
     <select name="agama" class="form-control" id="exampleFormControlSelect1" required>
             <?php 
