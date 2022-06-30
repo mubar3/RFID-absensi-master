@@ -38,7 +38,7 @@
         AND rekap_absen.makul_absen = ? 
         WHERE rekap_absen.tanggal_absen >= DATE(NOW())", [$jadwal[0]->makul_absen]);
 
-        $daftar_kelas = $qb->RAW("SELECT * FROM KELAS", []);
+        $daftar_kelas = $qb->RAW("SELECT * FROM kelas where id_user=".$_SESSION['id_user'], []);
         foreach ($daftar_kelas as $daftar_kelas) {
         echo '<h2 class=\"mt-4\">Kelas '.$daftar_kelas->kelas.'</h2>';
         // echo "<h2 class=\"mt-4\">{$value->makul_absen}</h2>";
