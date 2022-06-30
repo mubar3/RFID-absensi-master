@@ -17,7 +17,7 @@ $now->setTimezone('Asia/Jakarta');
 $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 		if(isset($_POST['simpan_kelas'])){
-     		$aksi = $qb->insert('KELAS', [
+     		$aksi = $qb->insert('kelas', [
 	          'kelas' => $_POST['kelas'],
 	          'id_user' => $_SESSION['id_user']
 	        ]);
