@@ -59,7 +59,7 @@
                 </a>
                 <div id="collapseUtilities" 
                 <?php 
-                if($page=='absen.php' || $page=='rekap.php' || $page=='setting_absen.php'){
+                if($page=='absen.php' || $page=='rekap.php' || $page=='setting_absen.php' || $page=='users.php'){
                     echo 'class="collapse show"';
                 }else{
                     echo 'class="collapse"';}
@@ -91,6 +91,16 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="setting_absen.php">Setting Absen</a>
+                    <?php if($_SESSION['role'] == 1){?>
+                        <a 
+                        <?php 
+                        if($page=='users.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="users.php">Data Users</a>
+                    <?php } ?>
                     </div>
                 </div>
             </li>
