@@ -95,10 +95,10 @@ $filename=$_FILES['file_kirim']['name'];
 $upload=move_uploaded_file($_FILES['file_kirim']['tmp_name'],  "asset/foto/".$filename);
 
  for($x=0;$x<20;$x++){
-if(filesize("asset/foto/".$filename)>50000)
-{resizer("asset/foto/".$filename, "asset/foto/".$filename, 70);}else{ break;}
-clearstatcache();
-}
+    if(filesize("asset/foto/".$filename)>50000)
+    {resizer("asset/foto/".$filename, "asset/foto/".$filename, 70);}else{ break;}
+    clearstatcache();
+ }
 if($upload){
 $rekapAbsen = $qb->insert('siswa', [
           'nama' => $nama,
