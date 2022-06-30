@@ -1,4 +1,6 @@
 
+ <?php if(empty($_SESSION['id_user'])){
+  } ?>
 
 <body id="page-top">
 
