@@ -13,7 +13,7 @@
 
     <!-- tags input -->
     
-    
+    <?php $server="http://localhost/RFID-absensi-master/";?>
 
 
     <!-- Custom fonts for this template-->

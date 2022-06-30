@@ -1,6 +1,7 @@
 <?php 
 require "partials/head.php";
-require "partials/sidebar.php"; ?>
+require "partials/sidebar.php";
+require "asset/phpqrcode/qrlib.php"; ?>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -149,6 +150,15 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $set=implode(',',$set);
             $aksi = $qb->RAW(
             "UPDATE siswa SET ".$set." where id=".$_POST['id_siswa'],[]);
+
+            $nameqrcode    = $_POST['id_siswa'].'.png';              
+            $tempdir        = "asset/qrcode/"; 
+            $isiqrcode     = $server."data?id=".$_POST['id_siswa'];
+            $quality        = 'H';
+            $Ukuran         = 10;
+            $padding        = 0;
+
+            QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
 
             // $aksi = $qb->RAW(
             // "UPDATE siswa SET 
