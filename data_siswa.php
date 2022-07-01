@@ -219,7 +219,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     $data_siswa = $qb->RAW(
     "SELECT *,kelas.kelas as nama_kelas FROM siswa
     join kelas on kelas.id_kelas=siswa.kelas
-    ",[]);
+    where siswa.user_input=".$_SESSION['id_user']
+    ,[]);
     // print_r($data_kelas);
     // die();
 

@@ -93,6 +93,7 @@ $user = $qb->RAW(
 $filename=$_FILES['file_kirim']['name'];
 // echo $filename;
 // die();
+if(!empty($filename)){
 $upload=move_uploaded_file($_FILES['file_kirim']['tmp_name'],  "asset/foto/".$filename);
 
  for($x=0;$x<20;$x++){
@@ -100,7 +101,9 @@ $upload=move_uploaded_file($_FILES['file_kirim']['tmp_name'],  "asset/foto/".$fi
     {resizer("asset/foto/".$filename, "asset/foto/".$filename, 70);}else{ break;}
     clearstatcache();
  }
-if($upload){
+}else{
+    $filename='';
+}
 $rekapAbsen = $qb->insert('siswa', [
           'nama' => $nama,
           'nim' => $nim,
@@ -155,7 +158,7 @@ $rekapAbsen = $qb->insert('siswa', [
             $padding        = 0;
 
             QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
-}
+
 
 if($rekapAbsen){
    echo '
@@ -319,7 +322,7 @@ if($rekapAbsen){
             }?>
         </select>
     </div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Foto</label><input class="form-control" name="file_kirim" type="file" placeholder="RFID" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Foto</label><input class="form-control" name="file_kirim" type="file" placeholder="RFID" ></div>
     <button name="simpan_data" type='submit' class="btn btn-primary btn-user btn-block">Simpan</button>
 </form>
 </div>
