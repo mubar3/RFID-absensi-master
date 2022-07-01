@@ -315,7 +315,20 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             }?>
         </select></div>
     <div class="mb-3"><label for="exampleFormControlInput1">No RFID</label><input class="form-control" name="norfid" type="text" placeholder="RFID" value="<?php echo $data_edit_siswa->norf;?>" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">NIK</label><input class="form-control" name="nim" type="text" placeholder="RFID" value="<?php echo $data_edit_siswa->nim;?>" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">NIK</label><input class="form-control" name="nim" type="text" placeholder="NIK" value="<?php echo $data_edit_siswa->nim;?>" required></div>
+    <div class="mb-3">
+        <label for="exampleFormControlSelect1">Kelas</label>
+        <select name="kelas" class="form-control" id="exampleFormControlSelect1" required>
+            <option value="">Pilih Kelas</option>
+            <?php foreach ($data_kelas as $data_kelas) {
+                if(($data_kelas->id_kelas)==($data_edit_siswa->kelas)){
+                echo '<option value="'.$data_kelas->id_kelas.'" selected>'.$data_kelas->kelas.'</option>';
+                }else{
+                echo '<option value="'.$data_kelas->id_kelas.'">'.$data_kelas->kelas.'</option>';
+                }
+            }?>
+        </select>
+    </div>
     <div class="mb-3"><label for="exampleFormControlInput1">Alamat Lengkap</label><input class="form-control" name="alamat" type="text" placeholder="Alamat" value="<?php echo $data_edit_siswa->alamat;?>"required></div>
 
     <div class="mb-3"><label for="exampleFormControlInput1">Provinsi</label> <select id="provinsi" name="provinsi" class="form-control" required>
@@ -443,20 +456,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
     <!-- udah -->
 
-    <div class="mb-3"><label for="exampleFormControlInput1">NIM</label><input class="form-control" name="nim" value="<?php echo $data_edit_siswa->nim;?>" type="text" placeholder="RFID" required></div>
-    <div class="mb-3">
-        <label for="exampleFormControlSelect1">Kelas</label>
-        <select name="kelas" class="form-control" id="exampleFormControlSelect1" required>
-            <option value="">Pilih Kelas</option>
-            <?php foreach ($data_kelas as $data_kelas) {
-                if(($data_kelas->id_kelas)==($data_edit_siswa->kelas)){
-                echo '<option value="'.$data_kelas->id_kelas.'" selected>'.$data_kelas->kelas.'</option>';
-                }else{
-                echo '<option value="'.$data_kelas->id_kelas.'">'.$data_kelas->kelas.'</option>';
-                }
-            }?>
-        </select>
-    </div>
+    
     <?php $time = date("H:i:s");?>
     <img src="asset/foto/<?php echo $data_edit_siswa->foto;?>?time=<?php echo $time;?>" width="150" class="img-thumbnail">
     <div class="mb-3"><label for="exampleFormControlInput1">Foto</label><input class="form-control" name="file_kirim" type="file" placeholder="RFID"></div>

@@ -218,6 +218,15 @@ if($rekapAbsen){
         </select></div>
     <div class="mb-3"><label for="exampleFormControlInput1">No RFID</label><input class="form-control" name="norfid" type="text" placeholder="RFID" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">NIK</label><input class="form-control" name="nim" type="text" placeholder="RFID" required></div>
+    <div class="mb-3">
+        <label for="exampleFormControlSelect1">Kelas</label>
+        <select name="kelas" class="form-control" id="exampleFormControlSelect1" required>
+            <option value="">Pilih Kelas</option>
+            <?php foreach ($data_kelas as $data_kelas) {
+                echo '<option value="'.$data_kelas->id_kelas.'">'.$data_kelas->kelas.'</option>';
+            }?>
+        </select>
+    </div>
     <div class="mb-3"><label for="exampleFormControlInput1">Alamat Lengkap</label><input class="form-control" name="alamat" type="text" placeholder="Alamat" required></div>
 
     <div class="mb-3"><label for="exampleFormControlInput1">Provinsi</label> <select id="provinsi" name="provinsi" class="form-control" required>
@@ -314,15 +323,7 @@ if($rekapAbsen){
         </select></div>
     <div class="mb-3"><label for="exampleFormControlInput1">No Ibu</label><input class="form-control" name="no_ibu" type="text" placeholder="No Hp Ibu" ></div>
 
-    <div class="mb-3">
-        <label for="exampleFormControlSelect1">Kelas</label>
-        <select name="kelas" class="form-control" id="exampleFormControlSelect1" required>
-            <option value="">Pilih Kelas</option>
-            <?php foreach ($data_kelas as $data_kelas) {
-                echo '<option value="'.$data_kelas->id_kelas.'">'.$data_kelas->kelas.'</option>';
-            }?>
-        </select>
-    </div>
+    
     <div class="mb-3"><label for="exampleFormControlInput1">Foto</label><input class="form-control" name="file_kirim" type="file" placeholder="RFID" ></div>
     <button name="simpan_data" type='submit' class="btn btn-primary btn-user btn-block">Simpan</button>
 </form>
