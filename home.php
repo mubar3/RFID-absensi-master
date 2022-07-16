@@ -37,7 +37,7 @@ require "partials/sidebar.php"; ?>
 
             $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $total_siswa= $qb->RAW(
-            "SELECT * FROM siswa",[]);
+            "SELECT * FROM siswa where user_input=".$_SESSION['id_user']."",[]);
             if (array_key_exists(0, $total_siswa)) {$total_siswa=count($total_siswa);}else{$total_siswa=0;}
             
             ?>
@@ -66,7 +66,9 @@ require "partials/sidebar.php"; ?>
                                             <div class="row no-gutters align-items-center">
         <?php
         $total_siswa_masuk= $qb->RAW(
-            "SELECT * FROM rekap_absen where tanggal_absen >= DATE(NOW()) GROUP BY norf",[]);
+            "SELECT * FROM rekap_absen
+            join siswa on siswa.norf=rekap_absen.norf
+             where siswa.user_input=".$_SESSION['id_user']." and rekap_absen.tanggal_absen >= DATE(NOW()) GROUP BY rekap_absen.norf",[]);
         if (array_key_exists(0, $total_siswa_masuk)) {$total_siswa_masuk=count($total_siswa_masuk);}else{$total_siswa_masuk=0;}
         
         $persentase=($total_siswa_masuk/$total_siswa)*100;
@@ -131,9 +133,8 @@ require "partials/sidebar.php"; ?>
                         </div>
 
                         <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
+                       <!--  <div class="col-xl-4 col-lg-5">
                             <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Keaktifan Peminjam Buku (Hari Ini)</h6>
@@ -152,7 +153,6 @@ require "partials/sidebar.php"; ?>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-pie pt-4 pb-2">
                                         <canvas id="myPieChart"></canvas>
@@ -168,7 +168,7 @@ require "partials/sidebar.php"; ?>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                
 
@@ -184,7 +184,7 @@ var myLineChart = new Chart(ctx, {
     labels: [
     <?php 
                     $data_tanggal = $qb->RAW(
-                    "SELECT ((count(x.id)/(SELECT COUNT(id) FROM siswa))*100) as banyak,date(x.tanggal_absen) as tanggal FROM (SELECT * from rekap_absen GROUP by norf,date(tanggal_absen))x WHERE x.tanggal_absen>(now()-interval 30 DAY) GROUP by DATE(x.tanggal_absen)",[]);
+                    "SELECT ((count(x.id)/(SELECT COUNT(id) FROM siswa where user_input=".$_SESSION['id_user']."))*100) as banyak,date(x.tanggal_absen) as tanggal FROM (SELECT * from rekap_absen GROUP by norf,date(tanggal_absen))x WHERE x.tanggal_absen>(now()-interval 30 DAY) GROUP by DATE(x.tanggal_absen)",[]);
                     foreach ($data_tanggal as $data_tanggal) {
           ?>
             "<?php echo $data_tanggal->tanggal; ?>",
@@ -207,7 +207,7 @@ var myLineChart = new Chart(ctx, {
       data: [
       <?php 
                     $data_tanggal = $qb->RAW(
-                    "SELECT ((count(x.id)/(SELECT COUNT(id) FROM siswa))*100) as banyak,date(x.tanggal_absen) as tanggal FROM (SELECT * from rekap_absen GROUP by norf,date(tanggal_absen))x WHERE x.tanggal_absen>(now()-interval 30 DAY) GROUP by DATE(x.tanggal_absen)",[]);
+                    "SELECT ((count(x.id)/(SELECT COUNT(id) FROM siswa where user_input=".$_SESSION['id_user']."))*100) as banyak,date(x.tanggal_absen) as tanggal FROM (SELECT * from rekap_absen GROUP by norf,date(tanggal_absen))x WHERE x.tanggal_absen>(now()-interval 30 DAY) GROUP by DATE(x.tanggal_absen)",[]);
                     foreach ($data_tanggal as $data_tanggal) {
           ?>
             <?php echo $data_tanggal->banyak; ?>,
