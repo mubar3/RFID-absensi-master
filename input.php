@@ -17,10 +17,13 @@ if (isset($_POST['id'])) {
     // echo $id;
     // die();
     $siswa = $qb->RAW(
-    "SELECT nama, last_update, NOW()
-    AS absen from siswa where user_input=".$_SESSION['id_user']." and norf = ?",
+    "SELECT kelas.kelas as nama_kelas ,nama, last_update, NOW()
+    AS absen from siswa 
+    join kelas on kelas.id_kelas=siswa.kelas
+    where siswa.user_input=".$_SESSION['id_user']." and siswa.norf = ?",
      [$id]);
-
+    // print_r($siswa[0]->nama_kelas);
+    // die();
     if(!array_key_exists(0, $siswa)){echo "Siswa tidak terdaftar";die();}
 
     $HARI = [
@@ -55,7 +58,8 @@ if (isset($_POST['id'])) {
         $hari=$HARI[$date->dayOfWeek];
 
         $cariMakulabsen = $qb->RAW("SELECT * FROM jadwal where id_user=".$_SESSION['id_user']." and hari = ?", [$hari]);
-
+        // $makul='';
+        if (!array_key_exists(0, $cariMakulabsen)) {echo "Tidak ada Kelas Hari Ini";die();}
         foreach ($cariMakulabsen as $index => $value) {
             $sekarang = Carbon::now('Asia/Jakarta');
 
@@ -72,10 +76,12 @@ if (isset($_POST['id'])) {
             }else{
                 echo "Harap absen sesuai jam masuk";die();
             }
-            if($akhir < $sekarang && $sekarang < $akhir_add){
-                $status=1;
-            }else{
-                echo "Harap absen sesuai jam pulang";die();
+            if($akhir < $sekarang){
+                if($akhir < $sekarang && $sekarang < $akhir_add){
+                    $status=1;
+                }else{
+                    echo "Harap absen sesuai jam pulang";die();
+                }
             }
 
         }
@@ -87,40 +93,43 @@ if (isset($_POST['id'])) {
 
         //parsing jam absen siswa ke dalam timezone asia/jakarta via Carbon
         //default Carbon timezone is Berlin
-        $date = Carbon::parse($siswa->absen, 'Asia/Jakarta');
+        // $date = Carbon::parse($siswa->absen, 'Asia/Jakarta');
 
-        $hari=$HARI[$date->dayOfWeek];
+        // $hari=$HARI[$date->dayOfWeek];
 
-        $cariMakulabsen = $qb->RAW("SELECT * FROM jadwal where id_user=".$_SESSION['id_user']." and hari = ?", [$hari]);
+        // $cariMakulabsen = $qb->RAW("SELECT * FROM jadwal where id_user=".$_SESSION['id_user']." and hari = ?", [$hari]);
 
-        foreach ($cariMakulabsen as $index => $value) {
-            $mulai = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->hour;
-            $akhir = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->hour;
+        // foreach ($cariMakulabsen as $index => $value) {
+            
+            // $mulai = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->hour;
+            // $akhir = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->hour;
 
-            //Mendapatkan jam sekarang
-            $sekarang = Carbon::now('Asia/Jakarta')->hour ;
+            // //Mendapatkan jam sekarang
+            // $sekarang = Carbon::now('Asia/Jakarta')->hour ;
 
-            if ($sekarang > $mulai && $sekarang < $akhir) { //10 > 8 && 10 < 12
-                $makul = $value->makul;
-                break;
-            } else {
-                // $makul = "Tidak ada kelas";
-                // $makul = $value->makul;
-            }
-        }
-        if(isset($makul)){
+            // if ($sekarang > $mulai && $sekarang < $akhir) { //10 > 8 && 10 < 12
+            //     $makul = $value->makul;
+            //     break;
+            // } else {
+            //     // $makul = "Tidak ada kelas";
+            //     // $makul = $value->makul;
+            // }
+        // }
+        // if(isset($makul)){
         //Yang akan ditampilkan
-        $formatTampilan = "<b>Nama:</b> %s, <b>Jam Absen:</b> %s, %s";
+        $formatTampilan = "<b>Nama:</b> %s, <b>Jam Absen:</b> %s, <b>Kelas:</b> %s";
         $rekapAbsen = $qb->insert('rekap_absen', [
           'id' => '',
           'norf' => $id,
-          'makul_absen' => $makul
+          'makul_absen' => ''
         ]);
 
-        echo sprintf($formatTampilan, $siswa->nama, $date, $date->diffForHumans(), $makul);
-        }else{echo "Tidak ada Kelas Hari Ini";}
-        }else{echo "Kartu tidak terdaftar";}
+        echo sprintf($formatTampilan, $siswa->nama, $date, 
+            // $date->diffForHumans(),
+             $siswa->nama_kelas);
+        // }else{echo "Tidak ada Kelas Hari Ini";}
+        }else{echo "Gagal";}
     } else {
-        echo "Kartu tidak terdaftar";
+        echo "Gagal";
     }
 

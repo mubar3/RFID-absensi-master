@@ -36,7 +36,10 @@
         FROM siswa
         INNER JOIN rekap_absen ON siswa.norf=rekap_absen.norf
         AND rekap_absen.makul_absen = ? 
-        WHERE user_input=".$_SESSION['id_user']." and rekap_absen.tanggal_absen >= DATE(NOW())", [$jadwal[0]->makul_absen]);
+        WHERE user_input=".$_SESSION['id_user']." and rekap_absen.tanggal_absen >= DATE(NOW())
+        group by rekap_absen.norf
+        having count(rekap_absen.norf) >= 2
+        ", [$jadwal[0]->makul_absen]);
 
         $daftar_kelas = $qb->RAW("SELECT * FROM kelas where id_user=".$_SESSION['id_user'], []);
         foreach ($daftar_kelas as $daftar_kelas) {

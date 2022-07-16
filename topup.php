@@ -77,11 +77,11 @@ $(document).ready(function() {
 
         if (data == "err") {
           // $('.alert').addClass('alert-danger').html("RFID belum terdaftar di dalam system kami: " + "<b>{ " + id + " }</b>");
-          $('#classInformation').html("Whoops, there was an error").addClass('display-4');
+          // $('#classInformation').html("Whoops, there was an error").addClass('display-4');
           $('#tampilMessage').addClass('bg-danger').html("RFID is not yet registered in our system: " + "<b>{ " + id + " }</b>");
         } else {
           // $('.alert').addClass('alert-success').html(data);
-          $('#classInformation').html("Class Information").addClass('display-4');
+          // $('#classInformation').html("Class Information").addClass('display-4');
           $('#tampilMessage').addClass('bg-success').html(data);
         }
 

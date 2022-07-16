@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require "vendor/autoload.php";
 require "partial/head.php";
 use StelinDB\Database\QueryBuilder;
@@ -38,7 +38,7 @@ if (isset($_POST['id'])) {
      [$id]);
 
     // input log
-    if(!empty($merchan)){
+    if(!empty($total)){
     $qb->insert('saldo_log', [
         'id_rfid' => $id,
         'banyak' => enkripsiDekripsi(strval($total), $kunciRahasia),
@@ -53,10 +53,23 @@ if (isset($_POST['id'])) {
     // die();
    
   
-        $formatTampilan = "<b>Saldo:</b> %s";
-      
+        $siswa = $qb->RAW(
+        "SELECT kelas.kelas as nama_kelas ,nama, last_update, NOW()
+        AS absen from siswa 
+        join kelas on kelas.id_kelas=siswa.kelas
+        where siswa.user_input=".$_SESSION['id_user']." and siswa.norf = ?",
+         [$id]);
+        $nama='';
+        $kelas='';
+        if(array_key_exists(0, $siswa)){
+          $nama=$siswa[0]->nama;
+          $kelas=$siswa[0]->nama_kelas;
+        }
 
-        echo sprintf($formatTampilan, $isi2);
+
+      $formatTampilan = "<b>Nama:</b> %s, <b>Kelas:</b> %s, <b>Saldo:</b> %s";
+      
+        echo sprintf($formatTampilan, $nama, $kelas, $isi2);
     } else {
       $isi2 = strval(enkripsiDekripsi($isi, $kunciRahasia));
       $tambah = $qb->insert('saldo_rfid', [
@@ -64,9 +77,33 @@ if (isset($_POST['id'])) {
           'saldo' => $isi2
         ]);
       $isi2 = strval(enkripsiDekripsi($isi2, $kunciRahasia));
-      $formatTampilan = "<b>Saldo:</b> %s";
-      
 
-        echo sprintf($formatTampilan, $isi2);
+       // input log
+        if(!empty($total)){
+        $qb->insert('saldo_log', [
+            'id_rfid' => $id,
+            'banyak' => enkripsiDekripsi(strval($total), $kunciRahasia),
+            'jenis' => 'masuk',
+          ]);     
+        }
+        // input log
+
+      $siswa = $qb->RAW(
+        "SELECT kelas.kelas as nama_kelas ,nama, last_update, NOW()
+        AS absen from siswa 
+        join kelas on kelas.id_kelas=siswa.kelas
+        where siswa.user_input=".$_SESSION['id_user']." and siswa.norf = ?",
+         [$id]);
+        $nama='';
+        $kelas='';
+        if(array_key_exists(0, $siswa)){
+          $nama=$siswa[0]->nama;
+          $kelas=$siswa[0]->nama_kelas;
+        }
+
+
+      $formatTampilan = "<b>Nama:</b> %s, <b>Kelas:</b> %s, <b>Saldo:</b> %s";
+      
+        echo sprintf($formatTampilan, $nama, $kelas, $isi2);
     }
 }

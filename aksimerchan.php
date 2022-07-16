@@ -52,7 +52,7 @@ if (isset($_POST['id'])) {
       ]);     
     }
     // input log
-    
+
     //topup merhcan
     $id_user= $_SESSION['id_user'];
     $data2 = $qb->RAW(
@@ -76,11 +76,23 @@ if (isset($_POST['id'])) {
     // print_r($isi2);
     // die();
    
+    $siswa = $qb->RAW(
+        "SELECT kelas.kelas as nama_kelas ,nama, last_update, NOW()
+        AS absen from siswa 
+        join kelas on kelas.id_kelas=siswa.kelas
+        where siswa.user_input=".$_SESSION['id_user']." and siswa.norf = ?",
+         [$id]);
+        $nama='';
+        $kelas='';
+        if(array_key_exists(0, $siswa)){
+          $nama=$siswa[0]->nama;
+          $kelas=$siswa[0]->nama_kelas;
+        }
   
-        $formatTampilan = "<div class='p-3 mb-2 bg-success'><b>Saldo:</b> %s</div>";
+        $formatTampilan = "<div class='p-3 mb-2 bg-success'><b>Nama:</b> %s, <b>Kelas:</b> %s, <b>Saldo:</b> %s</div>";
       
 
-        echo sprintf($formatTampilan, $isi2);
+        echo sprintf($formatTampilan, $nama, $kelas, $isi2);
       }else{
         echo "<div class='p-3 mb-2 bg-danger'>Saldo Kurang<div>";
       }

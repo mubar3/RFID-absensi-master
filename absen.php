@@ -62,18 +62,42 @@
 					<?php
                     $cariMakulabsen = $qb->RAW("SELECT * FROM jadwal where hari = ?", [$HARI[$sekarang]]);
                     foreach ($cariMakulabsen as $key => $value) {
-                        $mulai = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->hour;
-                        $mulaiMenit = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->addminutes(15);
+                    	
+                    	$sekarang = Carbon::now('Asia/Jakarta');
 
-                        $akhir = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->hour;
-                        $sekarang = Carbon::now('Asia/Jakarta')->hour ;
+					            $mulai = Carbon::parse($value->jam_mulai, 'Asia/Jakarta');
+					            // $mulai_add = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->addHour();
+					            $mulai_sub = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->subHour();
+					            
+					            $akhir = Carbon::parse($value->jam_akhir, 'Asia/Jakarta');
+					            $akhir_add = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->addHour();
+					            // $akhir_sub = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->subHour();
+					            
+					            if($mulai_sub < $sekarang && $sekarang < $mulai){
+					                $makul = "<span class=\"badge badge-success float-md-right\">Absen Tersedia</span>";
+					            }else{
+					                $makul = "<span class=\"badge badge-danger float-md-right\">Absen Tidak Tersedia</span>";
+					            }
+            					if($akhir < $sekarang){
+						            if($akhir < $sekarang && $sekarang < $akhir_add){
+						                $makul = "<span class=\"badge badge-success float-md-right\">Absen Tersedia</span>";
+						            }else{
+						                $makul = "<span class=\"badge badge-danger float-md-right\">Absen Tidak Tersedia</span>";
+						            }
+						          }
 
-                        if ($sekarang > $mulai && $sekarang < $akhir) { //10 > 8 && 10 < 12
-                            $makul = "<span class=\"badge badge-success float-md-right\">Kelas Tersedia</span>";
-                            break;
-                        } else {
-                            $makul = "<span class=\"badge badge-danger float-md-right\">Kelas Tidak Tersedia</span>";
-                        }
+                        // $mulai = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->hour;
+                        // $mulaiMenit = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->addminutes(15);
+
+                        // $akhir = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->hour;
+                        // $sekarang = Carbon::now('Asia/Jakarta')->hour ;
+
+                        // if ($sekarang > $mulai && $sekarang < $akhir) { //10 > 8 && 10 < 12
+                        //     $makul = "<span class=\"badge badge-success float-md-right\">Kelas Tersedia</span>";
+                        //     break;
+                        // } else {
+                        //     $makul = "<span class=\"badge badge-success float-md-right\">Kelas Tersedia</span>";
+                        // }
                     }
                     if(!empty($makul)){
                     echo "<h2>{$makul}</h2>";

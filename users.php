@@ -44,8 +44,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	        }
      	}
      	if(isset($_POST['update_user'])){
+     		// print_r("UPDATE user SET username='".$_POST['username']."',pass='".md5($_POST['password'])."' where id=".$_POST['id_user']);
+     		// die();
 	        $aksi = $qb->RAW(
-    		"UPDATE user SET username='".$_POST['username']."',pass='".md5($_POST['password'])."' where id=".$_POST['id_user'],[]);
+    		"UPDATE user SET username='".$_POST['username']."',pass='".md5($_POST['password'])."' where id_user=".$_POST['id_user'],[]);
 	        if($aksi){
 	        	echo '<div class="col-lg-12 mb-4">
 			        <div class="card bg-success text-white shadow">

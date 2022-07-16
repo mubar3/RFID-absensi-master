@@ -261,6 +261,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             ?></td>
                                             <td>
                                             <center>
+                                                <a href="users_rfidlog.php?norf=<?php echo $siswa->norf;?>"><i class="fa-solid fa-money-bill-transfer"></i></a>
+                                                &nbsp
                                                 <a href="data_siswa.php?edit_siswa=<?php echo $siswa->id;?>"><i class="fa-solid fa-pen-to-square"></i></a>
                                                 &nbsp
                                                 <a href="data_siswa.php?hapus_siswa=<?php echo $siswa->id;?>&&foto_siswa=<?php echo $siswa->foto;?>"><i class="fa-solid fa-trash-can"></i></a>
