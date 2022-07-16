@@ -75,7 +75,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             // $data_rfid = $qb->RAW(
             // "SELECT * FROM siswa where not norf=?",[$rfid_lama]);
             $data_nisn = $qb->RAW(
-            "SELECT * FROM siswa where not nisn=?",[$nisn_lama]);
+            "SELECT * FROM siswa user_input=".$_SESSION['id_user']."and where not nisn=?",[$nisn_lama]);
             foreach ($data_nisn as $data_nisn) {
                 if($nisn_baru==($data_nisn->nisn)){
                     echo '<div class="col-lg-12 mb-4">

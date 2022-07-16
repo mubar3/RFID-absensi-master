@@ -74,7 +74,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 $user = $qb->RAW(
     // "SELECT * FROM siswa WHERE norf='".$norfid."'",[]);
-    "SELECT * FROM siswa WHERE nisn='".$nisn."'",[]);
+    "SELECT * FROM siswa WHERE user_input=".$_SESSION['id_user']."and nisn='".$nisn."'",[]);
 
 
 // print_r($user);
