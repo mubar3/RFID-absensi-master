@@ -73,7 +73,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
   $user_input=$_SESSION['id_user'];
 
 $user = $qb->RAW(
-    "SELECT * FROM siswa WHERE norf='".$norfid."'",[]);
+    // "SELECT * FROM siswa WHERE norf='".$norfid."'",[]);
+    "SELECT * FROM siswa WHERE nisn='".$nisn."'",[]);
 
 
 // print_r($user);
@@ -84,7 +85,7 @@ $user = $qb->RAW(
         <div class="card bg-danger text-white shadow">
             <div class="card-body">
                 Gagal
-                <div class="text-white-50 small">Data RFID Sudah Ada</div>
+                <div class="text-white-50 small">Data NISN Sudah Ada</div>
             </div>
         </div>
     </div>
@@ -151,9 +152,16 @@ $rekapAbsen = $qb->insert('siswa', [
           'provinsi' => $provinsi
         ]);
 
-            $nameqrcode    = $norfid.'.png';              
+            // $nameqrcode    = $norfid.'.png';              
+            // $tempdir        = "asset/qrcode/"; 
+            // $isiqrcode     = $server."data?rfid=".$norfid;
+            // $quality        = 'H';
+            // $Ukuran         = 10;
+            // $padding        = 0;
+
+            $nameqrcode    = $nisn.'.png';              
             $tempdir        = "asset/qrcode/"; 
-            $isiqrcode     = $server."data?rfid=".$norfid;
+            $isiqrcode     = $server."data?id=".$nisn;
             $quality        = 'H';
             $Ukuran         = 10;
             $padding        = 0;

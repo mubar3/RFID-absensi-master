@@ -32,7 +32,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
               $tgl_lhr = $_POST['tgl_lhr'];
               $tmp_lhr = $_POST['tmp_lhr'];
               $agama = $_POST['agama'];
-              $nisn = $_POST['nisn'];
+              // $nisn = $_POST['nisn'];
               $nis = $_POST['nis'];
 
               $no_ibu = $_POST['no_ibu'];
@@ -66,18 +66,23 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
               $kabupaten= $_POST['kabupaten'];
               $provinsi= $_POST['provinsi'];
 
-            $rfid_lama=$_POST['rfid_lama'];
+            // $rfid_lama=$_POST['rfid_lama'];
             $rfid_baru=$_POST['norfid'];
+            $nisn_lama=$_POST['nisn_lama'];
+            $nisn_baru=$_POST['nisn'];
+
             $lanjut=0;
-            $data_rfid = $qb->RAW(
-            "SELECT * FROM siswa where not norf=?",[$rfid_lama]);
-            foreach ($data_rfid as $data_rfid) {
-                if($rfid_baru==($data_rfid->norf)){
+            // $data_rfid = $qb->RAW(
+            // "SELECT * FROM siswa where not norf=?",[$rfid_lama]);
+            $data_nisn = $qb->RAW(
+            "SELECT * FROM siswa where not nisn=?",[$nisn_lama]);
+            foreach ($data_nisn as $data_nisn) {
+                if($nisn_baru==($data_nisn->nisn)){
                     echo '<div class="col-lg-12 mb-4">
                     <div class="card bg-danger text-white shadow">
                         <div class="card-body">
                             Gagal
-                            <div class="text-white-50 small">Data RFID Sudah Ada</div>
+                            <div class="text-white-50 small">Data NISN Sudah Ada</div>
                         </div>
                      </div>
                     </div>';
@@ -103,7 +108,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
               'nim' => $nim,
               'norf' => $rfid_baru,
               'kelas' => $kelas,
-              'nisn' => $nisn,
+              'nisn' => $nisn_baru,
               'nis' => $nis,
               'agama' => $agama,
               'tmp_lhr' => $tmp_lhr,
@@ -152,9 +157,16 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $aksi = $qb->RAW(
             "UPDATE siswa SET ".$set." where id=".$_POST['id_siswa'],[]);
 
-            $nameqrcode    = $rfid_baru.'.png';              
+            // $nameqrcode    = $rfid_baru.'.png';              
+            // $tempdir        = "asset/qrcode/"; 
+            // $isiqrcode     = $server."data?rfid=".$rfid_baru;
+            // $quality        = 'H';
+            // $Ukuran         = 10;
+            // $padding        = 0;
+
+            $nameqrcode    = $nisn_baru.'.png';              
             $tempdir        = "asset/qrcode/"; 
-            $isiqrcode     = $server."data?rfid=".$rfid_baru;
+            $isiqrcode     = $server."data?id=".$nisn_baru;
             $quality        = 'H';
             $Ukuran         = 10;
             $padding        = 0;
@@ -286,6 +298,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
     <input name="id_siswa" value="<?php echo $data_edit_siswa->id;?>" type="hidden" >
     <input name="rfid_lama" value="<?php echo $data_edit_siswa->norf;?>" type="hidden" >
+    <input name="nisn_lama" value="<?php echo $data_edit_siswa->nisn;?>" type="hidden" >
     <input name="foto_lama" value="<?php echo $data_edit_siswa->foto;?>" type="hidden" >
 
     <!-- udah -->
