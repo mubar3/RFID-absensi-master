@@ -220,12 +220,15 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     $data_siswa = $qb->RAW(
     "SELECT *,kelas.kelas as nama_kelas FROM siswa
     join kelas on kelas.id_kelas=siswa.kelas
+    left join saldo_rfid on saldo_rfid.id_rfid=siswa.norf
     where siswa.user_input=".$_SESSION['id_user']
     ,[]);
     // print_r($data_kelas);
     // die();
 
+    require "partial/head.php";
     ?>
+
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Data Siswa</h1>
@@ -240,6 +243,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <th>Nama Siswa</th>
                                             <th>NIS</th>
                                             <th>Kelas</th>
+                                            <th>Saldo</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -251,6 +255,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <td><?php echo $siswa->nama;?></td>
                                             <td><?php echo $siswa->nis;?></td>
                                             <td><?php echo $siswa->nama_kelas;?></td>
+                                            <td><?php 
+                                            if($siswa->saldo != ''){
+                                            echo convertToRupiah(enkripsiDekripsi(strval($siswa->saldo), $kunciRahasia));}
+                                            ?></td>
                                             <td>
                                             <center>
                                                 <a href="data_siswa.php?edit_siswa=<?php echo $siswa->id;?>"><i class="fa-solid fa-pen-to-square"></i></a>

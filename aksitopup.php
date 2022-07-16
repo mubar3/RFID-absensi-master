@@ -15,6 +15,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 if (isset($_POST['id'])) {
     $id = $_POST['id'];
     $isi = $_POST['isi'];
+    $total = $isi;
     if(empty($isi)){$isi=0;}
 
 
@@ -35,6 +36,16 @@ if (isset($_POST['id'])) {
     $data = $qb->RAW(
     "UPDATE saldo_rfid SET saldo='".$isi2."'where id_rfid = ?",
      [$id]);
+
+    // input log
+    if(!empty($merchan)){
+    $qb->insert('saldo_log', [
+        'id_rfid' => $id,
+        'banyak' => enkripsiDekripsi(strval($total), $kunciRahasia),
+        'jenis' => 'masuk',
+      ]);     
+    }
+    // input log
 
     $isi2 = enkripsiDekripsi($isi2, $kunciRahasia);
     $isi2=convertToRupiah($isi2);

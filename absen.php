@@ -16,12 +16,12 @@
 	}else{
 		header("Location: index.php");
 	} ?>
-		<h2 class="text-primary mt-4">Put Your RFID Card to Your Scanner </h2>
+		<h2 class="text-primary mt-4">Silahkan Tap kartu RFID </h2>
 
 		<div class="form-group">
-			<label for="rfidnumber">RFID Tag Number</label>
-			<input type="text" class="form-control" id="inputs" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
-			<small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Abscence</small>
+			<label for="rfidnumber">Kartu RFID</label>
+			<input type="text" class="form-control" id="inputs" aria-describedby="rfidnumber" placeholder="RFID">
+			<small id="rfidnumber" class="form-text text-muted">Absensi RFID</small>
 		</div>
 
 		<div class="container mb-4">
@@ -69,19 +69,19 @@
                         $sekarang = Carbon::now('Asia/Jakarta')->hour ;
 
                         if ($sekarang > $mulai && $sekarang < $akhir) { //10 > 8 && 10 < 12
-                            $makul = "<span class=\"badge badge-success float-md-right\">Available</span>";
+                            $makul = "<span class=\"badge badge-success float-md-right\">Kelas Tersedia</span>";
                             break;
                         } else {
-                            $makul = "<span class=\"badge badge-danger float-md-right\">Not Available</span>";
+                            $makul = "<span class=\"badge badge-danger float-md-right\">Kelas Tidak Tersedia</span>";
                         }
                     }
                     if(!empty($makul)){
                     echo "<h2>{$makul}</h2>";
                   	}else{
-                  	echo "<h2><span class=\"badge badge-danger float-md-right\">Not Available</span></h2>";
+                  	echo "<h2><span class=\"badge badge-danger float-md-right\">Kelas Tidak Tersedia</span></h2>";
                   	}
                      ?>
-                  	}
+                  	<!-- } -->
 				</div>
 			</div>
 		</div>
@@ -147,11 +147,11 @@ $(document).ready(function() {
 
         if (data.match(/Nama.*/)) {
           // $('.alert').addClass('alert-success').html(data);
-          $('#classInformation').html("Class Information").addClass('display-4');
+          // $('#classInformation').html("Class Information").addClass('display-4');
           $('#tampilMessage').addClass('bg-success').html(data);
         } else {
           // $('.alert').addClass('alert-danger').html("RFID belum terdaftar di dalam system kami: " + "<b>{ " + id + " }</b>");
-          $('#classInformation').html("Whoops, there was an error").addClass('display-4');
+          // $('#classInformation').html("Whoops, there was an error").addClass('display-4');
           $('#tampilMessage').addClass('bg-danger').html(data);
         }
 
