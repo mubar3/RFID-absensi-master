@@ -92,10 +92,12 @@ $user = $qb->RAW(
     ';
   }else{
 $filename=$_FILES['file_kirim']['name'];
+if(!empty($filename)){
+$ext = pathinfo($_FILES['file_kirim']['name'], PATHINFO_EXTENSION);
+$filename = $nisn.'.'.$ext;
 // echo $filename;
 // die();
-if(!empty($filename)){
-$filename=$filename.rand(111,9999);
+// $filename=$filename.rand(111,9999);
 $upload=move_uploaded_file($_FILES['file_kirim']['tmp_name'],  "asset/foto/".$filename);
 
  for($x=0;$x<20;$x++){
