@@ -1,10 +1,10 @@
 <!-- Footer -->
             <footer class="sticky-footer">
-                <div class="container my-auto">
+                <!-- <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span style="color: white; font-size: 15px;">Copyright &copy; KlikTap-NFC 2022</span>
                     </div>
-                </div>
+                </div> -->
             </footer>
             <!-- End of Footer -->
 

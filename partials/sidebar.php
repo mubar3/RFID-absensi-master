@@ -12,7 +12,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <!-- <i class="fas fa-laugh-wink"></i> -->
                     <i class="fa-brands fa-nfc-directional"></i>
@@ -222,7 +222,7 @@
             }else{
                 echo '<li class="nav-item">';}
             ?>
-            <!-- <li class="nav-item"> -->
+            <!-- <li class="nav-item active"> -->
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
@@ -256,6 +256,42 @@
                         href="merchan.php">Merchant</a>
                     </div>
                 </div>
+            </li>
+            <?php 
+            if($page=='spp.php'){
+                echo '<li class="nav-item active">';
+            }else{
+                echo '<li class="nav-item">';}
+            ?>
+                <a class="nav-link"  href="spp.php" >
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>SPP</span>
+                </a>
+            </li>
+
+            <?php 
+            if($page=='akses_parkir.php'){
+                echo '<li class="nav-item active">';
+            }else{
+                echo '<li class="nav-item">';}
+            ?>
+                <a class="nav-link" href="akses_parkir.php" >
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Akses Parkir</span>
+                </a>
+            </li>
+
+            <?php 
+            if($page=='akses_gerbang.php' ){
+                echo '<li class="nav-item active">';
+            }else{
+                echo '<li class="nav-item">';}
+            ?>
+                <a class="nav-link" href="akses_gerbang.php" >
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Akses Gerbang</span>
+                </a>
+
             </li>
 
 

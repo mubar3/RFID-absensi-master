@@ -131,7 +131,16 @@ require "partials/sidebar.php"; ?>
                                 </div>
                             </div>
                         </div>
-
+                        <!-- <div class="col-xl-4 col-lg-5">
+                            <div class="card shadow mb-4">
+                            <div class="card" style="width: 18rem; background;">
+                              <div class="card-body">
+                                <h5 class="card-title">Input Data Siswa</h5>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                              </div>
+                            </div>
+                            </div>
+                        </div> -->
                         <!-- Pie Chart -->
                        <!--  <div class="col-xl-4 col-lg-5">
                             <div class="card shadow mb-4">

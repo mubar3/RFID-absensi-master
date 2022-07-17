@@ -1,6 +1,8 @@
 <?php require "partials/head.php"; ?>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-primary" 
+style="background-image: url('https://assets.promediateknologi.com/crop/0x0:0x0/x/photo/2022/07/11/2639001114.jpeg');
+">
 
     <?php
 
@@ -66,9 +68,18 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                 background-position: center;
                                 background-size: cover;
                                 "
-                                ></div>
+                                >    
+                                    
+                                </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
+                                    <a class="sidebar-brand d-flex align-items-center justify-content-center">
+                                        <div class="sidebar-brand-icon rotate-n-15">
+                                            <!-- <i class="fas fa-laugh-wink"></i> -->
+                                            <i class="fa-brands fa-nfc-directional"></i>
+                                        </div>
+                                        <div class="sidebar-brand-text mx-3">KlikTap <sup>NFC</sup></div>
+                                    </a>
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Selamat Datang</h1>
                                     </div>
@@ -107,6 +118,11 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                     <div class="text-center">
                                         <a class="small" href="register.html">Create an Account!</a>
                                     </div> -->
+                                    <div class="container my-auto">
+                                        <div class="copyright text-center my-auto">
+                                            <span style="color: black; font-size: 15px;">Copyright &copy; KlikTap-NFC 2022</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
