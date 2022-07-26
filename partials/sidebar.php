@@ -294,6 +294,34 @@
 
             </li>
 
+             <?php 
+            if($_SESSION['role'] == 1){
+            if($page=='cetak.php' ){
+                echo '<li class="nav-item active">';
+            }else{
+                echo '<li class="nav-item">';}
+            ?>
+                <!-- <a class="nav-link" href="cetak.php" >
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Cetak</span>
+                </a> -->
+
+            </li>
+            <?php } ?>
+
+             <?php 
+            if($page=='maps.php' ){
+                echo '<li class="nav-item active">';
+            }else{
+                echo '<li class="nav-item">';}
+            ?>
+                <a class="nav-link" href="maps.php" >
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Tracking</span>
+                </a>
+
+            </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
