@@ -174,6 +174,14 @@
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" href="https://www.perpusnas.go.id" >
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Perpustakaan Online</span>
+                </a>
+
+            </li>
+
             <?php 
             if($page=='input_siswa.php' || $page=='data_siswa.php'){
                 echo '<li class="nav-item active">';
