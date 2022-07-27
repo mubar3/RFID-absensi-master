@@ -302,18 +302,48 @@
 
             </li>
 
-             <?php 
+             
+            <?php 
             if($_SESSION['role'] == 1){
-            if($page=='cetak.php' ){
+            if($page=='cetak.php' || $page=='sudah_cetak.php'){
                 echo '<li class="nav-item active">';
             }else{
                 echo '<li class="nav-item">';}
             ?>
-                <a class="nav-link" href="cetak.php" >
+            <!-- <li class="nav-item"> -->
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapse2"
+                    aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Cetak</span>
                 </a>
-
+                <div id="collapse2" 
+                <?php 
+                if($page=='cetak.php' || $page=='sudah_cetak.php'){
+                    echo 'class="collapse show"';
+                }else{
+                    echo 'class="collapse"';}
+                ?>
+                aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a
+                        <?php 
+                        if($page=='cetak.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="cetak.php">Belum Cetak</a>
+                        <a
+                        <?php 
+                        if($page=='sudah_cetak.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="sudah_cetak.php">Sudah Cetak</a>
+                    </div>
+                </div>
             </li>
             <?php } ?>
 
