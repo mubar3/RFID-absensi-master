@@ -140,6 +140,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>Foto</th>
                             <th>Nama</th>
                             <th>Kelas</th>
                             <th>NISN</th>
@@ -151,6 +152,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         foreach ($data_siswa as $siswa) {
                             ?>
                         <tr>
+                            <td><img style="display: block; margin-left: auto;  margin-right: auto;   width: 70px;" class="img-responsive img" src="asset/foto/<?php echo $siswa->foto;?>"></td>
                             <td><?php echo $siswa->nama;?></td>
                              <td><?php echo $siswa->nama_kelas;?></td>
                              <td><?php echo $siswa->nisn;?></td>
