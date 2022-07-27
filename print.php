@@ -29,16 +29,16 @@ if(empty($_SESSION))
 </script>
 <style>
     body{
-        color: white;
+        color: black;
         font-size:20px ;
         font-weight: bold;
-        font-family: Arial;font-size: 13px;
+        font-family: Arial;font-size: 12px;
     }
     table{
-        color: white;
+        color: black;
         font-size:20px ;
         font-weight: bold;
-        font-family: Arial;font-size: 13px;
+        font-family: Arial;font-size: 12px;
     }
 /*body {
     -webkit-transform: scaleX(-1);
@@ -53,58 +53,89 @@ if(empty($_SESSION))
 <?php //echo count($anggota);?>
 <?php //echo ($_POST["kartu"][24]);?>
 <?php
+require "vendor/autoload.php";
+
+        use StelinDB\Database\QueryBuilder;
+        use Carbon\Carbon;
+
+        $dotenv = new \Dotenv\Dotenv(__DIR__);
+                    $dotenv->load();
+        $now = new Carbon;
+        $now->setTimezone('Asia/Jakarta');
+
+        $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     
     $id=$_POST['selector'];
     $qr=array();
     $date=array();
     // $rr[qrcode]
 
-    for($i=0; $i < 10; $i++) {
-        $sql = "SELECT * FROM siswa 
-          WHERE id='$id[$i]'";
-          // echo $sql."<br>";
-        $rr=mysqli_fetch_array(mysqli_query($koneksi, $sql));
-        $qr[$i]=$rr['qrcode'];
-        $date[$i]=$rr['created'];
-        // array_push($q,$rr['qrcode']);
-    }
-    // print_r($qr);
-    // die();
-
-        // $N = count($id);
-    $N = 10;
+    $N = count($id);
     for($i=0; $i < $N; $i++) {
-        // $tgl_skr = date("Y-m-d G:i:s");
+        // $sql = "SELECT * FROM siswa WHERE id='$id[$i]'";
+        // if(isset($id[$i])){
+            $rr = $qb->RAW(
+              "SELECT * FROM siswa WHERE id=".$id[$i],[]);
+            $rr=$rr[0];
+            // $rr=json_decode(json_encode($rr), true);
+        // print_r($rr->nisn);
+        // die();
+              // echo $sql."<br>";
+            // $rr=mysqli_fetch_array(mysqli_query($koneksi, $sql));
+            $qr[$i]=$rr->nisn.'.png';
+            $date[$i]=$rr->id;
+        // }
+    }
+    for($i=0; $i < $N; $i++) {
         mysqli_query($koneksi, "UPDATE siswa SET cetak=1 WHERE id= '$id[$i]'");
-        // print_r($id[$i]);
-        // end();
-		$sql = "SELECT * FROM siswa 
-		  -- LEFT JOIN desa ON user.id_kel= desa.id_desa
-    --       LEFT JOIN tb_jk ON user.jk= tb_jk.id
-		  -- LEFT JOIN kabupaten ON user.id_kab= kabupaten.id_kab 
-		  -- LEFT JOIN kecamatan ON user.id_kec= kecamatan.id_kec 
-		  -- LEFT JOIN provinsi ON user.id_prov= provinsi.id_prov
-		  -- LEFT JOIN tb_pekerjaan ON user.pekerjaan= tb_pekerjaan.id
-		  -- LEFT JOIN banom ON user.banom= banom.idbanom
-		  WHERE siswa.id='$id[$i]'";
-		  // echo $sql."<br>";
-		$rr=mysqli_fetch_array(mysqli_query($koneksi, $sql));
+        $qb->RAW("UPDATE siswa SET cetak=1 WHERE id=".$id[$i],[]);
+		// $sql = "SELECT * FROM siswa WHERE siswa.id='$id[$i]'";
+        $rr = $qb->RAW(
+          "SELECT * FROM siswa 
+          join tb_agama on tb_agama.id=siswa.agama
+          join tb_jk on tb_jk.id=siswa.jk
+          WHERE siswa.id=".$id[$i],[]);
+        $rr=$rr[0];
+        // $rr=json_decode($rr[0]);
+		 // $rr=mysqli_fetch_array(mysqli_query($koneksi, $sql));
 
-		
+
+    // $foto_qr='';
+    // $date_input='';
+    // //baris 1
+    //     if ($i==0){$foto_qr=$qr[1]; $date_input=$date[1];}
+    //     elseif ($i==1){$foto_qr=$qr[0]; $date_input=$date[0];}
+
+    // //baris 2
+    //     if ($i==2){$foto_qr=$qr[3];  $date_input=$date[3];}
+    //     elseif ($i==3){$foto_qr=$qr[2]; $date_input=$date[2];}
+
+    // //baris 3
+    //     if ($i==4){$foto_qr=$qr[5]; $date_input=$date[5];}
+    //     elseif ($i==5){$foto_qr=$qr[4]; $date_input=$date[4];}
+
+    // //baris 4
+    //     if ($i==6){$foto_qr=$qr[7]; $date_input=$date[7];}
+    //     elseif ($i==7){$foto_qr=$qr[6]; $date_input=$date[6];}
+
+    // //baris 5
+    //     if ($i==8){$foto_qr=$qr[9]; $date_input=$date[9];}
+    //     elseif ($i==9){$foto_qr=$qr[8]; $date_input=$date[8];}
 ?>
+
 <div style=" float: left;  padding-left: 30px; width: 550px;height: 350px; border-left: 2px dashed red;">
 <div style=" margin-left: 0px;  float: left;  margin-right: 30px; margin-top:-4px;width: 550px;height: 350px;margin-bottom: 6px;background-size: 550px 350px;
-    <?php if(!empty($rr[gambar])){?>
+    <?php if(!empty($rr->foto)){?>
     /*background-image: url('kartu/depan.jpg');*/
+    background-image: url('asset/desain/depan.jpg');
     <?php } ?>
-    background-image: url('asset/foto/DSCF2001.JPG');
     ">
 
-  <?php if(!empty($rr[gambar])){?>
-  <img style="position: absolute;margin-left: 37px;margin-top: 130px; width: 105px; height: 140px;overflow: hidden;" class="img-responsive img" src="../assets/img/user/<?php echo "$rr[gambar]";?>">
+  <?php if(!empty($rr->foto)){?>
+  <img style="position: absolute;margin-left: 37px;margin-top: 120px; width: 105px; height: 140px;overflow: hidden;" class="img-responsive img" src="asset/foto/<?php echo $rr->foto;?>">
   <?php } ?>
                 <!-- <div style="display: block; position: absolute;margin-left: 288px;margin-top: 190px; line-height: 15px; width: 220px;height:35px;text-align:left;position: left;float: left">
-                       <?php echo $rr[alamat].", RT.".$rr[rt]."/RW.".$rr[rw].", ".$rr[nama_desa].", ".$rr[nama_kecamatan].", ".$rr[nama_kabupaten].", ".$rr[nama_provinsi].", Indonesia (".$rr[kodepos].")";?>
+                       <?php echo $rr->alamat.", ".$rr->desa.", ".$rr->kecamatan.", ".$rr->kabupaten.", ".$rr->provinsi.", Indonesia";?>
                    </div> -->
            
                 <p style="position: absolute;margin-left: 190px;margin-top: 110px;width: 50px;height:10px;text-align:center;position: center;float: center">
@@ -112,40 +143,53 @@ if(empty($_SESSION))
                     
 
                     <p style="position: absolute;margin-left: 160px;margin-top: 310px; line-height: 15px; width: 400px;height:35px;text-align:left;position: center;float: center">
-                       <b style="border-top: 1px solid white;">Masa Berlaku : S</b><b>eumur Hidup</b>
+                       <!-- <b style="border-top: 1px solid white;">Masa Berlaku : S</b><b>eumur Hidup</b> -->
                    </p>
                   
 					   
-                <table cellpadding="" cellspacing="" style="margin-top: -16px;padding-top: 145px;padding-left: 155px; position: relative;transition-property: 600px;width: 510px;height: 170px;">
+                <table cellpadding="" cellspacing="" style="margin-top: -16px;padding-top: 135px;padding-left: 155px; position: relative;transition-property: 600px;width: 510px;height: 170px;">
                   
                     <tr>
                         <td width="30%">Nama</td>
                         <td>:</td>
-                          <td style="text-transform: uppercase;"><?php echo $rr["nama"];?></td>
-                    </tr>
-                    <tr>
-                        <td>NIA</td>
-                        <td>:</td>
-                        <td><?php echo $rr["nokartanu"];?></td>
+                          <td style="text-transform: uppercase;"><?php echo $rr->nama;?></td>
                     </tr>
                     <tr>
                         <td>TTL</td>
                         <td>:</td>
-                        <td><?php echo strtoupper($rr["tmp_lhr"]);?>, <?php echo tgl_indo($rr["tgl_lhr"]);
+                        <td><?php echo strtoupper($rr->tmp_lhr);?>, <?php echo tgl_indo($rr->tgl_lhr);
                         // format_date($rr["tgl_lhr"]);
                         ?></td>
                     </tr>
                     <tr>
+                        <td>NIS</td>
+                        <td>:</td>
+                        <td><?php echo $rr->nim;?></td>
+                    </tr>
+                    <tr>
+                        <td>NISN</td>
+                        <td>:</td>
+                        <td><?php echo $rr->nisn;?></td>
+                    </tr>
+                    <tr>
                         <td>Jenis Kelamin</td>
                         <td>:</td>
-                        <td><?php echo "$rr[jk]";?></td>
+                        <td><?php echo $rr->jk;?></td>
+                    </tr>
+                    <tr>
+                        <td>Agama</td>
+                        <td>:</td>
+                        <td><?php echo $rr->agama;?></td>
                     </tr>
                     <tr>
                         <td style="vertical-align:top">Alamat</td>
                         <td style="vertical-align:top">:</td>
-                        <td style="vertical-align:top"><?php echo $rr[alamat].", RT.".$rr[rt]."/RW.".$rr[rw].", ".$rr[nama_desa].", ".$rr[nama_kecamatan].", ".$rr[nama_kabupaten].", ".$rr[nama_provinsi].", Indonesia (".$rr[kodepos].")";?></td>
+                        <td style="vertical-align:top"> <?php echo $rr->alamat.", ".$rr->desa.", ".$rr->kecamatan.", ".$rr->kabupaten.", ".$rr->provinsi.", Indonesia";?></td>
                         
                     </tr>
+                        <img style="border: 0px solid white; border-radius: 5px; position: absolute;margin-left: 440px;margin-top: 270px; width: 60px; height: 60px;overflow: hidden;" class="img-responsive img" src="asset/qrcode/<?php 
+                        echo $rr->nisn.'.png';
+                        ?>">
                     
                 </table>
 
@@ -154,37 +198,13 @@ if(empty($_SESSION))
             </div>
         </div>
 
-<?php
-    $foto_qr='';
-    $date_input='';
-    //baris 1
-        if ($i==0){$foto_qr=$qr[1]; $date_input=$date[1];}
-        elseif ($i==1){$foto_qr=$qr[0]; $date_input=$date[0];}
 
-    //baris 2
-        if ($i==2){$foto_qr=$qr[3];  $date_input=$date[3];}
-        elseif ($i==3){$foto_qr=$qr[2]; $date_input=$date[2];}
-
-    //baris 3
-        if ($i==4){$foto_qr=$qr[5]; $date_input=$date[5];}
-        elseif ($i==5){$foto_qr=$qr[4]; $date_input=$date[4];}
-
-    //baris 4
-        if ($i==6){$foto_qr=$qr[7]; $date_input=$date[7];}
-        elseif ($i==7){$foto_qr=$qr[6]; $date_input=$date[6];}
-
-    //baris 5
-        if ($i==8){$foto_qr=$qr[9]; $date_input=$date[9];}
-        elseif ($i==9){$foto_qr=$qr[8]; $date_input=$date[8];}
-?>
 
 <div style="float: left; 
     margin-right: 30px;  margin-left: 30px;
      margin-top:-4px;width: 550px;height: 350px;margin-bottom: 6px;background-size: 550px 350px;
-     <?php if(!empty($foto_qr)){?>
      /*background-image: url('kartu/belakang.jpg');*/
-     <?php } ?>
-     background-image: url('asset/foto/DSCF2001.JPG');
+     background-image: url('asset/desain/belakang.jpg');
      ">
     <!-- <a><?php echo $i;?></a> -->
 
@@ -194,11 +214,7 @@ if(empty($_SESSION))
                         ?>
                    </div>
 
-                <?php if(!empty($foto_qr)){?>
-                <img style="border: 5px solid white; border-radius: 5px; position: absolute;margin-left: 32px;margin-top: 216px; width: 75px; height: 75px;overflow: hidden;" class="img-responsive img" src="../assets/img/qrcode/<?php 
-                echo $foto_qr;
-                ?>">
-                <?php } ?>
+                
 
            
 
