@@ -311,12 +311,12 @@
                 echo '<li class="nav-item">';}
             ?>
             <!-- <li class="nav-item"> -->
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapse2"
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapse_cetak"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Cetak</span>
                 </a>
-                <div id="collapse2" 
+                <div id="collapse_cetak" 
                 <?php 
                 if($page=='cetak.php' || $page=='sudah_cetak.php'){
                     echo 'class="collapse show"';
