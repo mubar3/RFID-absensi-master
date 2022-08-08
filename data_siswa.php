@@ -229,12 +229,24 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         }
 
     $table='kelas';
-    $data_siswa = $qb->RAW(
-    "SELECT *,kelas.kelas as nama_kelas FROM siswa
-    join kelas on kelas.id_kelas=siswa.kelas
-    left join saldo_rfid on saldo_rfid.id_rfid=siswa.norf
-    where siswa.user_input=".$_SESSION['id_user']
-    ,[]);
+     $data_user = $qb->RAW(
+    "SELECT * FROM user",[]);
+     if(isset($_POST['cari_user'])){
+        $data_siswa = $qb->RAW(
+            "SELECT *,kelas.kelas as nama_kelas FROM siswa
+            join kelas on kelas.id_kelas=siswa.kelas
+            left join saldo_rfid on saldo_rfid.id_rfid=siswa.norf
+            where siswa.user_input=".$_POST['data_user']
+            ,[]);  
+    }else{
+        $data_siswa = $qb->RAW(
+            "SELECT *,kelas.kelas as nama_kelas FROM siswa
+            join kelas on kelas.id_kelas=siswa.kelas
+            left join saldo_rfid on saldo_rfid.id_rfid=siswa.norf
+            where siswa.user_input=".$_SESSION['id_user']
+            ,[]);
+    }
+
     // print_r($data_kelas);
     // die();
 
@@ -244,6 +256,28 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Data Siswa</h1>
+
+                    <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+                        <div class="col-lg-12 mb-2">
+                            <div class="input-group">
+                                <select class="form-control" name="data_user">
+                                    <option value="">User</option>
+                                    <?php
+                                    foreach ($data_user as $user) {
+                                        if($user->id_user == $_POST['data_user']){
+                                        echo '<option value="'.$user->id_user.'" selected>'.$user->username.'</option>';}
+                                        else{
+                                        echo '<option value="'.$user->id_user.'">'.$user->username.'</option>';}
+                                    }
+                                    ?>
+                                </select>
+                              <div class="input-group-prepend">
+                               <button type="submit" name="cari_user" class="input-group-text"><span  id="">Cari</span></button>
+                              </div>
+
+                            </div>
+                        </div>
+                    </form>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -285,7 +319,65 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                         
                                     </tbody>
                                 </table>
+
+                              <button class="btn btn-primary" onclick="exportData()">
+                                    <span class="glyphicon glyphicon-download"></span>
+                                    Download excel</button>
+
                             </div>
+    <script type="text/javascript">
+          var rows =[];
+              /* Get the HTML data using Element by Id */
+          var table = document.getElementById("dataTable");
+       
+          /* Declaring array variable */
+          rows.push(
+                  [
+                     table.rows[0].cells[0].innerText,
+                     table.rows[0].cells[1].innerText,
+                     table.rows[0].cells[2].innerText,
+                     table.rows[0].cells[3].innerText
+                  ]
+              );
+            //iterate through rows of table
+          for(var i=1,row; row = table.rows[i];i++){
+              //rows would be accessed using the "row" variable assigned in the for loop
+              //Get each cell value/column from the row
+              // column4 = 
+              // column5 ='sdaw';
+          /* add a new records in the array */
+              rows.push(
+                  [
+                      row.cells[0].innerText,
+                      row.cells[1].innerText,
+                      row.cells[2].innerText,
+                      row.cells[3].innerText.substring(0, row.cells[3].innerText.length - 3)
+                     
+                  ]
+              );
+       
+              }
+
+            function exportData(){
+                
+                    csvContent = "data:text/csv;charset=utf-8,";
+                     /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+                    rows.forEach(function(rowArray){
+                        row = rowArray.join(",");
+                        csvContent += row + "\r\n";
+                    });
+             
+                    /* create a hidden <a> DOM node and set its download attribute */
+                    var encodedUri = encodeURI(csvContent);
+                    var link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "data_siswa_<?php echo $_SESSION['nama_user']; ?>.csv");
+                    document.body.appendChild(link);
+                     /* download the data file named "Stock_Price_Report.csv" */
+                    link.click();
+            }
+            </script>
+
     <?php if(isset($_GET['edit_siswa'])){
         $data_edit_siswa = $qb->RAW(
         "SELECT * FROM siswa where id=?",[$_GET['edit_siswa']]);

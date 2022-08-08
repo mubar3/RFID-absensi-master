@@ -114,7 +114,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                     <option value="">User</option>
                     <?php
                     foreach ($data_user as $user) {
-                        echo '<option value="'.$user->id_user.'">'.$user->username.'</option>';
+                        if($user->id_user == $_POST['data_user']){
+                        echo '<option value="'.$user->id_user.'" selected>'.$user->username.'</option>';}
+                        else{
+                        echo '<option value="'.$user->id_user.'">'.$user->username.'</option>';}
                     }
                     ?>
                 </select>
