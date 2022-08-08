@@ -2,9 +2,9 @@
 $id=$_GET['id'];
 // echo $id; die();
 
-require "partials/head.php";
 require "vendor/autoload.php";
 require "partial/head.php";
+require "partials/head.php";
 use StelinDB\Database\QueryBuilder;
 use Carbon\Carbon;
 
@@ -23,6 +23,7 @@ $data_siswa = $qb->RAW(
 // print_r($data_siswa);die();
             foreach ($data_siswa as $siswa) {
 ?>
+<script src="https://kit.fontawesome.com/6e703c102f.js" crossorigin="anonymous"></script>
 
 <section style="background-color: #eee;">
   <div class="container py-5">
@@ -121,6 +122,74 @@ $data_siswa = $qb->RAW(
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0">
+              <div class="card-body">
+
+                <h1 style="text-align: center;" class="h3 mb-2 text-gray-800">Saldo Kartu</h1>
+                <?php
+                $data_saldo = $qb->RAW(
+                   "SELECT * FROM saldo_log where id_rfid=?",[$siswa->norf]);
+                ?>
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                      <tr>
+                          <th>Jenis</th>
+                          <th>Jumlah</th>
+                          <th>Keterangan</th>
+                      </tr>
+                  </thead>
+                    <tbody>
+                        <?php 
+                        foreach ($data_saldo as $user) {
+                            ?>
+                        <tr>
+                            <td><?php echo $user->jenis;?></td>
+                            <td><?php 
+                            if($user->banyak != ''){
+                            echo convertToRupiah(enkripsiDekripsi(strval($user->banyak), $kunciRahasia));}
+                            ?></td>
+                            <td><?php echo $user->ket;?></td>
+                        </tr>
+                        <?php } ?>
+                        
+                    </tbody>
+                </table>
+               </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0">
+              <div class="card-body">
+                 <h1 style="text-align: center;" class="h3 mb-2 text-gray-800">Absen Hari Ini</h1>
+                <?php
+                $absen = $qb->RAW(
+                  "SELECT * FROM rekap_absen WHERE tanggal_absen >= DATE(NOW()) and norf='".$siswa->norf."' order by tanggal_absen desc",[]);
+                  // "SELECT * FROM rekap_absen WHERE norf='".$siswa->norf."' order by tanggal_absen desc",[]);
+                // print_r($absen);die();
+                // if(count($absen) != 0){echo 'a';}die();
+                $masuk='';
+                $pulang='';
+                if(array_key_exists(0, $absen)){$masuk='<i class="fa-solid fa-check"></i>';}
+                if(array_key_exists(1, $absen)){$pulang='<i class="fa-solid fa-check"></i>';}
+                ?>
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <tbody>
+                      <tr>
+                        <td>Masuk</td>
+                        <td><?php echo $masuk;?></td>
+                      </tr>
+                      <tr>
+                        <td>Pulang</td>
+                        <td><?php echo $pulang;?></td>
+                      </tr>
+                    </tbody>
+                </table>
+               </div>
+            </div>
+          </div>
+        </div> 
         <!-- <div class="row">
           <div class="col-md-6">
             <div class="card mb-4 mb-md-0">
