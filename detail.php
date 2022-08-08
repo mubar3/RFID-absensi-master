@@ -2,6 +2,7 @@
 $id=$_GET['id'];
 // echo $id; die();
 
+require "partials/head.php";
 require "vendor/autoload.php";
 require "partial/head.php";
 use StelinDB\Database\QueryBuilder;
