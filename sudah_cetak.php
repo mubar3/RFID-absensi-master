@@ -139,7 +139,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
   
             <div class="table-responsive">
                 <form  role="form" action="print.php" method="post" autocomplete="off" enctype="multipart/form-data" >
-                    <button type="submit" name="simpan_user" class="input-group-text"><span  id="">Cetak</span></button>
+                    <button type="submit" name="simpan_user" formtarget="_blank" class="input-group-text"><span  id="">Cetak</span></button>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
