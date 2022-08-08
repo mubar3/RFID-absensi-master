@@ -34,11 +34,11 @@ $data_siswa = $qb->RAW(
           <div class="card-body text-center">
             <img src="asset/foto/<?php echo $siswa->foto; ?>" alt="avatar"
               class="img-fluid" style="width: 150px;">
-            <H5 class="my-3" >NAMA</H5>
+            <H5 class="my-3" style="color:black" >NAMA</H5>
             <p class="text-muted mb-1"><?php echo $siswa->nama; ?></p>
-            <H5 class="my-3" >KELAS</H5>
+            <H5 class="my-3" style="color:black"  >KELAS</H5>
             <p class="text-muted mb-1"><?php echo $siswa->kelas; ?></p>
-            <H5 class="my-3" >NISN</H5>
+            <H5 class="my-3" style="color:black"  >NISN</H5>
             <p class="text-muted mb-4"><?php echo $siswa->nisn; ?></p>
             <div class="d-flex justify-content-center mb-2">
               <!-- <button type="button" class="btn btn-primary">Follow</button> -->
