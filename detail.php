@@ -24,8 +24,15 @@ $data_siswa = $qb->RAW(
             foreach ($data_siswa as $siswa) {
 ?>
 <script src="https://kit.fontawesome.com/6e703c102f.js" crossorigin="anonymous"></script>
-
-<section style="background-color: #eee;">
+<style type="text/css">
+  div,table,body,p {color: black!important; font-family:times;}
+</style>
+<body>
+<section style="
+/*background-color: #eee; */
+background: url('https://baradesain.files.wordpress.com/2021/03/tut-wuri-handayani-logo-featured-03.jpg?w=1200');
+background-position: center;
+background-size: cover;">
   <div class="container py-5">
 
     <div class="row">
@@ -34,16 +41,45 @@ $data_siswa = $qb->RAW(
           <div class="card-body text-center">
             <img src="asset/foto/<?php echo $siswa->foto; ?>" alt="avatar"
               class="img-fluid" style="width: 150px;">
-            <H5 class="my-3" style="color:black" >NAMA</H5>
-            <p class="text-muted mb-1"><?php echo $siswa->nama; ?></p>
-            <H5 class="my-3" style="color:black"  >KELAS</H5>
-            <p class="text-muted mb-1"><?php echo $siswa->kelas; ?></p>
-            <H5 class="my-3" style="color:black"  >NISN</H5>
-            <p class="text-muted mb-4"><?php echo $siswa->nisn; ?></p>
+            <H5 class="my-3" style="color:black;" >NAMA :</H5>
+            <p class="mb-1"><?php echo $siswa->nama; ?></p>
+            <H5 class="my-3" style="color:black"  >KELAS :</H5>
+            <p class="mb-1"><?php echo $siswa->kelas; ?></p>
+            <H5 class="my-3" style="color:black"  >NISN :</H5>
+            <p class="mb-4"><?php echo $siswa->nisn; ?></p>
             <div class="d-flex justify-content-center mb-2">
               <!-- <button type="button" class="btn btn-primary">Follow</button> -->
               <!-- <button type="button" class="btn btn-outline-primary ms-1">Message</button> -->
             </div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <h1 style="text-align: center;" class="h3 mb-2 text-gray-800">Absen Hari Ini</h1>
+                <?php
+                $absen = $qb->RAW(
+                  "SELECT * FROM rekap_absen WHERE tanggal_absen >= DATE(NOW()) and norf='".$siswa->norf."' order by tanggal_absen desc",[]);
+                  // "SELECT * FROM rekap_absen WHERE norf='".$siswa->norf."' order by tanggal_absen desc",[]);
+                // print_r($absen);die();
+                // if(count($absen) != 0){echo 'a';}die();
+                $masuk='';
+                $pulang='';
+                if(array_key_exists(0, $absen)){$masuk='<i class="fa-solid fa-check"></i>';}
+                if(array_key_exists(1, $absen)){$pulang='<i class="fa-solid fa-check"></i>';}
+                ?>
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <tbody>
+                      <tr>
+                        <td>Masuk</td>
+                        <td><?php echo $masuk;?></td>
+                      </tr>
+                      <tr>
+                        <td>Pulang</td>
+                        <td><?php echo $pulang;?></td>
+                      </tr>
+                    </tbody>
+                </table>
           </div>
         </div>
     <!--     <div class="card mb-4 mb-lg-0">
@@ -81,7 +117,7 @@ $data_siswa = $qb->RAW(
                 <p class="mb-0">Jenis Kelamin</p>
               </div>
               <div class="col-sm-9">
-                <p class="text-muted mb-0"><?php echo $siswa->jk; ?></p>
+                <p class="mb-0"><?php echo $siswa->jk; ?></p>
               </div>
             </div>
             <hr>
@@ -90,7 +126,7 @@ $data_siswa = $qb->RAW(
                 <p class="mb-0">NIK</p>
               </div>
               <div class="col-sm-9">
-                <p class="text-muted mb-0"><?php echo $siswa->nim; ?></p>
+                <p class="mb-0"><?php echo $siswa->nim; ?></p>
               </div>
             </div>
             <hr>
@@ -99,7 +135,7 @@ $data_siswa = $qb->RAW(
                 <p class="mb-0">TTl</p>
               </div>
               <div class="col-sm-9">
-                <p class="text-muted mb-0"><?php echo $siswa->tmp_lhr; ?>, <?php echo $siswa->tgl_lhr; ?></p>
+                <p class="mb-0"><?php echo $siswa->tmp_lhr; ?>, <?php echo $siswa->tgl_lhr; ?></p>
               </div>
             </div>
             <hr>
@@ -108,7 +144,7 @@ $data_siswa = $qb->RAW(
                 <p class="mb-0">Alamat</p>
               </div>
               <div class="col-sm-9">
-                <p class="text-muted mb-0"><?php echo $siswa->alamat; ?></p>
+                <p class="mb-0"><?php echo $siswa->alamat; ?></p>
               </div>
             </div>
             <hr>
@@ -117,25 +153,27 @@ $data_siswa = $qb->RAW(
                 <p class="mb-0">Nama Ayah</p>
               </div>
               <div class="col-sm-9">
-                <p class="text-muted mb-0"><?php echo $siswa->nm_ayah; ?></p>
+                <p class="mb-0"><?php echo $siswa->nm_ayah; ?></p>
               </div>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card mb-4 mb-md-0">
-              <div class="card-body">
-
-                <h1 style="text-align: center;" class="h3 mb-2 text-gray-800">Saldo Kartu</h1>
+         <div class="card mb-4">
+          <div class="card-body">
                 <?php
                 $data_saldo = $qb->RAW(
                    "SELECT * FROM saldo_log where id_rfid=?",[$siswa->norf]);
+
+                $saldo = $qb->RAW(
+                   "SELECT * FROM saldo_rfid where id_rfid=?",[$siswa->norf]);
+                if(array_key_exists(0, $saldo)){$saldo=convertToRupiah(enkripsiDekripsi(strval($saldo[0]->saldo), $kunciRahasia));}else{$saldo=convertToRupiah(0);}
                 ?>
+                <h1 style="text-align: center;" class="h3 mb-2 text-gray-800">Saldo Kartu : <?php echo $saldo; ?></h1>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                       <tr>
-                          <th>Jenis</th>
+                          <th>Transaksi</th>
+                          <th>Waktu</th>
                           <th>Jumlah</th>
                           <th>Keterangan</th>
                       </tr>
@@ -146,6 +184,7 @@ $data_siswa = $qb->RAW(
                             ?>
                         <tr>
                             <td><?php echo $user->jenis;?></td>
+                            <td><?php echo $user->waktu;?></td>
                             <td><?php 
                             if($user->banyak != ''){
                             echo convertToRupiah(enkripsiDekripsi(strval($user->banyak), $kunciRahasia));}
@@ -156,40 +195,24 @@ $data_siswa = $qb->RAW(
                         
                     </tbody>
                 </table>
+          </div>
+        </div>
+       <!--  <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0">
+              <div class="card-body">
+
                </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="card mb-4 mb-md-0">
               <div class="card-body">
-                 <h1 style="text-align: center;" class="h3 mb-2 text-gray-800">Absen Hari Ini</h1>
-                <?php
-                $absen = $qb->RAW(
-                  "SELECT * FROM rekap_absen WHERE tanggal_absen >= DATE(NOW()) and norf='".$siswa->norf."' order by tanggal_absen desc",[]);
-                  // "SELECT * FROM rekap_absen WHERE norf='".$siswa->norf."' order by tanggal_absen desc",[]);
-                // print_r($absen);die();
-                // if(count($absen) != 0){echo 'a';}die();
-                $masuk='';
-                $pulang='';
-                if(array_key_exists(0, $absen)){$masuk='<i class="fa-solid fa-check"></i>';}
-                if(array_key_exists(1, $absen)){$pulang='<i class="fa-solid fa-check"></i>';}
-                ?>
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <tbody>
-                      <tr>
-                        <td>Masuk</td>
-                        <td><?php echo $masuk;?></td>
-                      </tr>
-                      <tr>
-                        <td>Pulang</td>
-                        <td><?php echo $pulang;?></td>
-                      </tr>
-                    </tbody>
-                </table>
+                 
                </div>
             </div>
           </div>
-        </div> 
+        </div>  -->
         <!-- <div class="row">
           <div class="col-md-6">
             <div class="card mb-4 mb-md-0">
@@ -262,5 +285,6 @@ $data_siswa = $qb->RAW(
     </div>
   </div>
 </section>
+</body>
 
 <?php } ?>
