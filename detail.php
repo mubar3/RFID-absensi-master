@@ -19,9 +19,10 @@ $data_siswa = $qb->RAW(
             "SELECT * FROM siswa  
             join kelas on kelas.id_kelas=siswa.kelas
             join tb_jk on tb_jk.id=siswa.jk
-            where siswa.nisn='".$id."'",[]);
+            where siswa.nisn='".$id."' order by last_update desc",[]);
 // print_r($data_siswa);die();
-            foreach ($data_siswa as $siswa) {
+if(array_key_exists(0, $data_siswa)){
+            $siswa=$data_siswa[0];
 ?>
 <script src="https://kit.fontawesome.com/6e703c102f.js" crossorigin="anonymous"></script>
 <style type="text/css">
@@ -288,5 +289,5 @@ background-size: cover;">
   </div>
 </section>
 </body>
-
-<?php } ?>
+  
+  <?php }?>
