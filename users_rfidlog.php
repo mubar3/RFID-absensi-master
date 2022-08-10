@@ -64,6 +64,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 
             </tbody>
         </table>
+        <br><br>
             <h5 style="text-align:center;">Uang Keluar</h5>
         <table class="display table table-bordered" id="table2" width="100%" cellspacing="0">
             <thead>

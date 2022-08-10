@@ -172,6 +172,20 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     "SELECT * FROM jadwal where id_user=".$_SESSION['id_user'],[]);
 
     ?>
+    <!-- Page Heading -->
+    <!-- <h1 class="h3 mb-2 text-gray-800">Pengaturan Aplikasi</h1> -->
+
+    <!-- DataTales Example -->
+    <!-- <div class="card shadow mb-4">
+        <div class="card-body">
+	    <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+	    	<span>Ubah Foto Login</span>	
+		  	<input type="file" name="foto_login" placeholder="Jam Selesai" class="form-control">
+		  	<br>
+		  	<button type="submit" name="simpan_setting" class="input-group-text"><span  id="">Simpan</span></button>'
+        </form>
+        </div>
+    </div> -->
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Daftar Kelas</h1>

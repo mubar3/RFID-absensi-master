@@ -170,6 +170,10 @@ background-size: cover;">
                 if(array_key_exists(0, $saldo)){$saldo=convertToRupiah(enkripsiDekripsi(strval($saldo[0]->saldo), $kunciRahasia));}else{$saldo=convertToRupiah(0);}
                 ?>
                 <h1 style="text-align: center;" class="h3 mb-2 text-gray-800">Saldo Kartu : <?php echo $saldo; ?></h1>
+          </div>
+         </div>
+         <div class="card mb-4">
+          <div class="card-body">
                 <h5 style="text-align:center;">Uang Masuk</h5>
                   <div class="table-responsive">
                   <table class="display table table-bordered" id="table1" width="100%" cellspacing="0">
@@ -199,6 +203,10 @@ background-size: cover;">
                     </tbody>
                 </table>
                 </div>
+          </div>
+         </div>
+         <div class="card mb-4">
+          <div class="card-body">
                     <h5 style="text-align:center;">Uang Keluar</h5>
                 <div class="table-responsive">                    
                 <table class="display table table-bordered" id="table2" width="100%" cellspacing="0">
