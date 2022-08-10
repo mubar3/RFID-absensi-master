@@ -32,14 +32,14 @@
         GROUP BY makul_absen", []);
     if (array_key_exists(0, $jadwal)) {
     // foreach ($jadwal[0] as $value[0]) {
-        $rekabAbsen = $qb->RAW("SELECT siswa.kelas, siswa.nama,siswa.NIM, rekap_absen.makul_absen, rekap_absen.tanggal_absen
-        FROM siswa
-        INNER JOIN rekap_absen ON siswa.norf=rekap_absen.norf
-        AND rekap_absen.makul_absen = ? 
-        WHERE user_input=".$_SESSION['id_user']." and rekap_absen.tanggal_absen >= DATE(NOW())
-        group by rekap_absen.norf
-        having count(rekap_absen.norf) >= 2
-        ", [$jadwal[0]->makul_absen]);
+        // $rekabAbsen = $qb->RAW("SELECT siswa.kelas, siswa.nama,siswa.NIM, rekap_absen.makul_absen, rekap_absen.tanggal_absen
+        // FROM siswa
+        // INNER JOIN rekap_absen ON siswa.norf=rekap_absen.norf
+        // AND rekap_absen.makul_absen = ? 
+        // WHERE user_input=".$_SESSION['id_user']." and rekap_absen.tanggal_absen >= DATE(NOW())
+        // group by rekap_absen.norf
+        // having count(rekap_absen.norf) >= 2
+        // ", [$jadwal[0]->makul_absen]);
 
         $daftar_kelas = $qb->RAW("SELECT * FROM kelas where id_user=".$_SESSION['id_user'], []);
         foreach ($daftar_kelas as $daftar_kelas) {
@@ -53,23 +53,50 @@
             <th>Nama</th>
             <th>NIM</th>
             <th>Jam</th>
-            <th>History</th>
           </tr>
         </thead>
         <tbody>";
-        foreach ($rekabAbsen as $key => $nilai) {
-          if(($nilai->kelas)==($daftar_kelas->id_kelas)){
-            $date = Carbon::parse($nilai->tanggal_absen, 'Asia/Jakarta');
+        //baru
+        $data_siswa = $qb->RAW("SELECT * from siswa where kelas=?", [$daftar_kelas->id_kelas]);
+        foreach ($data_siswa as $siswa) {
+          $absen = $qb->RAW("SELECT * FROM rekap_absen WHERE norf='".$siswa->norf."'and tanggal_absen >= DATE(NOW()) order by tanggal_absen desc",[]);
+          if (array_key_exists(0, $absen)) {
+            $masuk=substr($absen[0]->tanggal_absen,10);
+            if (array_key_exists(1, $absen)) {
+                $pulang=substr($absen[1]->tanggal_absen,10);;
+            }else{
+                $pulang='';
+            }
+
             $table .= "<tr>";
             $table .= "<td>$i</td>";
-            $table .= "<td>$nilai->nama</td>";
-            $table .= "<td>$nilai->NIM</td>";
-            $table .= "<td>".$date->toDayDateTimeString()."</td>";
-            $table .= "<td>".$date->diffForHumans()."</td>";
+            $table .= "<td>$siswa->nama</td>";
+            $table .= "<td>$siswa->nim</td>";
+            $table .= "<td>".$masuk." - ".$pulang."</td>";
             $table .= "</tr>";
-            $i++;
+          }else{
+            $table .= "<tr style='color:red;'>";
+            $table .= "<td>$i</td>";
+            $table .= "<td>$siswa->nama</td>";
+            $table .= "<td>$siswa->nim</td>";
+            $table .= "<td></td>";
+            $table .= "</tr>";
           }
         }
+        //lama
+        // foreach ($rekabAbsen as $key => $nilai) {
+        //   if(($nilai->kelas)==($daftar_kelas->id_kelas)){
+        //     $date = Carbon::parse($nilai->tanggal_absen, 'Asia/Jakarta');
+        //     $table .= "<tr>";
+        //     $table .= "<td>$i</td>";
+        //     $table .= "<td>$nilai->nama</td>";
+        //     $table .= "<td>$nilai->NIM</td>";
+        //     $table .= "<td>".$date->toDayDateTimeString()."</td>";
+        //     $table .= "<td>".$date->diffForHumans()."</td>";
+        //     $table .= "</tr>";
+        //     $i++;
+        //   }
+        // }
         $table .= "
         </tbody>
       </table>";

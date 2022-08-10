@@ -19,7 +19,7 @@ if (isset($_POST['id'])) {
     // die();
     if(empty($isi)){echo "buku kosong"; die();}
     else{
-
+      $buku=array();
       $data_buku=explode(',', $isi);
       $total_buku=count($data_buku);
       // print_r($total);
@@ -31,6 +31,7 @@ if (isset($_POST['id'])) {
               foreach ($data_rfid_buku as $data_rfid_buku) {
                 if($data_buku[$x]==($data_rfid_buku->rfid)){
                   $status=1;
+                  array_push($buku,'<li>'.$data_rfid_buku->judul_buku.'</li>');
                 }
               }
               if($status==0){echo 'RFID buku ada yang tidak terdaftar';die();}  
@@ -45,7 +46,7 @@ if (isset($_POST['id'])) {
           'buku' => $isi
         ]);
     if($rekapAbsen){
-      echo 'Berhasil';
+      echo 'Buku Dengan Judul'.implode('',$buku).'Berhasil Dipinjam';
     }else{
       echo 'Tidak berhasil, coba ulangi lagi';
     }

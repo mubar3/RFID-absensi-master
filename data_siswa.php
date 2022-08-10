@@ -286,6 +286,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th>Foto</th>
                                             <th>Nama Siswa</th>
                                             <th>NIS</th>
                                             <th>Kelas</th>
@@ -298,6 +299,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                         foreach ($data_siswa as $siswa) {
                                             ?>
                                         <tr>
+                                            <td><img style="display: block; margin-left: auto;  margin-right: auto;   width: 70px;" class="img-responsive img" src="asset/foto/<?php echo $siswa->foto;?>"></td>
                                             <td><?php echo $siswa->nama;?></td>
                                             <td><?php echo $siswa->nis;?></td>
                                             <td><?php echo $siswa->nama_kelas;?></td>
@@ -333,10 +335,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
           /* Declaring array variable */
           rows.push(
                   [
-                     table.rows[0].cells[0].innerText,
                      table.rows[0].cells[1].innerText,
                      table.rows[0].cells[2].innerText,
-                     table.rows[0].cells[3].innerText
+                     table.rows[0].cells[3].innerText,
+                     table.rows[0].cells[4].innerText
                   ]
               );
             //iterate through rows of table
@@ -348,10 +350,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
           /* add a new records in the array */
               rows.push(
                   [
-                      row.cells[0].innerText,
                       row.cells[1].innerText,
                       row.cells[2].innerText,
-                      row.cells[3].innerText.substring(0, row.cells[3].innerText.length - 3)
+                      row.cells[3].innerText,
+                      row.cells[4].innerText.substring(0, row.cells[4].innerText.length - 3)
                      
                   ]
               );

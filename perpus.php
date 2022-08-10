@@ -44,7 +44,7 @@
 		<h2 class="text-primary mt-4">Pinjam Perpus </h2>
 
 		<div class="form-group">
-			<label for="rfidnumber">Buku</label>
+			<label for="rfidnumber">RFID Buku</label>
 			<input type="text" id="books" class="form-control" data-role="tagsinput"  name="tags" class="form-control">
 			<label for="rfidnumber">RFID Tag Number</label>
 			<input type="text" class="form-control" id="inputs" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
@@ -105,11 +105,11 @@ $(document).ready(function() {
 
         if (data.match(/Berhasil.*/)) {
           // $('.alert').addClass('alert-success').html(data);
-          $('#classInformation').html("Class Information").addClass('display-4');
+          // $('#classInformation').html("Class Information").addClass('display-4');
           $('#tampilMessage').addClass('bg-success').html(data);
         } else {
           // $('.alert').addClass('alert-danger').html("RFID belum terdaftar di dalam system kami: " + "<b>{ " + id + " }</b>");
-          $('#classInformation').html("Whoops, there was an error").addClass('display-4');
+          // $('#classInformation').html("Whoops, there was an error").addClass('display-4');
           $('#tampilMessage').addClass('bg-danger').html(data);
         }
 
@@ -117,7 +117,7 @@ $(document).ready(function() {
         // $('#books').val("");
         // $('#books').tagsinput('focus');
         // $('#inputs').focus(); //mengembalikan cursor ke input field
-        setTimeout(location.reload.bind(location), 1200);
+        // setTimeout(location.reload.bind(location), 1200);
       })
       .fail(function(data) {
         console.log(data);

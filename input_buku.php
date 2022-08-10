@@ -91,7 +91,7 @@ if($rekapAbsen){
     <div class="mb-3"><label for="exampleFormControlInput1">Judul Buku</label><input class="form-control" name="judul" type="text" placeholder="Judul Buku" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Tahun Terbit</label><input class="form-control" name="tahun" type="text" placeholder="Tahun" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Penerbit</label><input class="form-control" name="penerbit" type="text" placeholder="Penerbit" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">RFID</label><input class="form-control" name="rfid" type="text" placeholder="RFID" required></div>       
+    <div class="mb-3"><label for="exampleFormControlInput1">RFID</label><input class="form-control" name="rfid" type="text" placeholder="RFID" ></div>       
     <div class="mb-3"><label for="exampleFormControlInput1">Penulis</label><input class="form-control" name="penulis" type="text" placeholder="Penulis" required></div>
     <button name="simpan_data" type='submit' class="btn btn-primary btn-user btn-block">Simpan</button>
 </form>
