@@ -19,6 +19,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		if(isset($_POST['simpan_kelas'])){
      		$aksi = $qb->insert('kelas', [
 	          'kelas' => $_POST['kelas'],
+	          'spp' => $_POST['spp'],
 	          'id_user' => $_SESSION['id_user']
 	        ]);
 	        if($aksi){
@@ -43,7 +44,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
      	}
      	if(isset($_POST['update_kelas'])){
 	        $aksi = $qb->RAW(
-    		"UPDATE kelas SET kelas='".$_POST['kelas']."' where id_kelas=".$_POST['id_kelas'],[]);
+    		"UPDATE kelas SET kelas='".$_POST['kelas']."',spp='".$_POST['spp']."' where id_kelas=".$_POST['id_kelas'],[]);
 	        if($aksi){
 	        	echo '<div class="col-lg-12 mb-4">
 			        <div class="card bg-success text-white shadow">
@@ -203,6 +204,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	        	<input type="hidden" name="id_kelas" value="<?php echo $_GET['edit_kelas']; ?>" class="form-control">
 	        	<?php } ?>
 			  <input type="text" name="kelas" value="<?php if(isset($_GET['edit_kelas'])){ echo $_GET['kelas'];}?>" placeholder="Kelas" class="form-control">
+			  <input type="text" name="spp" value="<?php if(isset($_GET['edit_kelas'])){ echo $_GET['spp'];}?>" placeholder="Jumlah SPP" class="form-control">
 			  <div class="input-group-prepend">
 			  	<?php if(isset($_GET['edit_kelas'])){echo '<button type="submit" name="update_kelas" class="input-group-text"><span  id="">Update</span></button>';}
 	    		else{echo'<button type="submit" name="simpan_kelas" class="input-group-text"><span  id="">Simpan</span></button>';}?>
@@ -218,6 +220,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         <tr>
                             <th>No</th>
                             <th>Kelas</th>
+                            <th>SPP</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -229,9 +232,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         <tr>
                             <td><?php echo $no;?></td>
                             <td><?php echo $kelas->kelas;?></td>
+                            <td><?php echo $kelas->spp;?></td>
                             <td>
                             <center>
-                            	<a href="setting_absen.php?edit_kelas=<?php echo $kelas->id_kelas;?>&&kelas=<?php echo $kelas->kelas;?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                            	<a href="setting_absen.php?edit_kelas=<?php echo $kelas->id_kelas;?>&&kelas=<?php echo $kelas->kelas;?>&&spp=<?php echo $kelas->spp;?>"><i class="fa-solid fa-pen-to-square"></i></a>
                             	&nbsp
                             	<a href="setting_absen.php?hapus_kelas=<?php echo $kelas->id_kelas;?>"><i class="fa-solid fa-trash-can"></i></a>
                             </center>
