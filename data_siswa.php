@@ -322,9 +322,12 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                     </tbody>
                                 </table>
 
-                              <button class="btn btn-primary" onclick="exportData()">
+                              <!-- <button class="btn btn-primary" onclick="exportData()">
                                     <span class="glyphicon glyphicon-download"></span>
-                                    Download excel</button>
+                                    Download excel</button> -->
+                              <a class="btn btn-primary" target="_Blank" href="download_excel.php">
+                                    <span class="glyphicon glyphicon-download"></span>
+                                    Download excel</a>
 
                             </div>
     <script type="text/javascript">
