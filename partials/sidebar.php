@@ -49,7 +49,59 @@
             </li> -->
             <!-- Nav Item - Pages Collapse Menu -->
             <?php 
-            if($page=='absen.php' || $page=='rekap.php' || $page=='setting_absen.php'){
+            if($page=='setting_raport.php' || $page=='users.php' || $page=='setting_absen.php'){
+                echo '<li class="nav-item active">';
+            }else{
+                echo '<li class="nav-item">';}
+            ?>
+            <!-- <li class="nav-item"> -->
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilitiessetting"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Setting</span>
+                </a>
+                <div id="collapseUtilitiessetting" 
+                <?php 
+                if($page=='setting_raport.php' || $page=='setting_absen.php' || $page=='users.php'){
+                    echo 'class="collapse show"';
+                }else{
+                    echo 'class="collapse"';}
+                ?>
+                aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a
+                        <?php 
+                        if($page=='setting_raport.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="setting_raport.php">Setting Raport</a>
+                        <a 
+                        <?php 
+                        if($page=='setting_absen.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="setting_absen.php">Setting Absensi</a>
+                    <?php if($_SESSION['role'] == 1){?>
+                        <a 
+                        <?php 
+                        if($page=='users.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="users.php">Data Users</a>
+                    <?php } ?>
+                    </div>
+                </div>
+            </li>
+
+            <?php 
+            if($page=='absen.php' || $page=='rekap.php'){
                 echo '<li class="nav-item active">';
             }else{
                 echo '<li class="nav-item">';}
@@ -62,7 +114,7 @@
                 </a>
                 <div id="collapseUtilities" 
                 <?php 
-                if($page=='absen.php' || $page=='rekap.php' || $page=='setting_absen.php' || $page=='users.php'){
+                if($page=='absen.php' || $page=='rekap.php' || $page=='users.php'){
                     echo 'class="collapse show"';
                 }else{
                     echo 'class="collapse"';}
@@ -86,24 +138,6 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="rekap.php">Rekap Absen (Hari Ini)</a>
-                        <a 
-                        <?php 
-                        if($page=='setting_absen.php'){
-                            echo 'class="collapse-item active"';
-                        }else{
-                            echo 'class="collapse-item"';}
-                        ?> 
-                        href="setting_absen.php">Setting Absen</a>
-                    <?php if($_SESSION['role'] == 1){?>
-                        <a 
-                        <?php 
-                        if($page=='users.php'){
-                            echo 'class="collapse-item active"';
-                        }else{
-                            echo 'class="collapse-item"';}
-                        ?> 
-                        href="users.php">Data Users</a>
-                    <?php } ?>
                     </div>
                 </div>
             </li>
@@ -220,6 +254,40 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="data_siswa.php">Data Siswa</a>
+                    </div>
+                </div>
+            </li>
+
+            <?php 
+            if($page=='input_nilai.php'){
+                echo '<li class="nav-item active">';
+            }else{
+                echo '<li class="nav-item">';}
+            ?>
+            <!-- <li class="nav-item"> -->
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilitiesnilai"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Nilai</span>
+                </a>
+                <div id="collapseUtilitiesnilai" 
+                <?php 
+                if($page=='input_nilai.php'){
+                    echo 'class="collapse show"';
+                }else{
+                    echo 'class="collapse"';}
+                ?>
+                aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a
+                        <?php 
+                        if($page=='input_nilai.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="input_nilai.php">Input Nilai</a>
                     </div>
                 </div>
             </li>
