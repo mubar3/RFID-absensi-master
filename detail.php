@@ -31,7 +31,8 @@ if(array_key_exists(0, $data_siswa)){
 <body>
 <section style="
 /*background-color: #eee; */
-background: url('https://baradesain.files.wordpress.com/2021/03/tut-wuri-handayani-logo-featured-03.jpg?w=1200');
+/*background: url('https://baradesain.files.wordpress.com/2021/03/tut-wuri-handayani-logo-featured-03.jpg?w=1200');*/
+background: url('asset/desain/background.jpg');
 background-position: center;
 background-size: cover;">
   <div class="container py-5">

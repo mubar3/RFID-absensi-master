@@ -114,7 +114,7 @@
                 </a>
                 <div id="collapseUtilities" 
                 <?php 
-                if($page=='absen.php' || $page=='rekap.php' || $page=='users.php'){
+                if($page=='absen.php' || $page=='rekap.php'){
                     echo 'class="collapse show"';
                 }else{
                     echo 'class="collapse"';}
@@ -209,7 +209,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="https://www.perpusnas.go.id" >
+                <a class="nav-link" target="_blank" href="https://www.perpusnas.go.id" >
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Perpustakaan Online</span>
                 </a>

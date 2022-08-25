@@ -8,7 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="https://media.istockphoto.com/vectors/contactless-payment-vector-icon-credit-card-hand-wireless-nfc-pay-vector-id1281706307?k=20&m=1281706307&s=170667a&w=0&h=u4ZZmlb_c9IDZnQ4f8GxfFGFxgRbiZjjHmDn9w7SRXQ=" type="image/icon type">
+    <!-- <link rel="icon" href="https://media.istockphoto.com/vectors/contactless-payment-vector-icon-credit-card-hand-wireless-nfc-pay-vector-id1281706307?k=20&m=1281706307&s=170667a&w=0&h=u4ZZmlb_c9IDZnQ4f8GxfFGFxgRbiZjjHmDn9w7SRXQ=" type="image/icon type"> -->
+    <link rel="icon" href="asset/desain/icon.png" type="image/icon type">
     <title>KlikTap NFC</title>
 
     <!-- tags input -->

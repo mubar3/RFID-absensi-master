@@ -64,7 +64,12 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block" style="background: url('https://baradesain.files.wordpress.com/2021/03/tut-wuri-handayani-logo-featured-03.jpg?w=1200');
+                            <!-- <div class="col-lg-6 d-none d-lg-block" style="background: url('https://baradesain.files.wordpress.com/2021/03/tut-wuri-handayani-logo-featured-03.jpg?w=1200');
+                                background-position: center;
+                                background-size: cover;
+                                "
+                                > -->    
+                            <div class="col-lg-6 d-none d-lg-block" style="background: url('asset/desain/logo.jpg');
                                 background-position: center;
                                 background-size: cover;
                                 "
