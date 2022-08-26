@@ -28,6 +28,7 @@
     <script src="./asset/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
+    <script src="./asset/js/sb-admin-2.js"></script>
     <script src="./asset/js/sb-admin-2.min.js"></script>
 
 
@@ -45,6 +46,25 @@
 
     <!-- Page level custom scripts -->
     <script src="./asset/js/demo/datatables-demo.js"></script>
+    <script type="text/javascript">
+        // $(window).resize(function() {
+                // console.log(screen.width);
+            if (screen.width < 768) {
+            // $('.sidebar').removeClass('hide');
+            $('.collapse').removeClass('show');
+            // $("#page-top").addClass("sidebar-toggled");
+            // $(".sidebar").addClass("toggled");
+        }
+
+        // if (screen.width < 480 && !$(".sidebar").find("toggled")) {
+        //     // $('.collapse').removeClass('show');
+        //     $("#page-top").addClass("sidebar-toggled");
+        //     // document.body.classList.add("sidebar-toggled");
+        //     $(".sidebar").addClass("toggled");
+        //     $('.sidebar,.collapse').removeClass('hide');
+        // }
+        // });
+    </script>
 
 </body>
 
