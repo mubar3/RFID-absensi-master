@@ -17,6 +17,7 @@ if (isset($_POST['id'])) {
     $isi = $_POST['isi'];
     $total = $isi;
     if(empty($isi)){$isi=0;}
+    if($isi > 1000000){echo "<div class='p-3 mb-2 bg-danger'>Isi Saldo Maksimum Rp1.000.000<div>"; die();}
 
 
     $data = $qb->RAW(
@@ -67,7 +68,7 @@ if (isset($_POST['id'])) {
         }
 
 
-      $formatTampilan = "<b>Nama:</b> %s, <b>Kelas:</b> %s, <b>Saldo:</b> %s";
+      $formatTampilan = "<div class='p-3 mb-2 bg-success'><b>Nama:</b> %s, <b>Kelas:</b> %s, <b>Saldo:</b> %s</div>";
       
         echo sprintf($formatTampilan, $nama, $kelas, $isi2);
     } else {
@@ -102,7 +103,7 @@ if (isset($_POST['id'])) {
         }
 
 
-      $formatTampilan = "<b>Nama:</b> %s, <b>Kelas:</b> %s, <b>Saldo:</b> %s";
+      $formatTampilan = "<div class='p-3 mb-2 bg-success'><b>Nama:</b> %s, <b>Kelas:</b> %s, <b>Saldo:</b> %s</div>";
       
         echo sprintf($formatTampilan, $nama, $kelas, $isi2);
     }

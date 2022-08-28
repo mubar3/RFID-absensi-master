@@ -49,7 +49,7 @@
             </li> -->
             <!-- Nav Item - Pages Collapse Menu -->
             <?php 
-            if($page=='setting_raport.php' || $page=='users.php' || $page=='setting_absen.php'){
+            if($page=='setting_raport.php' || $page=='users.php' || $page=='setting_absen.php' || $page=='toko_setting.php'){
                 echo '<li class="nav-item active">';
             }else{
                 echo '<li class="nav-item">';}
@@ -62,7 +62,7 @@
                 </a>
                 <div id="collapseUtilitiessetting" 
                 <?php 
-                if($page=='setting_raport.php' || $page=='setting_absen.php' || $page=='users.php'){
+                if($page=='setting_raport.php' || $page=='setting_absen.php' || $page=='users.php' || $page=='toko_setting.php'){
                     echo 'class="collapse show"';
                 }else{
                     echo 'class="collapse"';}
@@ -86,6 +86,14 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="setting_absen.php">Setting Absensi</a>
+                        <a 
+                        <?php 
+                        if($page=='toko_setting.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="toko_setting.php">Setting Toko</a>
                     <?php if($_SESSION['role'] == 1){?>
                         <a 
                         <?php 
@@ -329,7 +337,7 @@
                         }else{
                             echo 'class="collapse-item"';}
                         ?> 
-                        href="merchan.php">Merchant</a>
+                        href="merchan.php">Toko</a>
                     </div>
                 </div>
             </li>

@@ -92,7 +92,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         if($lanjut==0){
             $filename=$_FILES['file_kirim']['name'];
             if(!empty($filename)){
-            $filename=$filename.rand(111,9999);
+            $ext = pathinfo($_FILES['file_kirim']['name'], PATHINFO_EXTENSION);
+            $filename = $nisn_baru.'.'.$ext;
+            // $filename=$filename.rand(111,9999);
             unlink('asset/foto/'.$_POST['foto_lama']);
             $upload=move_uploaded_file($_FILES['file_kirim']['tmp_name'],  "asset/foto/".$filename);
                 for($x=0;$x<20;$x++){

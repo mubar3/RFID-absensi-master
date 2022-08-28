@@ -40,8 +40,17 @@ function resizer ($source, $destination, $size, $quality=null) {
   // (A) FILE CHECKS
   // Allowed image file extensions
   $ext = strtolower(pathinfo($source)['extension']);
-  if (!in_array($ext, ["bmp", "gif", "jpg", "jpeg", "png", "webp"])) {
-    throw new Exception('Invalid image file type');
+  // print_r($ext);die();
+  if (!in_array($ext, ["bmp", "gif", "jpg", "jpeg", "png", "PNG", "webp"])) {
+    // throw new Exception('Invalid image file type');
+    echo'<div class="col-lg-12 mb-4">
+              <div class="card bg-danger text-white shadow">
+                  <div class="card-body">
+                      Gagal
+                      <div class="text-white-50 small">Foto tidak didukung</div>
+                  </div>
+              </div>
+          </div>';die();
   }
  
   // Source image not found!
@@ -88,25 +97,27 @@ function resizer ($source, $destination, $size, $quality=null) {
   );
 
   // Correct image orientation
-$exif = exif_read_data($source);
-if ($exif && isset($exif['Orientation'])) {
-  $orientation = $exif['Orientation'];
-  switch ($orientation) {
-    case 1:
-      // no rotation necessary
-      break;
+if (!in_array($ext, ["png", "PNG"])) {
+  $exif = exif_read_data($source);
+  if ($exif && isset($exif['Orientation'])) {
+    $orientation = $exif['Orientation'];
+    switch ($orientation) {
+      case 1:
+        // no rotation necessary
+        break;
 
-    case 3: 
-      $resized = imagerotate($resized,180,0);
-      break;
-                               
-    case 6: 
-      $resized = imagerotate($resized,270,0);
-      break;
-                   
-    case 8: 
-      $resized = imagerotate($resized,90,0);  
-      break;
+      case 3: 
+        $resized = imagerotate($resized,180,0);
+        break;
+                                 
+      case 6: 
+        $resized = imagerotate($resized,270,0);
+        break;
+                     
+      case 8: 
+        $resized = imagerotate($resized,90,0);  
+        break;
+    }
   }
 }
 
