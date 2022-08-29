@@ -85,7 +85,7 @@
                         }else{
                             echo 'class="collapse-item"';}
                         ?> 
-                        href="setting_absen.php">Setting Absensi</a>
+                        href="setting_absen.php">Setting Absensi & SPP</a>
                         <a 
                         <?php 
                         if($page=='toko_setting.php'){
