@@ -85,6 +85,7 @@ $(document).ready(function() {
           $('#tampilMessage').html(data);
         // }
 
+        $('#rp').val(""); //Mengkosongkan input field
         $('#inputs').val(""); //Mengkosongkan input field
         $('#inputs').focus(); //mengembalikan cursor ke input field
 

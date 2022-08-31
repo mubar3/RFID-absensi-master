@@ -189,6 +189,8 @@ $(document).ready(function() {
           $('#tampilMessage').html(data1);
         // }
 
+    	$('#rp').val("");
+    	$('#keperluan').val("");
         $('#inputs').val(""); //Mengkosongkan input field
         $('#inputs').focus(); //mengembalikan cursor ke input field
 
@@ -228,6 +230,7 @@ $(document).ready(function() {
           $('#tampilMessage').html(data1);
         // }
 
+		$("#datas").tagsinput('removeAll');
         $('#inputs2').val(""); //Mengkosongkan input field
         $('#inputs2').focus(); //mengembalikan cursor ke input field
 
