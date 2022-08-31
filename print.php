@@ -92,8 +92,12 @@ require "vendor/autoload.php";
 		// $sql = "SELECT * FROM siswa WHERE siswa.id='$id[$i]'";
         $rr = $qb->RAW(
           "SELECT * FROM siswa 
-          join tb_agama on tb_agama.id=siswa.agama
-          join tb_jk on tb_jk.id=siswa.jk
+          left join tb_agama on tb_agama.id=siswa.agama
+          left join tb_jk on tb_jk.id=siswa.jk
+          left join provinsi on provinsi.id_prov=siswa.provinsi
+          left join kabupaten on kabupaten.id_kab=siswa.kabupaten
+          left join kecamatan on kecamatan.id_kec=siswa.kecamatan
+          left join desa on desa.id_desa=siswa.desa
           WHERE siswa.id=".$id[$i],[]);
         $rr=$rr[0];
         // $rr=json_decode($rr[0]);
@@ -184,7 +188,7 @@ require "vendor/autoload.php";
                     <tr>
                         <td style="vertical-align:top">Alamat</td>
                         <td style="vertical-align:top">:</td>
-                        <td style="vertical-align:top"> <?php echo $rr->alamat.", ".$rr->desa.", ".$rr->kecamatan.", ".$rr->kabupaten.", ".$rr->provinsi.", Indonesia";?></td>
+                        <td style="vertical-align:top"> <?php echo $rr->alamat.", ".$rr->nama_desa.", ".$rr->nama_kecamatan.", ".$rr->nama_kabupaten.", ".$rr->nama_provinsi;?></td>
                         
                     </tr>
                         <img style="border: 0px solid white; border-radius: 5px; position: absolute;margin-left: 440px;margin-top: 270px; width: 60px; height: 60px;overflow: hidden;" class="img-responsive img" src="asset/qrcode/<?php 
