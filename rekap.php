@@ -51,7 +51,7 @@
           <tr>
             <th>#</th>
             <th>Nama</th>
-            <th>NIM</th>
+            <th>NIS</th>
             <th>Jam</th>
           </tr>
         </thead>
@@ -78,7 +78,7 @@
             $table .= "<tr style='color:red;'>";
             $table .= "<td>$i</td>";
             $table .= "<td>$siswa->nama</td>";
-            $table .= "<td>$siswa->nim</td>";
+            $table .= "<td>$siswa->nis</td>";
             $table .= "<td></td>";
             $table .= "</tr>";
           }
