@@ -17,8 +17,11 @@
                     <!-- <i class="fas fa-laugh-wink"></i> -->
                     <!-- <i class="fa-brands fa-nfc-directional"></i> -->
                 </div>
-                <!-- <div class="sidebar-brand-text mx-3">KlikTap <sup>NFC</sup></div> -->
+                <?php if(!empty($_SESSION['lembaga'])){?>
                 <div class="sidebar-brand-text mx-3"><?php echo $_SESSION['lembaga'];?></div>
+                <?php }else{?>
+                <div class="sidebar-brand-text mx-3">KlikTap <sup>NFC</sup></div>
+                <?php } ?>
             </a>
 
             <!-- Divider -->
