@@ -207,7 +207,7 @@ require "vendor/autoload.php";
                         <td style="vertical-align:top"> <?php echo $rr->alamat.", ".$rr->nama_desa.", ".$rr->nama_kecamatan.", ".$rr->nama_kabupaten.", ".$rr->nama_provinsi;?></td>
                         
                     </tr>
-                        <img style="border: 0px solid white; border-radius: 5px; position: absolute;margin-left: 440px;margin-top: 260px; width: 70px; height: 70px;overflow: hidden;" class="img-responsive img" src="asset/qrcode/<?php 
+                        <img style="border: 0px solid white; border-radius: 5px; position: absolute;margin-left: 445px;margin-top: 260px; width: 70px; height: 70px;overflow: hidden;" class="img-responsive img" src="asset/qrcode/<?php 
                         echo $rr->nisn.'.png';
                         ?>">
                     
