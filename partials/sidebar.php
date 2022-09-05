@@ -49,7 +49,7 @@
             </li> -->
             <!-- Nav Item - Pages Collapse Menu -->
             <?php 
-            if($page=='setting_raport.php' || $page=='users.php' || $page=='setting_absen.php' || $page=='toko_setting.php'){
+            if($page=='setting_raport.php' || $page=='users.php' || $page=='setting_absen.php' || $page=='toko_setting.php' || $page=='user_cetak.php'){
                 echo '<li class="nav-item active">';
             }else{
                 echo '<li class="nav-item">';}
@@ -62,7 +62,7 @@
                 </a>
                 <div id="collapseUtilitiessetting" 
                 <?php 
-                if($page=='setting_raport.php' || $page=='setting_absen.php' || $page=='users.php' || $page=='toko_setting.php'){
+                if($page=='setting_raport.php' || $page=='setting_absen.php' || $page=='users.php' || $page=='toko_setting.php' || $page=='user_cetak.php'){
                     echo 'class="collapse show"';
                 }else{
                     echo 'class="collapse"';}
@@ -94,6 +94,14 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="toko_setting.php">Setting Toko</a>
+                        <a 
+                        <?php 
+                        if($page=='user_cetak.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="user_cetak.php">Setting Kartu</a>
                     <?php if($_SESSION['role'] == 1){?>
                         <a 
                         <?php 

@@ -142,7 +142,7 @@ require "vendor/autoload.php";
     //     elseif ($i==9){$foto_qr=$qr[8]; $date_input=$date[8];}
 ?>
 
-<div style=" float: left;  padding-left: 30px; width: 550px;height: 350px; border-left: 2px dashed red;">
+<div>
 <div style=" margin-left: 0px;  float: left;  margin-right: 30px; margin-top:-4px;width: 550px;height: 350px;margin-bottom: 6px;background-size: 550px 350px;
     <?php if(!empty($rr->foto)){?>
     /*background-image: url('kartu/depan.jpg');*/
@@ -247,7 +247,7 @@ require "vendor/autoload.php";
 </body>
 
 <script>
-        window.print();
+        // window.print();
     </script>
 
     <?php
