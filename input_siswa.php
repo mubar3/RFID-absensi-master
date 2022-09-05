@@ -75,10 +75,24 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 $user = $qb->RAW(
     // "SELECT * FROM siswa WHERE norf='".$norfid."'",[]);
     "SELECT * FROM siswa WHERE user_input=".$_SESSION['id_user']."and nisn='".$nisn."'",[]);
+$rfid = $qb->RAW(
+    "SELECT * FROM siswa WHERE norf='".$norfid."'",[]);
+    // "SELECT * FROM siswa WHERE user_input=".$_SESSION['id_user']."and nisn='".$nisn."'",[]);
 
 
 // print_r($user);
 // die();
+  if (array_key_exists(0, $rfid)) {
+    echo'
+    <div class="col-lg-12 mb-4">
+        <div class="card bg-danger text-white shadow">
+            <div class="card-body">
+                Gagal
+                <div class="text-white-50 small">Data RFID Sudah Ada</div>
+            </div>
+        </div>
+    </div>
+    ';}else{
   if (array_key_exists(0, $user)) {
     echo'
     <div class="col-lg-12 mb-4">
@@ -194,7 +208,7 @@ if($rekapAbsen){
     </div>
     ';
 }
-}
+}}
 }
 
     ?>

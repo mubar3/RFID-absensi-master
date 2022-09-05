@@ -66,14 +66,27 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
               $kabupaten= $_POST['kabupaten'];
               $provinsi= $_POST['provinsi'];
 
-            // $rfid_lama=$_POST['rfid_lama'];
+            $rfid_lama=$_POST['rfid_lama'];
             $rfid_baru=$_POST['norfid'];
             $nisn_lama=$_POST['nisn_lama'];
             $nisn_baru=$_POST['nisn'];
 
             $lanjut=0;
-            // $data_rfid = $qb->RAW(
-            // "SELECT * FROM siswa where not norf=?",[$rfid_lama]);
+            $data_rfid = $qb->RAW(
+            "SELECT * FROM siswa where not norf=?",[$rfid_lama]);
+            foreach ($data_rfid as $data_rfid) {
+                if($rfid_baru==($data_rfid->nisn)){
+                    echo '<div class="col-lg-12 mb-4">
+                    <div class="card bg-danger text-white shadow">
+                        <div class="card-body">
+                            Gagal
+                            <div class="text-white-50 small">Data RFID Sudah Ada</div>
+                        </div>
+                     </div>
+                    </div>';
+                $lanjut=1;
+                }
+            }
             $data_nisn = $qb->RAW(
             "SELECT * FROM siswa user_input=".$_SESSION['id_user']."and where not nisn=?",[$nisn_lama]);
             foreach ($data_nisn as $data_nisn) {
