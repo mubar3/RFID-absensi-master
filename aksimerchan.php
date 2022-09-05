@@ -111,6 +111,7 @@ else {
   // $_POST['id2']
   // $_POST['id_isi']
   // $_POST['id_isi']=str_replace("on", "", $_POST['id_isi']);
+  // print_r($_POST['id_isi']);die();
   if(empty($_POST['id_isi'])){echo "<div class='p-3 mb-2 bg-danger'>Pembelian Kosong<div>"; die();}
     else{
       $data_menu=explode(',', $_POST['id_isi']);

@@ -105,7 +105,7 @@
 		        	<img width="150" style="display: block; margin-left: auto; margin-right: auto; " src="asset/menu/<?php echo $menu->gambar;?>">
 							  <div class="card-body" style="padding:0px;">
 							    <center><h5 class="card-title" style="font-size:15px!important; margin: 0px;"><?php echo $menu->nama; ?></h5></center>
-							    <center><button href="javascript:void(0);" value="<?php echo $menu->id;?>" class="datas btn btn-primary"style="width: 100px; font-size:10px!important;">Tambah</button></center>
+							    <center><button href="javascript:void(0);" value="<?php echo $menu->nama.','.$menu->id;?>" class="datas btn btn-primary"style="width: 100px; font-size:10px!important;">Tambah</button></center>
 							  </div>
 							</div>
 						</div>
@@ -151,7 +151,11 @@
 		});
 
 $(document).ready(function() {
-
+	$('#datas').tagsinput({
+		  allowDuplicates: true,
+        itemValue: 'id',  // this will be used to set id of tag
+        itemText: 'label' // this will be used to set text of tag
+		});
   // Input field langsung fokus
   // $('#inputs2').focus();
 
@@ -274,15 +278,9 @@ var rupiah = document.getElementById('rp');
 				// $("#datas").tagsinput('remove', 'on');
 		$(".datas-barang").on('click','.datas',function(){
 	        // console.log($(this).val());
-				$("#datas").tagsinput('add', $(this).val());
+	        let text = $(this).val();
+			const myArray = text.split(",");
+				$("#datas").tagsinput('add', { id:myArray[1] , label: myArray[0] });
 	    });
-				// $("#books").tagsinput('add', 'yhaa');
-				// $("#books").tagsinput('add', 'yhaaaaq');
-				// $("#books").tagsinput('add', 'yhaaaaq1');
-				// $("#books").tagsinput('add', 'yhaaaaq2');
-				// $("#books").tagsinput('add', 'yhaaaaq3');
-				// $("#books").val('some tag');
-				// $("#books").addTag('some tag2');
-				// $('#books').tagsinput('add', { "value": 1 , "text": "jQuery"});
 		
 	</script>
