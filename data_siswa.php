@@ -271,7 +271,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Data Siswa</h1>
-
+                    <?php if($_SESSION['role'] == 1){?>
                     <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
                         <div class="col-lg-12 mb-2">
                             <div class="input-group">
@@ -330,6 +330,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             </div>
                         </div>
                     </form>
+                    <?php } ?>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
