@@ -25,7 +25,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
   $pass = md5($_POST['pass']);
 
     $user = $qb->RAW(
-    "SELECT * FROM user WHERE username='".$username."'and pass=?",[$pass]);
+    "SELECT * FROM user WHERE username='".$username."'and status=1 and pass=?",[$pass]);
 
 
 
@@ -33,6 +33,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     $user = $user[0]; 
     $_SESSION['id_user']     = $user->id_user;
     $_SESSION['nama_user']     = $user->username;
+    $_SESSION['lembaga']     = $user->lembaga;
     $_SESSION['role']=$user->role;
     // print_r($_SESSION['role']);
     // die();

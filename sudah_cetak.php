@@ -110,14 +110,51 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
      <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
         <div class="col-lg-12 mb-2">
             <div class="input-group">
-                <select class="form-control" name="data_user">
+                <select id="provinsi" name="provinsi" class="form-control" required>
+                    <?php 
+                    $data= $qb->RAW("SELECT * FROM provinsi",[]);
+                    ?>
+                    <option value="">Provinsi</option>
+                    <?php foreach ($data as $data) {
+                        $selected='';
+                        if($_POST['provinsi'] == $data->id_prov){$selected='selected';}
+                        echo '<option value="'.$data->id_prov.'" '.$selected.'>'.$data->nama_provinsi.'</option>';
+                    }?>
+                </select>
+                <select id="kabupaten" name="kabupaten" class="form-control" required>
+                    <?php 
+                    $data= $qb->RAW("SELECT * FROM kabupaten",[]);
+                    ?>
+                    <option value="">Kab</option>
+                    <?php foreach ($data as $data) {
+                        $selected='';
+                        if($_POST['kabupaten'] == $data->id_kab){$selected='selected';}
+                        echo '<option id="kabupaten" class="'.$data->id_prov.'" value="'.$data->id_kab.'" '.$selected.'>'.$data->nama_kabupaten.'</option>';
+                    }?>
+                </select>
+                <select id="kecamatan" name="kecamatan" class="form-control" required>
+                    <?php 
+                    $data= $qb->RAW("SELECT * FROM kecamatan",[]);
+                    ?>
+                    <option value="">Kec</option>
+                    <?php foreach ($data as $data) {
+                        $selected='';
+                        if($_POST['kecamatan'] == $data->id_kec){$selected='selected';}
+                        echo '<option id="kecamatan" class="'.$data->id_kab.'" value="'.$data->id_kec.'" '.$selected.'>'.$data->nama_kecamatan.'</option>';
+                    }?>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-12 mb-2">
+            <div class="input-group">
+                <select id="lembaga" class="form-control" name="data_user">
                     <option value="">User</option>
                     <?php
                     foreach ($data_user as $user) {
                         if($user->id_user == $_POST['data_user']){
-                        echo '<option value="'.$user->id_user.'" selected>'.$user->username.'</option>';}
+                        echo '<option id="lembaga" class="'.$user->kecamatan.'" value="'.$user->id_user.'" selected>'.$user->lembaga.'</option>';}
                         else{
-                        echo '<option value="'.$user->id_user.'">'.$user->username.'</option>';}
+                        echo '<option id="lembaga" class="'.$user->kecamatan.'"  value="'.$user->id_user.'">'.$user->lembaga.'</option>';}
                     }
                     ?>
                 </select>
@@ -175,4 +212,11 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         </div>
     </div>
 </div>
+<script src="asset/js/jquery-1.10.2.min.js"></script>
+  <script src="asset/js/jquery.chained.min.js"></script>
+<script>
+    $("#kabupaten").chained("#provinsi");
+    $("#kecamatan").chained("#kabupaten");
+    $("#lembaga").chained("#kecamatan");
+  </script>
 <?php require "partials/footer.php"; ?>
