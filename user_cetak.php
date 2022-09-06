@@ -206,7 +206,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                     <thead>
                         <tr>
                             <th>Nama</th>
-                            <th>Banyak</th>
+                            <th>Ukuran (px)</th>
                         </tr>
                     </thead>
                     <tbody>
