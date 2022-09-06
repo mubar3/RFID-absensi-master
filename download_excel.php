@@ -58,7 +58,7 @@ $items = $qb->RAW(
     left join provinsi on provinsi.id_prov=siswa.provinsi 
     left join kabupaten on kabupaten.id_kab=siswa.kabupaten 
     left join kecamatan on kecamatan.id_kec=siswa.kecamatan 
-    left join desa on desa.id=siswa.desa 
+    left join desa on desa.id_desa=siswa.desa 
     where user_input = ?",
      [$_SESSION['id_user']]);
 

@@ -102,7 +102,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     }else{
         $data_siswa = $qb->RAW("SELECT *,kelas.kelas as nama_kelas FROM siswa 
             join kelas on kelas.id_kelas=siswa.kelas
-            where siswa.cetak=0 ",[]);
+            where siswa.cetak=0 LIMIT 200",[]);
     }
 
     ?>

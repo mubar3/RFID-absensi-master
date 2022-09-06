@@ -17,17 +17,57 @@ $now->setTimezone('Asia/Jakarta');
 $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
      	if(isset($_POST['simpan_user'])){
+     		$user = $qb->RAW(
+    			"SELECT * FROM user WHERE username='".$_POST['username'],[]);
+     		if (!array_key_exists(0, $user)) {
+
+			$kabupaten='';
+     		$kecamatan='';
+     		$lembaga='';
+     		
+     		if(isset($_POST['kabupaten'])){$kabupaten=$_POST['kabupaten'];}
+     		if(isset($_POST['kecamatan'])){$kecamatan=$_POST['kecamatan'];}
+     		if(isset($_POST['lembaga'])){$lembaga=$_POST['lembaga'];}
+
      		$aksi = $qb->insert('user', [
 	          'username' => $_POST['username'],
 	          'pass' => md5($_POST['password']),
 	          'provinsi' => $_POST['provinsi'],
-	          'kabupaten' => $_POST['kabupaten'],
-	          'kecamatan' => $_POST['kecamatan'],
-	          'lembaga' => $_POST['lembaga'],
+	          'kabupaten' => $kabupaten,
+	          'kecamatan' => $kecamatan,
+	          'lembaga' => $lembaga,
 	          'role' => 2
 
 	        ]);
+
+
 	        if($aksi){
+	     		// buat setting kartu default
+	     		$user = $qb->RAW(
+	    			"SELECT * FROM user WHERE username='".$_POST['username']."' and pass=?",[md5($_POST['password'])]);
+	     		$user = $user[0]; 
+
+	     		$code = array("nama", "ttl", "nis", "jk", "nisn", "agama", "alamat");
+	     		for ($i=0; $i < count($code); $i++) { 
+	     			$qb->insert('data_kartu', [
+			          'user' => $user->id_user,
+			          'code' => $code[$i],
+			          'urutan' => $i+1,
+			          'status' => 1
+			        ]);
+	     		}
+	     		$code2 = array("kelas", "rfid");
+	     		$a=8;
+	     		for ($i=0; $i < count($code2); $i++) { 
+	     			$qb->insert('data_kartu', [
+			          'user' => $user->id_user,
+			          'code' => $code2[$i],
+			          'urutan' =>$a,
+			          'status' => 0
+			        ]);
+			        $a++;
+	     		}
+	     		// buat setting kartu default
 	        	echo '<div class="col-lg-12 mb-4">
 			        <div class="card bg-success text-white shadow">
 			            <div class="card-body">
@@ -46,18 +86,64 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		       	 </div>
 		    	</div>';
 	        }
+	    	}else{
+	        	echo '<div class="col-lg-12 mb-4">
+		        <div class="card bg-danger text-white shadow">
+		            <div class="card-body">
+		                Gagal
+		                <div class="text-white-50 small">Username Sudah Ada</div>
+		            </div>
+		       	 </div>
+		    	</div>';
+
+	    	}
      	}
      	if(isset($_POST['update_user'])){
+     		$kabupaten='';
+     		$kecamatan='';
+     		$lembaga='';
+     		
+     		if(isset($_POST['kabupaten'])){$kabupaten=$_POST['kabupaten'];}
+     		if(isset($_POST['kecamatan'])){$kecamatan=$_POST['kecamatan'];}
+     		if(isset($_POST['lembaga'])){$lembaga=$_POST['lembaga'];}
+     		// die();
      		// print_r("UPDATE user SET username='".$_POST['username']."',pass='".md5($_POST['password'])."' where id=".$_POST['id_user']);
      		// die();
 	        $aksi = $qb->RAW(
     		"UPDATE user SET username='".$_POST['username']."',
     		provinsi='".$_POST['provinsi']."',
-    		kabupaten='".$_POST['kabupaten']."',
-    		kecamatan='".$_POST['kecamatan']."',
-    		lembaga='".$_POST['lembaga']."',
+    		kabupaten='".$kabupaten."',
+    		kecamatan='".$kecamatan."',
+    		lembaga='".$lembaga."',
     		pass='".md5($_POST['password'])."' where id_user=".$_POST['id_user'],[]);
 	        if($aksi){
+	        	// buat setting kartu default
+	        	$qb->RAW("DELETE from data_kartu where user=".$_POST['id_user'],[]);
+	     		$user = $qb->RAW(
+	    			"SELECT * FROM user WHERE username='".$_POST['username']."' and pass=?",[md5($_POST['password'])]);
+	     		$user = $user[0]; 
+
+	     		$code = array("nama", "ttl", "nis", "jk", "nisn", "agama", "alamat");
+	     		for ($i=0; $i < count($code); $i++) { 
+	     			$qb->insert('data_kartu', [
+			          'user' => $_POST['id_user'],
+			          'code' => $code[$i],
+			          'urutan' => $i+1,
+			          'status' => 1
+			        ]);
+	     		}
+	     		$code2 = array("kelas", "rfid");
+	     		$a=8;
+	     		for ($i=0; $i < count($code2); $i++) { 
+	     			$qb->insert('data_kartu', [
+			          'user' => $_POST['id_user'],
+			          'code' => $code2[$i],
+			          'urutan' =>$a,
+			          'status' => 0
+			        ]);
+			        $a++;
+	     		}
+	     		// buat setting kartu default
 	        	echo '<div class="col-lg-12 mb-4">
 			        <div class="card bg-success text-white shadow">
 			            <div class="card-body">
@@ -76,11 +162,13 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		       	 </div>
 		    	</div>';
 	        }
-     	}
+	        echo '<script>setTimeout(function(){location.replace("users.php"); }, 1000);</script>'; 
+	    }
      	if(isset($_GET['hapus_user'])){
 	        $aksi = $qb->RAW(
     		"DELETE from user where id_user=".$_GET['hapus_user'],[]);
 	        if($aksi){
+				$qb->RAW("DELETE from data_kartu where user=".$_GET['hapus_user'],[]);
 	        	echo '<div class="col-lg-12 mb-4">
 			        <div class="card bg-success text-white shadow">
 			            <div class="card-body">
@@ -99,6 +187,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		       	 </div>
 		    	</div>';
 	        }
+	        echo '<script>setTimeout(function(){location.replace("users.php"); }, 1000);</script>'; 
      	}
 
 
@@ -120,7 +209,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	    		else{echo'<h1 class="h3 mb-2 text-gray-800">Tambah</h1>';}?></center>
 	    <div class="col-lg-12 mb-2">
 	    	<div class="input-group">
-	    		<select id="provinsi" name="provinsi" class="form-control" required>
+	    		<select id="provinsi" name="provinsi" class="form-control" >
 		            <?php 
 		            $data= $qb->RAW("SELECT * FROM provinsi",[]);
 		            ?>
@@ -131,7 +220,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		                echo '<option value="'.$data->id_prov.'" '.$selected.'>'.$data->nama_provinsi.'</option>';
 		            }?>
 		        </select>
-		        <select id="kabupaten" name="kabupaten" class="form-control" required>
+		        <select id="kabupaten" name="kabupaten" class="form-control" >
 		            <?php 
 		            $data= $qb->RAW("SELECT * FROM kabupaten",[]);
 		            ?>
@@ -146,7 +235,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	    </div>
 	    <div class="col-lg-12 mb-2">
 	    	<div class="input-group">
-	    		<select onchange="myFunction()" id="kecamatan" name="kecamatan" class="form-control" required>
+	    		<select onchange="myFunction()" id="kecamatan" name="kecamatan" class="form-control" >
 		            <?php 
 		            $data= $qb->RAW("SELECT * FROM kecamatan",[]);
 		            ?>
@@ -161,7 +250,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	    </div>
 	    <div class="col-lg-12 mb-2">
 	    	<div class="input-group">
-	    		<input type="text" class="form-control" value="<?php if(isset($_GET['edit_user'])){echo $_GET['lembaga'];} ?>" name="lembaga" placeholder="Lembaga/Sekolah" required>
+	    		<input type="text" class="form-control" value="<?php if(isset($_GET['edit_user'])){echo $_GET['lembaga'];} ?>" name="lembaga" placeholder="Lembaga/Sekolah" >
 	    	</div>
 	    </div>
 	    <div class="col-lg-12 mb-2">

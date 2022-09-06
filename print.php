@@ -93,6 +93,7 @@ require "vendor/autoload.php";
 		// $sql = "SELECT * FROM siswa WHERE siswa.id='$id[$i]'";
         $rr = $qb->RAW(
           "SELECT * FROM siswa 
+          left join kelas on kelas.id_kelas=siswa.kelas
           left join tb_agama on tb_agama.id=siswa.agama
           left join tb_jk on tb_jk.id=siswa.jk
           left join provinsi on provinsi.id_prov=siswa.provinsi
@@ -101,6 +102,10 @@ require "vendor/autoload.php";
           left join desa on desa.id_desa=siswa.desa
           WHERE siswa.id=".$id[$i],[]);
         $rr=$rr[0];
+
+        $urutan = $qb->RAW(
+          "SELECT * FROM data_kartu
+          WHERE user=".$rr->user_input." order by urutan asc",[]);
 
         $data_user = $qb->RAW(
         "SELECT * FROM user where id_user=?",[$rr->user_input]);
@@ -168,12 +173,16 @@ require "vendor/autoload.php";
                   
 					   
                 <table cellpadding="" cellspacing="" style="margin-top: -16px;padding-top: 135px;padding-left: 155px; position: relative;transition-property: 600px;width: 510px;height: 170px;">
-                  
+               <?php 
+                foreach ($urutan as $urut) {
+               ?>   
+                    <?php if($urut->code == 'nama' && $urut->status == 1){ ?>
                     <tr>
                         <td width="30%">Nama</td>
                         <td>:</td>
                           <td style="text-transform: uppercase;"><?php echo $rr->nama;?></td>
                     </tr>
+                    <?php } else if($urut->code == 'ttl' && $urut->status == 1){?>
                     <tr>
                         <td>TTL</td>
                         <td>:</td>
@@ -181,32 +190,53 @@ require "vendor/autoload.php";
                         // format_date($rr["tgl_lhr"]);
                         ?></td>
                     </tr>
+                    <?php } else if($urut->code == 'nis' && $urut->status == 1){?>
                     <tr>
                         <td>NIS</td>
                         <td>:</td>
                         <td><?php echo $rr->nim;?></td>
                     </tr>
+                    <?php } else if($urut->code == 'nisn' && $urut->status == 1){?>
                     <tr>
                         <td>NISN</td>
                         <td>:</td>
                         <td><?php echo $rr->nisn;?></td>
                     </tr>
+                    <?php } else if($urut->code == 'jk' && $urut->status == 1){?>
                     <tr>
                         <td>Jenis Kelamin</td>
                         <td>:</td>
                         <td><?php echo $rr->jk;?></td>
                     </tr>
+                    <?php } else if($urut->code == 'agama' && $urut->status == 1){?>
                     <tr>
                         <td>Agama</td>
                         <td>:</td>
                         <td><?php echo $rr->agama;?></td>
                     </tr>
+                    <?php } else if($urut->code == 'alamat' && $urut->status == 1){?>
                     <tr>
                         <td style="vertical-align:top">Alamat</td>
                         <td style="vertical-align:top">:</td>
                         <td style="vertical-align:top"> <?php echo $rr->alamat.", ".$rr->nama_desa.", ".$rr->nama_kecamatan.", ".$rr->nama_kabupaten.", ".$rr->nama_provinsi;?></td>
                         
                     </tr>
+                    <?php } else if($urut->code == 'kelas' && $urut->status == 1){?>
+                    <tr>
+                        <td>Kelas</td>
+                        <td>:</td>
+                        <td><?php echo $rr->kelas;?></td>
+                    </tr>
+                    <?php } else if($urut->code == 'rfid' && $urut->status == 1){?>
+                    <tr>
+                        <td>No RFID</td>
+                        <td>:</td>
+                        <td><?php echo $rr->norf;?></td>
+                    </tr>
+                <?php
+                        }
+                    }
+                ?>
                         <img style="border: 0px solid white; border-radius: 5px; position: absolute;margin-left: 445px;margin-top: 260px; width: 70px; height: 70px;overflow: hidden;" class="img-responsive img" src="asset/qrcode/<?php 
                         echo $rr->nisn.'.png';
                         ?>">

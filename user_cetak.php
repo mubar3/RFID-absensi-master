@@ -161,5 +161,94 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 			?>
         </form>
     </div>
+    <!-- setting urutan data kartu -->
+    <?php 
+		if(isset($_POST['simpan_urutan'])){
+			$id=$_POST['id'];
+			$urutan=$_POST['urutan'];
+			$status=$_POST['status'];
+
+			for ($i=0; $i < count($id); $i++) { 
+				$aksi = $qb->RAW(
+	            "UPDATE data_kartu SET urutan='".$urutan[$i]."', status='".$status[$i]."' where id=".$id[$i],[]);
+			}
+
+	        if($aksi){
+	        	echo '<div class="col-lg-12 mb-4">
+			        <div class="card bg-success text-white shadow">
+			            <div class="card-body">
+			                Berhasil
+			                <div class="text-white-50 small">Tersimpan</div>
+			            </div>
+			        </div>
+			    </div>';
+	        }else{
+	        	echo '<div class="col-lg-12 mb-4">
+		        <div class="card bg-danger text-white shadow">
+		            <div class="card-body">
+		                Gagal
+		                <div class="text-white-50 small">Gagal Tersimpan</div>
+		            </div>
+		       	 </div>
+		    	</div>';
+	        }
+		}
+
+
+    	 $data_urutan = $qb->RAW(
+    		"SELECT * FROM data_kartu where user=? order by urutan asc",[$_SESSION['id_user']]);
+
+    	 // print_r($data_urutan);die();
+    ?>
+	 <div class="card shadow mb-4">
+        <div class="card-body">
+        	<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+        	<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Jenis</th>
+                            <th>Urutan</th>
+                            <th>Ditampilkan/Tidak</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        foreach ($data_urutan as $urutan) {
+                            ?>
+                        <tr>
+                        	<td><?php echo $urutan->urutan; ?></td>
+                        	<input type="hidden" value="<?php echo $urutan->id; ?>" name="id[]">
+                            <td><?php echo $urutan->code;?></td>
+                            <td>
+                            	<select class="form-control" name="urutan[]">
+                            		<option value="1" <?php if($urutan->urutan == 1){echo 'selected';}?> >1</option>
+                            		<option value="2" <?php if($urutan->urutan == 2){echo 'selected';}?>>2</option>
+                            		<option value="3" <?php if($urutan->urutan == 3){echo 'selected';}?>>3</option>
+                            		<option value="4" <?php if($urutan->urutan == 4){echo 'selected';}?>>4</option>
+                            		<option value="5" <?php if($urutan->urutan == 5){echo 'selected';}?>>5</option>
+                            		<option value="6" <?php if($urutan->urutan == 6){echo 'selected';}?>>6</option>
+                            		<option value="7" <?php if($urutan->urutan == 7){echo 'selected';}?>>7</option>
+                            		<option value="8" <?php if($urutan->urutan == 8){echo 'selected';}?>>8</option>
+                            		<option value="9" <?php if($urutan->urutan == 9){echo 'selected';}?>>9</option>
+                            	</select>
+                            </td>
+                            <td>
+                            	<select class="form-control" name="status[]">
+                            		<option value="1" <?php if($urutan->status == 1){echo 'selected';}?> >Tampil</option>
+                            		<option value="0" <?php if($urutan->status == 0){echo 'selected';}?> >Tidak</option>
+                            	</select>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                        
+                    </tbody>
+                </table>
+                <center><button type="submit" name="simpan_urutan" class="btn btn-primary"><span  id="">Simpan</span></button></center>
+            	</form>
+            </div>
+
+		</div>
+	</div>
 </div>
 <?php require "partials/footer.php"; ?>

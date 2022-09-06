@@ -63,6 +63,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		       	 </div>
 		    	</div>';
 	        }
+	        echo '<script>setTimeout(function(){location.replace("setting_raport.php"); }, 1000);</script>'; 
      	}
      	if(isset($_GET['hapus_ujian'])){
 	        $aksi = $qb->RAW(
@@ -86,6 +87,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		       	 </div>
 		    	</div>';
 	        }
+	        echo '<script>setTimeout(function(){location.replace("setting_raport.php"); }, 1000);</script>'; 
 
      	}
 
@@ -201,6 +203,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		       	 </div>
 		    	</div>';
 	        }
+	        echo '<script>setTimeout(function(){location.replace("setting_raport.php"); }, 1000);</script>'; 
      	}
      	if(isset($_GET['hapus_pelajaran'])){
 	        $aksi = $qb->RAW(
@@ -224,6 +227,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		       	 </div>
 		    	</div>';
 	        }
+	        echo '<script>setTimeout(function(){location.replace("setting_raport.php"); }, 1000);</script>'; 
 
 
      	}

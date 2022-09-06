@@ -216,6 +216,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                  </div>
                 </div>';
             }
+            echo '<script>setTimeout(function(){location.replace("data_siswa.php"); }, 1000);</script>';
           }
         }
         if(isset($_GET['hapus_siswa'])){
@@ -241,6 +242,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                  </div>
                 </div>';
             }
+            echo '<script>setTimeout(function(){location.replace("data_siswa.php"); }, 1000);</script>';
         }
 
     $table='kelas';
