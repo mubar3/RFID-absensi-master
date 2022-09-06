@@ -30,11 +30,11 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	            $depan=$name.rand(111,9999).'.'.$ext;
      			$nama_depan=$depan;
 	            $upload=move_uploaded_file($_FILES['depan']['tmp_name'],  "asset/desain/".$depan);
-	                for($x=0;$x<20;$x++){
-	                    if(filesize("asset/desain/".$depan)>50000)
-	                    {resizer("asset/desain/".$depan, "asset/desain/".$depan, 70);}else{ break;}
-	                    clearstatcache();
-	                }
+	                // for($x=0;$x<20;$x++){
+	                //     if(filesize("asset/desain/".$depan)>50000)
+	                //     {resizer("asset/desain/".$depan, "asset/desain/".$depan, 70);}else{ break;}
+	                //     clearstatcache();
+	                // }
 	        	}
      		$belakang=$_FILES['belakang']['name'];
      		if(!empty($belakang)){
@@ -46,11 +46,11 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	            $belakang=$name.rand(111,9999).'.'.$ext;
      			$nama_belakang=$belakang;
 	            $upload=move_uploaded_file($_FILES['belakang']['tmp_name'],  "asset/desain/".$belakang);
-	                for($x=0;$x<20;$x++){
-	                    if(filesize("asset/desain/".$belakang)>50000)
-	                    {resizer("asset/desain/".$belakang, "asset/desain/".$belakang, 70);}else{ break;}
-	                    clearstatcache();
-	                }
+	                // for($x=0;$x<20;$x++){
+	                //     if(filesize("asset/desain/".$belakang)>50000)
+	                //     {resizer("asset/desain/".$belakang, "asset/desain/".$belakang, 70);}else{ break;}
+	                //     clearstatcache();
+	                // }
 	        	}
 
 	        // print_r("UPDATE user SET kar_depan='".$nama_depan."', kar_belakang='".$nama_belakang."' where id_user=".$_SESSION['id_user']);die();	
