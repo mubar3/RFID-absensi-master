@@ -15,7 +15,42 @@ $now = new Carbon;
 $now->setTimezone('Asia/Jakarta');
 
 $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
+		
+    
+		if(isset($_POST['simpan_ukuran'])){
+			$data=$_POST['data'];
+			$set=array();
+			foreach ($data as $key => $value) {
+				array_push($set,$key.'="'.$value.'"');
+			}
+			$set=implode(",",$set);
+			// print_r($set);die();
 
+			$aksi = $qb->RAW(
+            "UPDATE user SET ".$set." where id_user=".$_SESSION['id_user'],[]);
+
+	        if($aksi){
+	        	echo '<div class="col-lg-12 mb-4">
+			        <div class="card bg-success text-white shadow">
+			            <div class="card-body">
+			                Berhasil
+			                <div class="text-white-50 small">Tersimpan</div>
+			            </div>
+			        </div>
+			    </div>';
+	        }else{
+	        	echo '<div class="col-lg-12 mb-4">
+		        <div class="card bg-danger text-white shadow">
+		            <div class="card-body">
+		                Gagal
+		                <div class="text-white-50 small">Gagal Tersimpan</div>
+		            </div>
+		       	 </div>
+		    	</div>';
+	        }
+		}
+
+   
      	if(isset($_POST['simpan_kartu'])){
      		$nama_depan=$_POST['depan_lama'];
      		$nama_belakang=$_POST['belakang_lama'];
@@ -161,7 +196,61 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 			?>
         </form>
     </div>
+
+    <!-- setting ukuran kartu -->
+    <h1 class="h3 mb-2 text-gray-800">Ukuran foto dan QR kartu</h1>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+        	<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+        	<table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Banyak</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Margin Kiri Foto</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->kar_img_kiri; ?>" name="data[kar_img_kiri]"></td>
+                        </tr>
+                        <tr>
+                            <td>Margin Atas Foto</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->kar_img_atas; ?>" name="data[kar_img_atas]"></td>
+                        </tr>
+                        <tr>
+                            <td>Lebar Foto</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->kar_img_lebar; ?>" name="data[kar_img_lebar]"></td>
+                        </tr>
+                        <tr>
+                            <td>Tinggi Foto</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->kar_img_tinggi; ?>" name="data[kar_img_tinggi]"></td>
+                        </tr>
+                        <tr>
+                            <td>Margin Kiri QR</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->kar_qr_kiri; ?>" name="data[kar_qr_kiri]"></td>
+                        </tr>
+                        <tr>
+                            <td>Margin Atas QR</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->kar_qr_atas; ?>" name="data[kar_qr_atas]"></td>
+                        </tr>
+                        <tr>
+                            <td>Lebar QR</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->kar_qr_lebar; ?>" name="data[kar_qr_lebar]"></td>
+                        </tr>
+                        <tr>
+                            <td>Tinggi QR</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->kar_qr_tinggi; ?>" name="data[kar_qr_tinggi]"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <center><button type="submit" name="simpan_ukuran" class="btn btn-primary"><span  id="">Simpan</span></button></center>
+            	</form>
+        </div>
+    </div>
+
     <!-- setting urutan data kartu -->
+    <h1 class="h3 mb-2 text-gray-800">Data Kartu</h1>
     <?php 
 		if(isset($_POST['simpan_urutan'])){
 			$id=$_POST['id'];

@@ -156,7 +156,9 @@ require "vendor/autoload.php";
     ">
 
   <?php if(!empty($rr->foto)){?>
-  <img style="position: absolute;margin-left: 37px;margin-top: 120px; width: 105px; height: 140px;overflow: hidden;" class="img-responsive img" src="asset/foto/<?php echo $rr->foto;?>">
+  <img style="position: absolute;margin-left: <?php echo $data_user->kar_img_kiri; ?>px;margin-top: <?php echo $data_user->kar_img_atas; ?>px; width: <?php echo $data_user->kar_img_lebar; ?>px; height: <?php echo $data_user->kar_img_tinggi; ?>px;overflow: hidden;" class="img-responsive img" src="asset/foto/<?php echo $rr->foto;?>">
+  <?php } else{ ?>
+  <img style="position: absolute;margin-left: <?php echo $data_user->kar_img_kiri; ?>px;margin-top: <?php echo $data_user->kar_img_atas; ?>px; width: <?php echo $data_user->kar_img_lebar; ?>px; height: <?php echo $data_user->kar_img_tinggi; ?>px;overflow: hidden;" class="img-responsive img" src="asset/foto/blank.png">
   <?php } ?>
                 <!-- <div style="display: block; position: absolute;margin-left: 288px;margin-top: 190px; line-height: 15px; width: 220px;height:35px;text-align:left;position: left;float: left">
                        <?php echo $rr->alamat.", ".$rr->desa.", ".$rr->kecamatan.", ".$rr->kabupaten.", ".$rr->provinsi.", Indonesia";?>
@@ -237,7 +239,7 @@ require "vendor/autoload.php";
                             }
                         }
                     ?>
-                        <img style="border: 0px solid white; border-radius: 5px; position: absolute;margin-left: 440px;margin-top: 260px; width: 70px; height: 70px;overflow: hidden;" class="img-responsive img" src="asset/qrcode/<?php 
+                        <img style="border: 0px solid white; border-radius: 5px; position: absolute;margin-left: <?php echo $data_user->kar_qr_kiri; ?>px;margin-top: <?php echo $data_user->kar_qr_atas; ?>px; width: <?php echo $data_user->kar_qr_lebar; ?>px; height: <?php echo $data_user->kar_qr_tinggi; ?>px;overflow: hidden;" class="img-responsive img" src="asset/qrcode/<?php 
                         echo $rr->nisn.'.png';
                         ?>">
                     
