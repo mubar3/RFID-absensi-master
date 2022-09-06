@@ -80,6 +80,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		       	 </div>
 		    	</div>';
 	        }
+            echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
      	}
 
 

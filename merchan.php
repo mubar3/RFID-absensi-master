@@ -102,10 +102,10 @@
   					<?php foreach ($data_menu as $menu) {?>
   					<div class="col-sm-2">        	
 		        	<div class="card">
-		        	<img width="150" style="display: block; margin-left: auto; margin-right: auto; " src="asset/menu/<?php echo $menu->gambar;?>">
+		        	<img class="card-img-top" style="display: block; margin-left: auto; margin-right: auto; " src="asset/menu/<?php echo $menu->gambar;?>">
 							  <div class="card-body" style="padding:0px;">
 							    <center><h5 class="card-title" style="font-size:15px!important; margin: 0px;"><?php echo $menu->nama; ?></h5></center>
-							    <center><button href="javascript:void(0);" value="<?php echo $menu->nama.','.$menu->id;?>" class="datas btn btn-primary"style="width: 100px; font-size:10px!important;">Tambah</button></center>
+							    <center><button href="javascript:void(0);" value="<?php echo $menu->nama.','.$menu->id;?>" class="datas btn btn-primary"style=" font-size:12px!important;">Tambah</button></center>
 							  </div>
 							</div>
 						</div>
