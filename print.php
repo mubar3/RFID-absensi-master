@@ -174,7 +174,7 @@ require "vendor/autoload.php";
                    </p>
                   
 					   
-                <table cellpadding="" cellspacing="" style="margin-top: -16px;padding-top: 135px;padding-left: 155px; position: relative;transition-property: 600px;width: 510px;height: 170px;">
+                <table cellpadding="" cellspacing="" style="margin-top: -16px;padding-top: 135px;padding-left: 165px; position: relative;transition-property: 600px;width: 510px;height: 170px;">
                <?php 
                 foreach ($urutan as $urut) {
                ?>   
