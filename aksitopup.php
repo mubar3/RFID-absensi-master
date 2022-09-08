@@ -19,6 +19,11 @@ if (isset($_POST['id'])) {
     if(empty($isi)){$isi=0;}
     if($isi > 1000000){echo "<div class='p-3 mb-2 bg-danger'>Isi Saldo Maksimum Rp1.000.000<div>"; die();}
 
+    $data = $qb->RAW(
+    "SELECT * from siswa where norf = ?",
+     [$id]);
+
+    if (!array_key_exists(0, $data)) {echo "<div class='p-3 mb-2 bg-danger'>Kartu Tidak Terdaftar<div>";die();}
 
     $data = $qb->RAW(
     "SELECT * from saldo_rfid where id_rfid = ?",
@@ -44,6 +49,7 @@ if (isset($_POST['id'])) {
         'id_rfid' => $id,
         'banyak' => enkripsiDekripsi(strval($total), $kunciRahasia),
         'jenis' => 'masuk',
+        'user' => $_SESSION['id_user']
       ]);     
     }
     // input log
@@ -85,6 +91,7 @@ if (isset($_POST['id'])) {
             'id_rfid' => $id,
             'banyak' => enkripsiDekripsi(strval($total), $kunciRahasia),
             'jenis' => 'masuk',
+            'user' => $_SESSION['id_user']
           ]);     
         }
         // input log

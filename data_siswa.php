@@ -172,6 +172,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $aksi = $qb->RAW(
             "UPDATE siswa SET ".$set." where id=".$_POST['id_siswa'],[]);
 
+
+            $qb->RAW(
+            "UPDATE saldo_rfid SET id_rfid='".$rfid_baru."' where id_rfid=".$rfid_lama,[]);
+
             // $nameqrcode    = $rfid_baru.'.png';              
             // $tempdir        = "asset/qrcode/"; 
             // $isiqrcode     = $server."data?rfid=".$rfid_baru;

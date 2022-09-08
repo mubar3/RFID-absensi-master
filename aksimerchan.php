@@ -29,6 +29,12 @@ if (isset($_POST['id'])) {
 
 
     $data = $qb->RAW(
+    "SELECT * from siswa where norf = ?",
+     [$id]);
+
+    if (!array_key_exists(0, $data)) {echo "<div class='p-3 mb-2 bg-danger'>Kartu Tidak Terdaftar<div>";die();}
+
+    $data = $qb->RAW(
     "SELECT * from saldo_rfid where id_rfid = ?",
      [$id]);
 
@@ -56,6 +62,7 @@ if (isset($_POST['id'])) {
         'banyak' => enkripsiDekripsi(strval($merchan), $kunciRahasia),
         'ket' => $keperluan,
         'jenis' => 'keluar',
+        'user' => $_SESSION['id_user']
       ]);     
     }
     // input log
@@ -125,6 +132,12 @@ else {
               $total=$total+$data_harga_menu->harga;
             }
 
+        $data = $qb->RAW(
+        "SELECT * from siswa where norf = ?",
+         [$id]);
+
+        if (!array_key_exists(0, $data)) {echo "<div class='p-3 mb-2 bg-danger'>Kartu Tidak Terdaftar<div>";die();}
+
          $data = $qb->RAW(
           "SELECT * from saldo_rfid where id_rfid =".$_POST['id2'],
            []);
@@ -153,6 +166,7 @@ else {
                   'banyak' => enkripsiDekripsi(strval($data_harga_menu->harga), $kunciRahasia),
                   'ket' => $data_harga_menu->nama,
                   'jenis' => 'keluar',
+                  'user' => $_SESSION['id_user']
                 ]);     
 
             }
