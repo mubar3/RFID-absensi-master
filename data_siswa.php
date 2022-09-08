@@ -165,7 +165,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $set=array();
             foreach ($data as $key => $value) {
                 // $code=$key."=".$value;
-                $code=$key."='".$value."'";
+                $code=$key.'="'.$value.'"';
                 array_push($set, $code);
             }
             $set=implode(',',$set);
