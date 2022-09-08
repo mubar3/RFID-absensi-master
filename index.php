@@ -82,7 +82,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                     <a class="sidebar-brand d-flex align-items-center justify-content-center">
                                         <div class="sidebar-brand-icon rotate-n-15">
                                             <!-- <i class="fas fa-laugh-wink"></i> -->
-                                            <i class="fa-brands fa-nfc-directional"></i>
+                                            <!-- <i class="fa-brands fa-nfc-directional"></i> -->
                                         </div>
                                         <div class="sidebar-brand-text mx-3">KlikTap <sup>NFC</sup></div>
                                     </a>
