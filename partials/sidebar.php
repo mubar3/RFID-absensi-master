@@ -30,6 +30,51 @@
             $link = $_SERVER['PHP_SELF'];
             $link_array = explode('/',$link);
             $page = end($link_array);
+
+
+            $setting=1;
+            $absen=1;
+            $perpustakaan=1;
+            $perpus_online=1;
+            $data_siswa=1;
+            $nilai=1;
+            $topup=1;
+            $merchan=1;
+            $spp=1;
+            $akses_parkir=1;
+            $akses_gerbang=1;
+            $tracking=1;
+
+            // setting
+            if($page == 'setting_raport.php' && $setting == 0){header("Location: home.php");}
+            else if($page == 'setting_absen.php' && $setting == 0){header("Location: home.php");}
+            else if($page == 'toko_setting.php' && $setting == 0){header("Location: home.php");}
+            else if($page == 'user_cetak.php' && $setting == 0){header("Location: home.php");}
+            else if($page == 'users.php' && $setting == 0){header("Location: home.php");}
+            // absen
+            else if($page == 'absen.php' && $absen == 0){header("Location: home.php");}
+            else if($page == 'rekap.php' && $absen == 0){header("Location: home.php");}
+            // perpus
+            else if($page == 'perpus.php' && $perpustakaan == 0){header("Location: home.php");}
+            else if($page == 'daftar_peminjaman.php' && $perpustakaan == 0){header("Location: home.php");}
+            else if($page == 'daftar_peminjaman_sudah.php' && $perpustakaan == 0){header("Location: home.php");}
+            else if($page == 'daftar_buku.php' && $perpustakaan == 0){header("Location: home.php");}
+            else if($page == 'input_buku.php' && $perpustakaan == 0){header("Location: home.php");}
+            // data siswa
+            else if($page == 'input_siswa.php' && $data_siswa == 0){header("Location: home.php");}
+            else if($page == 'data_siswa.php' && $data_siswa == 0){header("Location: home.php");}
+            // nilai
+            else if($page == 'input_nilai.php' && $nilai == 0){header("Location: home.php");}
+            // transaksi
+            else if($page == 'topup.php' && $topup == 0){header("Location: home.php");}
+            else if($page == 'merchan.php' && $merchan == 0){header("Location: home.php");}
+            // spp
+            else if($page == 'spp.php' && $spp == 0){header("Location: home.php");}
+            else if($page == 'akses_gerbang.php' && $akses_gerbang == 0){header("Location: home.php");}
+            else if($page == 'akses_parkir.php' && $akses_parkir == 0){header("Location: home.php");}
+            else if($page == 'maps.php' && $tracking == 0){header("Location: home.php");}
+            else if($page == 'cetak.php' && $_SESSION['role'] != 1){header("Location: home.php");}
+            else if($page == 'sudah_cetak.php' && $_SESSION['role'] != 1){header("Location: home.php");}
             ?>
 
             <!-- Nav Item - Dashboard -->
@@ -53,6 +98,7 @@
             </li> -->
             <!-- Nav Item - Pages Collapse Menu -->
             <?php 
+            if($setting == 1){
             if($page=='setting_raport.php' || $page=='users.php' || $page=='setting_absen.php' || $page=='toko_setting.php' || $page=='user_cetak.php'){
                 echo '<li class="nav-item active">';
             }else{
@@ -120,7 +166,8 @@
                 </div>
             </li>
 
-            <?php 
+            <?php
+            }if($absen == 1){ 
             if($page=='absen.php' || $page=='rekap.php'){
                 echo '<li class="nav-item active">';
             }else{
@@ -163,6 +210,7 @@
             </li>
 
              <?php 
+            }if($perpustakaan == 1){  
             if($page=='perpus.php' || $page=='daftar_buku.php' || $page=='input_buku.php' || $page=='daftar_peminjaman.php' || $page=='daftar_peminjaman_sudah.php'){
                 echo '<li class="nav-item active">';
             }else{
@@ -227,7 +275,8 @@
                     </div>
                 </div>
             </li>
-
+            <?php
+        }if($perpus_online ==1 ){ ?>
             <li class="nav-item">
                 <a class="nav-link" target="_blank" href="https://www.perpusnas.go.id" >
                     <i class="fas fa-fw fa-cog"></i>
@@ -237,6 +286,7 @@
             </li>
 
             <?php 
+        }if($data_siswa ==1 ){
             if($page=='input_siswa.php' || $page=='data_siswa.php'){
                 echo '<li class="nav-item active">';
             }else{
@@ -279,6 +329,7 @@
             </li>
 
             <?php 
+        }if($nilai == 1 ){
             if($page=='input_nilai.php'){
                 echo '<li class="nav-item active">';
             }else{
@@ -313,6 +364,7 @@
             </li>
 
             <?php 
+        }
             if($page=='topup.php' || $page=='merchan.php'){
                 echo '<li class="nav-item active">';
             }else{
@@ -334,6 +386,7 @@
                 aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
+                        <?php if($topup == 1 ){ ?>
                         <a
                         <?php 
                         if($page=='topup.php'){
@@ -342,6 +395,7 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="topup.php">Topup</a>
+                        <?php }if($merchan == 1 ){ ?>
                         <a 
                         <?php 
                         if($page=='merchan.php'){
@@ -350,10 +404,12 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="merchan.php">Toko</a>
+                        <?php } ?>
                     </div>
                 </div>
             </li>
             <?php 
+        if($spp == 1 ){
             if($page=='spp.php'){
                 echo '<li class="nav-item active">';
             }else{
@@ -365,7 +421,8 @@
                 </a>
             </li>
 
-            <?php 
+            <?php
+        }if($akses_parkir == 1 ){ 
             if($page=='akses_parkir.php'){
                 echo '<li class="nav-item active">';
             }else{
@@ -378,6 +435,7 @@
             </li>
 
             <?php 
+        }if($akses_gerbang == 1 ){
             if($page=='akses_gerbang.php' ){
                 echo '<li class="nav-item active">';
             }else{
@@ -436,6 +494,7 @@
             <?php } ?>
 
              <?php 
+        }if($tracking == 1 ){
             if($page=='maps.php' ){
                 echo '<li class="nav-item active">';
             }else{
@@ -447,6 +506,7 @@
                 </a>
 
             </li>
+        <?php }?>
 
 
             <!-- Divider -->
