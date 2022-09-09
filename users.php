@@ -192,7 +192,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 
     $data_user = $qb->RAW(
-    "SELECT * FROM user",[]);
+    "SELECT * FROM user where role != 3",[]);
 
     ?>
 
