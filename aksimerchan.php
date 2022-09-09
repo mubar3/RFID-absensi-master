@@ -57,12 +57,15 @@ if (isset($_POST['id'])) {
 
     // input log
     if(!empty($merchan)){
+      $subuser='';
+      if($_SESSION['role'] == 3){$subuser=$_SESSION['sub_user'];}
     $qb->insert('saldo_log', [
         'id_rfid' => $id,
         'banyak' => enkripsiDekripsi(strval($merchan), $kunciRahasia),
         'ket' => $keperluan,
         'jenis' => 'keluar',
-        'user' => $_SESSION['id_user']
+        'user' => $_SESSION['id_user'],
+        'subuser' => $subuser
       ]);     
     }
     // input log
@@ -134,13 +137,14 @@ else {
 
         $data = $qb->RAW(
         "SELECT * from siswa where norf = ?",
-         [$id]);
+         [$_POST['id2']]);
 
         if (!array_key_exists(0, $data)) {echo "<div class='p-3 mb-2 bg-danger'>Kartu Tidak Terdaftar<div>";die();}
 
          $data = $qb->RAW(
-          "SELECT * from saldo_rfid where id_rfid =".$_POST['id2'],
-           []);
+          "SELECT * from saldo_rfid where id_rfid =?",
+           [$_POST['id2']]);
+
         $data = $data[0];
         $saldo=enkripsiDekripsi($data->saldo, $kunciRahasia);
         $saldo=(int)$saldo;
@@ -161,12 +165,15 @@ else {
               $data_harga_menu = $qb->RAW(
               "SELECT * FROM toko_menu where id=".$data_menu[$x],[]);
               $data_harga_menu=$data_harga_menu[0];
+                $subuser='';
+                if($_SESSION['role'] == 3){$subuser=$_SESSION['sub_user'];}
               $qb->insert('saldo_log', [
                   'id_rfid' => $_POST['id2'],
                   'banyak' => enkripsiDekripsi(strval($data_harga_menu->harga), $kunciRahasia),
                   'ket' => $data_harga_menu->nama,
                   'jenis' => 'keluar',
-                  'user' => $_SESSION['id_user']
+                  'user' => $_SESSION['id_user'],
+                  'subuser' => $subuser
                 ]);     
 
             }

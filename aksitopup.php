@@ -45,11 +45,14 @@ if (isset($_POST['id'])) {
 
     // input log
     if(!empty($total)){
+    $subuser='';
+    if($_SESSION['role'] == 3){$subuser=$_SESSION['sub_user'];}
     $qb->insert('saldo_log', [
         'id_rfid' => $id,
         'banyak' => enkripsiDekripsi(strval($total), $kunciRahasia),
         'jenis' => 'masuk',
-        'user' => $_SESSION['id_user']
+        'user' => $_SESSION['id_user'],
+        'subuser' => $subuser
       ]);     
     }
     // input log
@@ -87,11 +90,14 @@ if (isset($_POST['id'])) {
 
        // input log
         if(!empty($total)){
+        $subuser='';
+        if($_SESSION['role'] == 3){$subuser=$_SESSION['sub_user'];}
         $qb->insert('saldo_log', [
             'id_rfid' => $id,
             'banyak' => enkripsiDekripsi(strval($total), $kunciRahasia),
             'jenis' => 'masuk',
-            'user' => $_SESSION['id_user']
+            'user' => $_SESSION['id_user'],
+            'subuser' => $subuser
           ]);     
         }
         // input log

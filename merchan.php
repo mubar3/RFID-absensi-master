@@ -1,6 +1,7 @@
 
 	<?php require "partials/head.php";
-	require "partials/sidebar.php"; ?>
+	require "partial/head.php";
+	require "partials/sidebar.php";?> 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" integrity="sha512-xmGTNt20S0t62wHLmQec2DauG9T+owP9e6VU8GigI0anN7OXLip9i7IwEhelasml2osdxX71XcYm6BQunTQeQg==" crossorigin="anonymous" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
@@ -135,7 +136,78 @@
 			</div>
 			<div class="alert" role="alert"></div>
 		</div>
-
+		<?php
+		$tanggal='Hari Ini';
+		if(isset($_POST['cari_transaksi'])){$tanggal='';}
+		?>
+	<h1 class="h3 mb-2 text-gray-800">Riwayat Transaksi Toko <?php echo $tanggal; ?></h1>
+	<div class="col-lg-12 mb-2">
+		<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+		<div class="input-group">
+			 <span class="input-group-text" id="basic-addon1">Dari</span>
+			<input type="date" class="form-control" value="<?php echo $_POST['tanggal_awal'];?>" name="tanggal_awal">
+			 <span class="input-group-text" id="basic-addon1">Sampai</span>
+			<input type="date" class="form-control" value="<?php echo $_POST['tanggal_akhir'];?>" name="tanggal_akhir">
+			<button type="submit" name="cari_transaksi" class="input-group-text"><span  id="">cari</span></button>
+		</div>
+		</form>
+	</div>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+        	<div class="table-responsive">
+        	<table class="table table-bordered" width="100%" cellspacing="0">
+	            <thead>
+	                <tr>
+	                    <th>Nama</th>
+	                    <th>NIS</th>
+	                    <th>Lembaga/Sekolah Siswa</th>
+	                    <th>Lembaga/Sekolah Transaksi</th>
+	                    <th>SubUser Transaksi</th>
+	                    <th>Pembelian</th>
+	                    <th>Harga</th>
+	                </tr>
+	            </thead>
+	            <?php
+	            	$total=0;
+	            	$id_user="user='".$_SESSION['id_user']."'";
+	            	if($_SESSION['role'] == 3){$id_user="subuser='".$_SESSION['sub_user']."'";}
+	            	if(isset($_POST['cari_transaksi'])){
+	            	$saldo_log = $qb->RAW("SELECT u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
+	            		left join siswa on siswa.norf=saldo_log.id_rfid
+	            		left join user on siswa.user_input=user.id_user
+	            		left join user u1 on saldo_log.user=u1.id_user
+	            		left join user u2 on saldo_log.subuser=u2.id_user
+	            		where saldo_log.".$id_user." and DATE(saldo_log.waktu) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."' and saldo_log.jenis='keluar'",[]);
+	            	}else{
+	            	$saldo_log = $qb->RAW("SELECT u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
+	            		left join siswa on siswa.norf=saldo_log.id_rfid
+	            		left join user on siswa.user_input=user.id_user
+	            		left join user u1 on saldo_log.user=u1.id_user
+	            		left join user u2 on saldo_log.subuser=u2.id_user
+	            		where saldo_log.".$id_user." and DATE(saldo_log.waktu) = CURDATE() and saldo_log.jenis='keluar'",[]);
+	            	}
+	            ?>
+	            <tbody>
+	            	<?php foreach ($saldo_log as $log) { 
+	            		$harga=enkripsiDekripsi($log->banyak, $kunciRahasia);
+	            		$total=$total+$harga;?>
+	                <tr>
+	                    <td><?php echo $log->nama; ?></td>
+	                    <td><?php echo $log->nis; ?></td>
+	                    <td><?php echo $log->lembaga; ?></td>
+	                    <td><?php echo $log->userutama; ?></td>
+	                    <td><?php echo $log->subuser; ?></td>
+	                    <td><?php echo $log->ket; ?></td>
+	                    <td><?php echo convertToRupiah($harga); ?></td>
+	                </tr>
+	                `<?php } ?>
+	            </tbody>
+	        </table>
+	        <h5>Total : <?php echo convertToRupiah($total); ?></h5>
+	    	</div>
+        </div>
+    </div>
+	
 	<?php require "partial/footer.php"; ?>
 	<script type="text/javascript">
 
@@ -284,3 +356,4 @@ var rupiah = document.getElementById('rp');
 	    });
 		
 	</script>
+

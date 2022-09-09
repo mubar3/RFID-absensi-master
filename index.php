@@ -25,7 +25,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
   $pass = md5($_POST['pass']);
 
     $user = $qb->RAW(
-    "SELECT * FROM user WHERE username='".$username."'and status=1 and pass=?",[$pass]);
+    "SELECT * FROM user 
+    left join subuser on subuser.user_id=user.id_user
+    WHERE user.username='".$username."'and user.status=1 and user.pass=?",[$pass]);
 
 
 
@@ -35,6 +37,16 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     $_SESSION['nama_user']     = $user->username;
     $_SESSION['lembaga']     = $user->lembaga;
     $_SESSION['role']=$user->role;
+    if($user->role == 3){
+                $_SESSION['id_user']     = $user->create_id;
+                $_SESSION['sub_user']     = $user->user_id;
+                $sub_user= $qb->RAW("select * from user
+                    join subuser on subuser.user_id=user.id_user
+                    where user.id_user=?",[$user->id_user]);
+                $sub_user=$sub_user[0];
+            $_SESSION['sidebar_data']=$sub_user->data;
+            $_SESSION['sidebar_status']=$sub_user->status;
+            }
     // print_r($_SESSION['role']);
     // die();
     // if($_SESSION['role']==1){

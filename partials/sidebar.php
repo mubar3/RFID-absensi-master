@@ -45,12 +45,24 @@
             $akses_gerbang=1;
             $tracking=1;
 
+            if($_SESSION['role'] == 3){
+                $menu=explode(",",$_SESSION['sidebar_data']);
+                $status=explode(",",$_SESSION['sidebar_status']);
+                // print_r($menu);print_r($status);die();
+                for ($i=0; $i < count($menu); $i++) { 
+                    // code...
+                    $name=$menu[$i];
+                    $$name=$status[$i];
+                }
+            }
+
             // setting
             if($page == 'setting_raport.php' && $setting == 0){header("Location: home.php");}
             else if($page == 'setting_absen.php' && $setting == 0){header("Location: home.php");}
             else if($page == 'toko_setting.php' && $setting == 0){header("Location: home.php");}
             else if($page == 'user_cetak.php' && $setting == 0){header("Location: home.php");}
             else if($page == 'users.php' && $setting == 0){header("Location: home.php");}
+            else if($page == 'subusers.php' && $setting == 0){header("Location: home.php");}
             // absen
             else if($page == 'absen.php' && $absen == 0){header("Location: home.php");}
             else if($page == 'rekap.php' && $absen == 0){header("Location: home.php");}
@@ -75,6 +87,8 @@
             else if($page == 'maps.php' && $tracking == 0){header("Location: home.php");}
             else if($page == 'cetak.php' && $_SESSION['role'] != 1){header("Location: home.php");}
             else if($page == 'sudah_cetak.php' && $_SESSION['role'] != 1){header("Location: home.php");}
+            else if($page == 'users.php' && $_SESSION['role'] != 1){header("Location: home.php");}
+            else if($page == 'subusers.php' && $_SESSION['role'] == 3){header("Location: home.php");}
             ?>
 
             <!-- Nav Item - Dashboard -->
@@ -99,7 +113,7 @@
             <!-- Nav Item - Pages Collapse Menu -->
             <?php 
             if($setting == 1){
-            if($page=='setting_raport.php' || $page=='users.php' || $page=='setting_absen.php' || $page=='toko_setting.php' || $page=='user_cetak.php'){
+            if($page=='setting_raport.php' || $page=='users.php'|| $page=='subusers.php' || $page=='setting_absen.php' || $page=='toko_setting.php' || $page=='user_cetak.php'){
                 echo '<li class="nav-item active">';
             }else{
                 echo '<li class="nav-item">';}
@@ -112,7 +126,7 @@
                 </a>
                 <div id="collapseUtilitiessetting" 
                 <?php 
-                if($page=='setting_raport.php' || $page=='setting_absen.php' || $page=='users.php' || $page=='toko_setting.php' || $page=='user_cetak.php'){
+                if($page=='setting_raport.php' || $page=='setting_absen.php' || $page=='users.php'|| $page=='subusers.php' || $page=='toko_setting.php' || $page=='user_cetak.php'){
                     echo 'class="collapse show"';
                 }else{
                     echo 'class="collapse"';}
@@ -161,6 +175,15 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="users.php">Data Users</a>
+                    <?php } if($_SESSION['role'] != 3){?>
+                        <a 
+                        <?php 
+                        if($page=='subusers.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="subusers.php">Data subUsers</a>
                     <?php } ?>
                     </div>
                 </div>

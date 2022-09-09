@@ -70,7 +70,7 @@ require "partials/sidebar.php"; ?>
             join siswa on siswa.norf=rekap_absen.norf
              where siswa.user_input=".$_SESSION['id_user']." and rekap_absen.tanggal_absen >= DATE(NOW()) GROUP BY rekap_absen.norf",[]);
         if (array_key_exists(0, $total_siswa_masuk)) {$total_siswa_masuk=count($total_siswa_masuk);}else{$total_siswa_masuk=0;}
-        
+        if(empty($total_siswa)){$total_siswa=1;}
         $persentase=($total_siswa_masuk/$total_siswa)*100;
         ?>
                                                 <div class="col-auto">
