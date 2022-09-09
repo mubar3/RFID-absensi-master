@@ -196,7 +196,7 @@ require "vendor/autoload.php";
                         <tr>
                             <td>NIS</td>
                             <td>:</td>
-                            <td><?php echo $rr->nim;?></td>
+                            <td><?php echo $rr->nis;?></td>
                         </tr>
                         <?php } else if($urut->code == 'nisn' && $urut->status == 1){?>
                         <tr>
