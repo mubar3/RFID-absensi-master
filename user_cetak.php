@@ -242,6 +242,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             <td>Tinggi QR</td>
                             <td><input type="text" class="form-control" value="<?php echo $data_user->kar_qr_tinggi; ?>" name="data[kar_qr_tinggi]"></td>
                         </tr>
+                        <tr>
+                            <td>Margin Atas 'DIkeluarkan tanggal'</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->dikeluarkan_atas; ?>" name="data[dikeluarkan_atas]"></td>
+                        </tr>
                     </tbody>
                 </table>
                 <center><button type="submit" name="simpan_ukuran" class="btn btn-primary"><span  id="">Simpan</span></button></center>

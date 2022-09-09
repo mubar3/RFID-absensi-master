@@ -261,11 +261,12 @@ require "vendor/autoload.php";
      ">
     <!-- <a><?php echo $i;?></a> -->
 
-    <div style="display: block; position: absolute;margin-left: 220px;margin-top: 190px; line-height: 15px; width: 220px;height:35px;text-align:left; font-size: 10px; font-weight: normal!important; position: left;float: left">
-                       <!-- Dikeluarkan  -->
+    <div style="display: block; position: absolute;margin-left: 220px;margin-top: <?php echo $data_user->dikeluarkan_atas; ?>px; line-height: 15px; width: 220px;height:35px;text-align:left; font-size: 10px; font-weight: normal!important; position: left;float: left">
+                       Dikeluarkan 
                        <?php 
-                       // echo tgl_indo($date_input);
-                        // format_date($rr["tgl_input"]);
+                       // echo tgl_indo($rr->last_update);
+                       echo tgl_indo(date("Y-m-d"));
+                        // format_date($rr["last_update"]);
                         ?>
                    </div>
 
