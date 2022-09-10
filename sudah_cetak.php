@@ -192,7 +192,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         foreach ($data_siswa as $siswa) {
                             ?>
                         <tr>
-                            <td><img style="display: block; margin-left: auto;  margin-right: auto;   width: 70px;" class="img-responsive img" src="asset/foto/<?php if(!empty($siswa->foto)){echo $siswa->foto;}else{echo 'blank.png';}?>"></td>
+                            <td><img style="display: block; margin-left: auto;  margin-right: auto;   width: 70px;" class="img-responsive img" src="asset/foto/<?php if(!empty($siswa->foto)){echo $siswa->foto;}else{echo 'blank.png';}?>?time=<?php echo date("H:i:s");?>"></td>
                             <td><?php echo $siswa->nama;?></td>
                              <td><?php echo $siswa->nama_kelas;?></td>
                              <td><?php echo $siswa->nisn;?></td>

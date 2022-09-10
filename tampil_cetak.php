@@ -156,7 +156,7 @@ require "vendor/autoload.php";
     ">
 
   <?php if(!empty($rr->foto)){?>
-  <img style="position: absolute;margin-left: <?php echo $data_user->kar_img_kiri; ?>px;margin-top: <?php echo $data_user->kar_img_atas; ?>px; width: <?php echo $data_user->kar_img_lebar; ?>px; height: <?php echo $data_user->kar_img_tinggi; ?>px;overflow: hidden;" class="img-responsive img" src="asset/foto/<?php echo $rr->foto;?>">
+  <img style="position: absolute;margin-left: <?php echo $data_user->kar_img_kiri; ?>px;margin-top: <?php echo $data_user->kar_img_atas; ?>px; width: <?php echo $data_user->kar_img_lebar; ?>px; height: <?php echo $data_user->kar_img_tinggi; ?>px;overflow: hidden;" class="img-responsive img" src="asset/foto/<?php echo $rr->foto;?>?time=<?php echo date("H:i:s");?>">
   <?php } else{ ?>
   <img style="position: absolute;margin-left: <?php echo $data_user->kar_img_kiri; ?>px;margin-top: <?php echo $data_user->kar_img_atas; ?>px; width: <?php echo $data_user->kar_img_lebar; ?>px; height: <?php echo $data_user->kar_img_tinggi; ?>px;overflow: hidden;" class="img-responsive img" src="asset/foto/blank.png">
   <?php } ?>
@@ -241,7 +241,7 @@ require "vendor/autoload.php";
                     ?>
                         <img style="border: 0px solid white; border-radius: 5px; position: absolute;margin-left: <?php echo $data_user->kar_qr_kiri; ?>px;margin-top: <?php echo $data_user->kar_qr_atas; ?>px; width: <?php echo $data_user->kar_qr_lebar; ?>px; height: <?php echo $data_user->kar_qr_tinggi; ?>px;overflow: hidden;" class="img-responsive img" src="asset/qrcode/<?php 
                         echo $rr->nisn.'.png';
-                        ?>">
+                        ?>?time=<?php echo date("H:i:s");?>">
                     
                 </table>
 
