@@ -257,14 +257,14 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
      if(isset($_POST['cari_user'])){
         $data_siswa = $qb->RAW(
             "SELECT *,kelas.kelas as nama_kelas FROM siswa
-            join kelas on kelas.id_kelas=siswa.kelas
+            left join kelas on kelas.id_kelas=siswa.kelas
             left join saldo_rfid on saldo_rfid.id_rfid=siswa.norf
             where siswa.user_input=".$_POST['data_user']
             ,[]);  
     }else{
         $data_siswa = $qb->RAW(
             "SELECT *,kelas.kelas as nama_kelas FROM siswa
-            join kelas on kelas.id_kelas=siswa.kelas
+            left join kelas on kelas.id_kelas=siswa.kelas
             left join saldo_rfid on saldo_rfid.id_rfid=siswa.norf
             where siswa.user_input=".$_SESSION['id_user']
             ,[]);

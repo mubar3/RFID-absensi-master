@@ -18,7 +18,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
     $data_siswa = $qb->RAW(
     "SELECT *,kelas.kelas as nama_kelas FROM siswa 
-    join kelas on kelas.id_kelas=siswa.kelas
+    left join kelas on kelas.id_kelas=siswa.kelas
     where siswa.norf=?",[$_GET['norf']]);
      // print_r($data_siswa);
      // die();

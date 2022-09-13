@@ -19,7 +19,7 @@ if (isset($_POST['id'])) {
     $siswa = $qb->RAW(
     "SELECT kelas.kelas as nama_kelas ,nama, last_update, NOW()
     AS absen from siswa 
-    join kelas on kelas.id_kelas=siswa.kelas
+    left join kelas on kelas.id_kelas=siswa.kelas
     where siswa.user_input=".$_SESSION['id_user']." and siswa.norf = ?",
      [$id]);
     // print_r($siswa[0]->nama_kelas);

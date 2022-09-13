@@ -177,7 +177,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 			echo'<input type="hidden" class="form-control" name="ujian" value="'.$_POST['ujian'].'" readonly>';
 			$data_siswa = $qb->RAW(
     		"SELECT siswa.*,nilai.nilai FROM nilai 
-    		join siswa on siswa.id=nilai.id_siswa
+    		left join siswa on siswa.id=nilai.id_siswa
     		where nilai.kelas=".$_POST['kelas']." and nilai.id_pelajaran=".$_POST['pelajaran']." and nilai.id_ujian=".$_POST['ujian']." and nilai.id_user=".$_SESSION['id_user'],[]);
     		if (!array_key_exists(0, $data_siswa)) {
     			$data_siswa = $qb->RAW(

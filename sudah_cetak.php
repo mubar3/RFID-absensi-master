@@ -97,11 +97,11 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     "SELECT * FROM user",[]);
     if(isset($_POST['cari_user'])){
         $data_siswa = $qb->RAW("SELECT *,kelas.kelas as nama_kelas FROM siswa 
-            join kelas on kelas.id_kelas=siswa.kelas
+            left join kelas on kelas.id_kelas=siswa.kelas
             where siswa.cetak=1 and siswa.user_input=".$_POST['data_user'],[]);  
     }else{
         $data_siswa = $qb->RAW("SELECT *,kelas.kelas as nama_kelas FROM siswa 
-            join kelas on kelas.id_kelas=siswa.kelas
+            left join kelas on kelas.id_kelas=siswa.kelas
             where siswa.cetak=1 LIMIT 200",[]);
     }
 

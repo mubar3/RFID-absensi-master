@@ -17,8 +17,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 $data_siswa = $qb->RAW(
             "SELECT * FROM siswa  
-            join kelas on kelas.id_kelas=siswa.kelas
-            join tb_jk on tb_jk.id=siswa.jk
+            left join kelas on kelas.id_kelas=siswa.kelas
+            left join tb_jk on tb_jk.id=siswa.jk
             where siswa.nisn='".$id."' order by last_update desc",[]);
 // print_r($data_siswa);die();
 if(array_key_exists(0, $data_siswa)){

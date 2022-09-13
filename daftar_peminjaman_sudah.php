@@ -50,7 +50,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     $table='kelas';
     $data_buku = $qb->RAW(
     "SELECT * FROM peminjaman
-    join siswa on siswa.norf=peminjaman.peminjam
+    left join siswa on siswa.norf=peminjaman.peminjam
     where peminjaman.status=1
     ",[]);
     // print_r($data_kelas);
