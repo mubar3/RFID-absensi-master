@@ -175,7 +175,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	    
 	    <div class="col-lg-12 mb-2">
 	    	<div class="input-group">
-	    		<input type="text" class="form-control" value="<?php if(isset($_GET['edit_user'])){echo $_GET['lembaga'];} ?>" name="lembaga" placeholder="Lembaga/Sekolah" >
+	    		<input type="text" class="form-control" value="<?php if(isset($_GET['edit_user'])){echo $_GET['lembaga'];} ?>" name="lembaga" placeholder="Nama Sub Users" >
 	    	</div>
 	    </div>
 	    <div class="col-lg-12 mb-2">
@@ -245,7 +245,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Lembaga</th>
+                            <th>Nama</th>
                             <th>Username</th>
                             <th>Aksi</th>
                         </tr>
