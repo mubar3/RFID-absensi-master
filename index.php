@@ -40,6 +40,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     if($user->role == 3){
                 $_SESSION['id_user']     = $user->create_id;
                 $_SESSION['sub_user']     = $user->user_id;
+                $lembaga=$qb->RAW("select * from user where user.id_user=?",[$user->create_id]);
+                $lembaga=$lembaga[0];
+                $_SESSION['lembaga_pst']     = $lembaga->lembaga;
                 $sub_user= $qb->RAW("select * from user
                     left join subuser on subuser.user_id=user.id_user
                     where user.id_user=?",[$user->id_user]);

@@ -11,12 +11,19 @@
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
+                <?php if($_SESSION['role'] == 3){?>
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <!-- <i class="fas fa-laugh-wink"></i> -->
                     <!-- <i class="fa-brands fa-nfc-directional"></i> -->
                 </div>
+                <div class="sidebar-brand-text mx-3"><?php echo $_SESSION['lembaga_pst'];?></div>
+                <br>
+            </a>
+                <?php } ?>
+            <hr class="sidebar-divider">            
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
                 <?php if(!empty($_SESSION['lembaga'])){?>
                 <div class="sidebar-brand-text mx-3"><?php echo $_SESSION['lembaga'];?></div>
                 <?php }else{?>
