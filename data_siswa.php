@@ -266,6 +266,12 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             "UPDATE saldo_rfid SET id_rfid='".$rfid_baru."' where id_rfid=".$rfid_lama,[]);
             $qb->RAW(
             "UPDATE saldo_log SET id_rfid='".$rfid_baru."' where id_rfid=".$rfid_lama,[]);
+            $qb->RAW(
+            "UPDATE peminjaman SET peminjam='".$rfid_baru."' where peminjam=".$rfid_lama,[]);
+            $qb->RAW(
+            "UPDATE rekap_absen SET norf='".$rfid_baru."' where norf=".$rfid_lama,[]);
+            $qb->RAW(
+            "UPDATE rekap_parkir SET norf='".$rfid_baru."' where norf=".$rfid_lama,[]);
 
             // $nameqrcode    = $rfid_baru.'.png';              
             // $tempdir        = "asset/qrcode/"; 

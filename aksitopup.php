@@ -17,7 +17,7 @@ if (isset($_POST['id'])) {
     $isi = $_POST['isi'];
     $total = $isi;
     if(empty($isi)){$isi=0;}
-    if($isi > 1000000){echo "<div class='p-3 mb-2 bg-danger'>Isi Saldo Maksimum Rp1.000.000<div>"; die();}
+    if($isi > 10000000){echo "<div class='p-3 mb-2 bg-danger'>Isi Saldo Maksimum Rp10.000.000<div>"; die();}
 
     $data = $qb->RAW(
     "SELECT * from siswa where norf = ?",
