@@ -464,7 +464,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php 
+                                        <?php $i=1;
                                         foreach ($data_siswa as $siswa) {
                                             ?>
                                         <tr>
@@ -482,11 +482,31 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                                 &nbsp
                                                 <a href="data_siswa.php?edit_siswa=<?php echo $siswa->id;?>"><i class="fa-solid fa-pen-to-square"></i></a>
                                                 &nbsp
-                                                <a href="data_siswa.php?hapus_siswa=<?php echo $siswa->id;?>&&foto_siswa=<?php echo $siswa->foto;?>"><i class="fa-solid fa-trash-can"></i></a>
+                                                <a href="#" data-toggle="modal" data-target="#logoutModal<?php echo $i; ?>" ><i class="fa-solid fa-trash-can"></i></a>
+                                                <div class="modal-dialog" role="document">
+            <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Peringatan</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Apa anda yakin untuk Hapus?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="data_siswa.php?hapus_siswa=<?php echo $siswa->id;?>&&foto_siswa=<?php echo $siswa->foto;?>">Hapus</a>
+                </div>
+            </div>
+        </div>
+    </div>
                                             </center>
                                             </td>
                                         </tr>
-                                        <?php } ?>
+                                        <?php $i++;} ?>
                                         
                                     </tbody>
                                 </table>
