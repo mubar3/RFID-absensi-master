@@ -21,6 +21,95 @@ $now->setTimezone('Asia/Jakarta');
 $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 
+    if(isset($_POST['Upload'])){
+        require "asset/excel_reader2.php";
+        // upload file xls
+        $target = basename($_FILES['excel']['name']) ;
+        move_uploaded_file($_FILES['excel']['tmp_name'], $target);
+
+        // beri permisi agar file xls dapat di baca
+        chmod($_FILES['excel']['name'],0777);
+
+        // mengambil isi file xls
+        $data = new Spreadsheet_Excel_Reader($_FILES['excel']['name'],false);
+        // menghitung jumlah baris data yang ada
+        $jumlah_baris = $data->rowcount($sheet_index=0);
+
+        // jumlah default data yang berhasil di import
+        $berhasil = 0;
+        for ($i=2; $i<=$jumlah_baris; $i++){
+            if($data->val($i, 3) == ''){break;}
+            // menangkap data dan memasukkan ke variabel sesuai dengan kolumnya masing-masing
+
+            $user = $qb->RAW("SELECT * FROM siswa WHERE nisn='".$data->val($i, 1)."'",[]);
+            if (array_key_exists(0, $user)) {
+                echo'
+                <div class="col-lg-12 mb-4">
+                    <div class="card bg-danger text-white shadow">
+                        <div class="card-body">
+                            Gagal
+                            <div class="text-white-50 small">Data NISN '.$data->val($i, 1).' Sudah Ada</div>
+                        </div>
+                    </div>
+                </div>
+                ';
+              }else{
+                $user_input=$_SESSION['id_user'];
+                if(isset($_POST['data_user'])){
+                    $user_input=$_POST['data_user'];
+                }
+                $rekapAbsen = $qb->insert('siswa', [
+                          'nama' => $data->val($i, 3),
+                          'nisn' => $data->val($i, 1),
+                          'nis' => $data->val($i, 2),
+                          'agama' => $data->val($i, 5),
+                          'tmp_lhr' => $data->val($i, 7),
+                          'tgl_lhr' => $data->val($i, 8),
+                          'alamat' => $data->val($i, 6),
+                          'jk' => $data->val($i, 4),
+                          'user_input' => $user_input
+                        ]);
+
+                            $nameqrcode    = $data->val($i, 1).'.png';              
+                            $tempdir        = "asset/qrcode/"; 
+                            $isiqrcode     = $server."data?id=".$data->val($i, 1);
+                            $quality        = 'H';
+                            $Ukuran         = 10;
+                            $padding        = 0;
+
+                            QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
+
+
+                if($rekapAbsen){
+                   echo '
+                   <div class="col-lg-12 mb-4">
+                        <div class="card bg-success text-white shadow">
+                            <div class="card-body">
+                                Berhasil
+                                <div class="text-white-50 small">Data Tersimpan</div>
+                            </div>
+                        </div>
+                    </div>
+                    '; 
+                }else{
+                    echo'
+                    <div class="col-lg-12 mb-4">
+                        <div class="card bg-danger text-white shadow">
+                            <div class="card-body">
+                                Gagal
+                                <div class="text-white-50 small">Data Gagal Tersimpan</div>
+                            </div>
+                        </div>
+                    </div>
+                    ';
+                }
+              }
+        }
+
+        // hapus kembali file .xls yang di upload tadi
+        unlink($_FILES['excel']['name']);
+        // die();
+    }
     if(isset($_POST['simpan_data'])){
               $nama = $_POST['nama'];
               $nim = $_POST['nim'];
@@ -88,7 +177,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 }
             }
             $data_nisn = $qb->RAW(
-            "SELECT * FROM siswa user_input=".$_SESSION['id_user']."and where not nisn=?",[$nisn_lama]);
+            "SELECT * FROM siswa where not nisn=?",[$nisn_lama]);
             foreach ($data_nisn as $data_nisn) {
                 if($nisn_baru==($data_nisn->nisn)){
                     echo '<div class="col-lg-12 mb-4">
@@ -335,6 +424,19 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                <button type="submit" name="cari_user" class="input-group-text"><span  id="">Cari</span></button>
                               </div>
 
+                            </div>
+                        </div>
+                    </form>
+
+                    <h4 class="h5 mb-2 text-gray-800">Import Data Siswa</h4><a href="asset/sampel.xls">Template Excel</a>
+                    <!-- <label>Import Data Siswa</label> -->
+                    <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+                        <div class="col-lg-12 mb-2">
+                            <div class="input-group">
+                                <input type="file" name="excel" class="form-control">
+                            <div class="input-group-prepend">
+                                <button type="submit" name="Upload" class="input-group-text"><span  id="">Upload</span></button>
+                            </div>
                             </div>
                         </div>
                     </form>

@@ -56,7 +56,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 			          'status' => 1
 			        ]);
 	     		}
-	     		$code2 = array("kelas", "rfid");
+	     		$code2 = array("kelas", "rfid","alamat_saja");
 	     		$a=8;
 	     		for ($i=0; $i < count($code2); $i++) { 
 	     			$qb->insert('data_kartu', [
@@ -132,7 +132,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 			          'status' => 1
 			        ]);
 	     		}
-	     		$code2 = array("kelas", "rfid");
+	     		$code2 = array("kelas", "rfid","alamat_saja");
 	     		$a=8;
 	     		for ($i=0; $i < count($code2); $i++) { 
 	     			$qb->insert('data_kartu', [

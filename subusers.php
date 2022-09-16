@@ -210,7 +210,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	    		<input type="radio" aria-label="Checkbox for following text input" value="1" name="data[topup]" <?php if($data[6]==1){echo 'checked';}?>><a style="padding-left:2px;padding-right:3px;">Topup</a>
 	    		<input type="radio" aria-label="Checkbox for following text input" value="0" name="data[topup]" <?php if($data[6]==0){echo 'checked';}?> ><a style="padding-right: 10px;">off</a>|&nbsp;
 
-	    		<input type="radio" aria-label="Checkbox for following text input" value="1" name="data[merchan]" <?php if($data[7]==1){echo 'checked';}?>><a style="padding-left:2px;padding-right:3px;">Merchan</a>
+	    		<input type="radio" aria-label="Checkbox for following text input" value="1" name="data[merchan]" <?php if($data[7]==1){echo 'checked';}?>><a style="padding-left:2px;padding-right:3px;">Toko</a>
 	    		<input type="radio" aria-label="Checkbox for following text input" value="0" name="data[merchan]"  <?php if($data[7]==0){echo 'checked';}?> ><a style="padding-right: 10px;">off</a>|&nbsp;
 
 	    		<input type="radio" aria-label="Checkbox for following text input" value="1" name="data[spp]" <?php if($data[8]==1){echo 'checked';}?>><a style="padding-left:2px;padding-right:3px;">SPP</a>

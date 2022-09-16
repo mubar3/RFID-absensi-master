@@ -324,6 +324,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             		<option value="7" <?php if($urutan->urutan == 7){echo 'selected';}?>>7</option>
                             		<option value="8" <?php if($urutan->urutan == 8){echo 'selected';}?>>8</option>
                             		<option value="9" <?php if($urutan->urutan == 9){echo 'selected';}?>>9</option>
+                            		<option value="10" <?php if($urutan->urutan == 10){echo 'selected';}?>>10</option>
                             	</select>
                             </td>
                             <td>

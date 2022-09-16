@@ -236,6 +236,13 @@ require "vendor/autoload.php";
                             <td><?php echo $rr->norf;?></td>
                         </tr>
                     <?php
+                            }else if($urut->code == 'alamat_saja' && $urut->status == 1){?>
+                        <tr>
+                            <td>Alamat</td>
+                            <td>:</td>
+                            <td><?php echo $rr->alamat;?></td>
+                        </tr>
+                    <?php
                             }
                         }
                     ?>
