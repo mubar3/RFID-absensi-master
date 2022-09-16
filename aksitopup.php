@@ -17,7 +17,12 @@ if (isset($_POST['id'])) {
     $isi = $_POST['isi'];
     $total = $isi;
     if(empty($isi)){$isi=0;}
-    if($isi > 10000000){echo "<div class='p-3 mb-2 bg-danger'>Isi Saldo Maksimum Rp10.000.000<div>"; die();}
+
+    $data_user = $qb->RAW(
+    "SELECT * FROM user where id_user=?",[$_SESSION['id_user']]);
+    $data_user=$data_user[0];
+
+    if($isi > $data_user->saldo_max){echo "<div class='p-3 mb-2 bg-danger'>Isi Saldo Maksimum ".convertToRupiah($data_user->saldo_max)."<div>"; die();}
 
     $data = $qb->RAW(
     "SELECT * from siswa where norf = ?",
@@ -36,6 +41,9 @@ if (isset($_POST['id'])) {
     $saldo=(int)$saldo;
     $isi=(int)$isi;
     $isi=strval($saldo+$isi);
+    
+    if(($saldo+$isi) > $data_user->saldo_max){echo "<div class='p-3 mb-2 bg-danger'>Saldo Maksimum ".convertToRupiah($data_user->saldo_max)."<div>"; die();}
+
     $isi2 = strval(enkripsiDekripsi($isi, $kunciRahasia));
 
 
