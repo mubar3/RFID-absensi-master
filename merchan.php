@@ -173,24 +173,40 @@
 	            	$id_user="user='".$_SESSION['id_user']."'";
 	            	if($_SESSION['role'] == 3){$id_user="subuser='".$_SESSION['sub_user']."'";}
 	            	if(isset($_POST['cari_transaksi'])){
-	            	$saldo_log = $qb->RAW("SELECT (select count(id_log) from saldo_log where ket=saldo_log.ket) as banyak_pemb,u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
+	            	$saldo_log = $qb->RAW("SELECT (select count(id_log) from saldo_log x where ket=saldo_log.ket) as banyak_pemb,u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
 	            		left join siswa on siswa.norf=saldo_log.id_rfid
 	            		left join user on siswa.user_input=user.id_user
 	            		left join user u1 on saldo_log.user=u1.id_user
 	            		left join user u2 on saldo_log.subuser=u2.id_user
 	            		where saldo_log.".$id_user." and DATE(saldo_log.waktu) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."' and saldo_log.jenis='keluar' 
 	            		group by saldo_log.ket",[]);
+	            	$saldo_log_total = $qb->RAW("SELECT u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
+	            		left join siswa on siswa.norf=saldo_log.id_rfid
+	            		left join user on siswa.user_input=user.id_user
+	            		left join user u1 on saldo_log.user=u1.id_user
+	            		left join user u2 on saldo_log.subuser=u2.id_user
+	            		where saldo_log.".$id_user." and DATE(saldo_log.waktu) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."' and saldo_log.jenis='keluar'",[]);
 	            	}else{
-	            	$saldo_log = $qb->RAW("SELECT (select count(id_log) from saldo_log where ket=saldo_log.ket) as banyak_pemb,u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
+	            	$saldo_log = $qb->RAW("SELECT (select count(id_log) from saldo_log y where ket=saldo_log.ket) as banyak_pemb,u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
 	            		left join siswa on siswa.norf=saldo_log.id_rfid
 	            		left join user on siswa.user_input=user.id_user
 	            		left join user u1 on saldo_log.user=u1.id_user
 	            		left join user u2 on saldo_log.subuser=u2.id_user
 	            		where saldo_log.".$id_user." and DATE(saldo_log.waktu) = CURDATE() and saldo_log.jenis='keluar' 
 	            		group by saldo_log.ket",[]);
+	            	$saldo_log_total = $qb->RAW("SELECT u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
+	            		left join siswa on siswa.norf=saldo_log.id_rfid
+	            		left join user on siswa.user_input=user.id_user
+	            		left join user u1 on saldo_log.user=u1.id_user
+	            		left join user u2 on saldo_log.subuser=u2.id_user
+	            		where saldo_log.".$id_user." and DATE(saldo_log.waktu) = CURDATE() and saldo_log.jenis='keluar'",[]);
 	            	}
 	            ?>
 	            <tbody>
+	            	<?php foreach ($saldo_log_total as $s_total) { 
+	            		$harga=enkripsiDekripsi($s_total->banyak, $kunciRahasia);
+	            		$total=$total+$harga;}?>
+
 	            	<?php foreach ($saldo_log as $log) { 
 	            		$harga=enkripsiDekripsi($log->banyak, $kunciRahasia);
 	            		$total=$total+$harga;?>
