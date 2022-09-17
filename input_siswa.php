@@ -138,6 +138,7 @@ $rekapAbsen = $qb->insert('siswa', [
           'foto' => $filename,
           'user_input' => $user_input,
           'no_ibu' => $no_ibu,
+          'gaji_ibu' => $_POST['gaji_ibu'],
           'kerj_ibu' => $kerj_ibu,
           'pend_ibu' => $pend_ibu,
           'tgl_ibu' => $tgl_ibu,
@@ -145,6 +146,7 @@ $rekapAbsen = $qb->insert('siswa', [
           'nik_ibu' => $nik_ibu,
           'nm_ibu' => $nm_ibu,
           'no_ayah' => $no_ayah,
+          'gaji_ayah' => $_POST['gaji_ayah'],
           'kerj_ayah' => $kerj_ayah,
           'pend_ayah' => $pend_ayah,
           'tgl_ayah' => $tgl_ayah,
@@ -321,6 +323,7 @@ if($rekapAbsen){
             }?>
         </select></div>
     <div class="mb-3"><label for="exampleFormControlInput1">No Ayah</label><input class="form-control" name="no_ayah" type="text" placeholder="No Hp" ></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Gaji Ayah</label><input class="form-control" name="gaji_ayah" type="Number" placeholder="Gaji Ayah" ></div>
 
     <!-- data ibu -->
     <div class="mb-3"><label for="exampleFormControlInput1">Nama Ibu</label><input class="form-control" name="nm_ibu" type="text" placeholder="Nama Ibu" ></div>
@@ -346,6 +349,7 @@ if($rekapAbsen){
             }?>
         </select></div>
     <div class="mb-3"><label for="exampleFormControlInput1">No Ibu</label><input class="form-control" name="no_ibu" type="text" placeholder="No Hp Ibu" ></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Gaji Ibu</label><input class="form-control" name="gaji_ibu" type="text" placeholder="Gaji Ibu" ></div>
 
     
     <div class="mb-3"><label for="exampleFormControlInput1">Foto</label><input class="form-control" name="file_kirim" type="file" placeholder="RFID" ></div>

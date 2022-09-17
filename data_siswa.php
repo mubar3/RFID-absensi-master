@@ -222,6 +222,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
               'jk' => $jk,
               'foto' => $filename,
               'no_ibu' => $no_ibu,
+              'gaji_ibu' => $_POST['gaji_ibu'],
               'kerj_ibu' => $kerj_ibu,
               'pend_ibu' => $pend_ibu,
               'tgl_ibu' => $tgl_ibu,
@@ -229,6 +230,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
               'nik_ibu' => $nik_ibu,
               'nm_ibu' => $nm_ibu,
               'no_ayah' => $no_ayah,
+              'gaji_ayah' => $_POST['gaji_ayah'],
               'kerj_ayah' => $kerj_ayah,
               'pend_ayah' => $pend_ayah,
               'tgl_ayah' => $tgl_ayah,
@@ -728,6 +730,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             }?>
         </select></div>
     <div class="mb-3"><label for="exampleFormControlInput1">No Ayah</label><input class="form-control" name="no_ayah" type="text" placeholder="No Hp" value="<?php echo $data_edit_siswa->no_ayah;?>"></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Gaji Ayah</label><input class="form-control" name="gaji_ayah" type="text" placeholder="Gaji Ayah" value="<?php echo $data_edit_siswa->gaji_ayah;?>"></div>
 
     <!-- data ibu -->
     <div class="mb-3"><label for="exampleFormControlInput1">Nama Ibu</label><input class="form-control" name="nm_ibu" type="text" placeholder="Nama Ibu" value="<?php echo $data_edit_siswa->nm_ibu;?>"></div>
@@ -761,6 +764,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             }?>
         </select></div>
     <div class="mb-3"><label for="exampleFormControlInput1">No Ibu</label><input class="form-control" name="no_ibu" type="text" placeholder="No Hp Ibu" value="<?php echo $data_edit_siswa->no_ibu;?>"></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Gaji Ibu</label><input class="form-control" name="gaji_ibu" type="text" placeholder="Gaji Ibu" value="<?php echo $data_edit_siswa->gaji_ibu;?>"></div>
 
 
     <!-- udah -->

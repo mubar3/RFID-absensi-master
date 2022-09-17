@@ -99,7 +99,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <!-- <i class="fas fa-laugh-wink"></i> -->
                                             <!-- <i class="fa-brands fa-nfc-directional"></i> -->
                                         </div>
-                                        <div class="sidebar-brand-text mx-3">KlikTap <sup>NFC</sup></div>
+                                        <!-- <div class="sidebar-brand-text mx-3">KlikTap <sup>NFC</sup></div> -->
+                                        <div class="sidebar-brand-text mx-3">E-Smart Card</div>
                                     </a>
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Selamat Datang</h1>

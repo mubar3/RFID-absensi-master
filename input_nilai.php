@@ -16,8 +16,62 @@ $now->setTimezone('Asia/Jakarta');
 
 $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
+		if(isset($_GET['kls'])){
+			$update=$qb->RAW(
+    		"update nilai set tampil=0 where kelas=".$_GET['kls']." and id_ujian=".$_GET['uji']." and id_pelajaran=".$_GET['plj'],[]);
+    		if($update){
+
+	        	echo '<div class="col-lg-12 mb-4">
+			        <div class="card bg-success text-white shadow">
+			            <div class="card-body">
+			                Berhasil
+			                <div class="text-white-50 small">Data Terarsip</div>
+			            </div>
+			        </div>
+			    </div>';
+	        }else{
+	        	echo '<div class="col-lg-12 mb-4">
+		        <div class="card bg-danger text-white shadow">
+		            <div class="card-body">
+		                Gagal
+		                <div class="text-white-50 small">Data Gagal Terarsip</div>
+		            </div>
+		       	 </div>
+		    	</div>';
+	        }
+            echo '<script>setTimeout(function(){location.replace("input_nilai.php"); }, 1000);</script>';
+		}
+
+		if(isset($_GET['kls_hps'])){
+			$update=$qb->RAW(
+    		"delete from nilai where kelas=".$_GET['kls_hps']." and id_ujian=".$_GET['uji']." and id_pelajaran=".$_GET['plj'],[]);
+    		if($update){
+
+	        	echo '<div class="col-lg-12 mb-4">
+			        <div class="card bg-success text-white shadow">
+			            <div class="card-body">
+			                Berhasil
+			                <div class="text-white-50 small">Data Terhapus</div>
+			            </div>
+			        </div>
+			    </div>';
+	        }else{
+	        	echo '<div class="col-lg-12 mb-4">
+		        <div class="card bg-danger text-white shadow">
+		            <div class="card-body">
+		                Gagal
+		                <div class="text-white-50 small">Data Gagal Terhapus</div>
+		            </div>
+		       	 </div>
+		    	</div>';
+	        }
+            echo '<script>setTimeout(function(){location.replace("input_nilai.php"); }, 1000);</script>';
+		}
+
 		if(isset($_POST['simpan_nilai'])){
 			$nilai=$_POST['nilai'];
+			$kelakuan=$_POST['kelakuan'];
+			$kkm=$_POST['kkm'];
 			$id_siswa=$_POST['id_siswa'];
 			$ujian=$_POST['ujian'];
 			$pelajaran=$_POST['pelajaran'];
@@ -32,6 +86,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		          'kelas' => $kelas,
 		          'id_ujian' => $ujian,
 		          'nilai' => $nilai[$i],
+		          'kelakuan' => $kelakuan[$i],
+		          'kkm' => $kkm,
 		          'tampil' => 1,
 		          'id_user' => $_SESSION['id_user']
 		        ]);
@@ -176,34 +232,53 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 			echo'<input type="hidden" class="form-control" name="pelajaran" value="'.$_POST['pelajaran'].'" readonly>';
 			echo'<input type="hidden" class="form-control" name="ujian" value="'.$_POST['ujian'].'" readonly>';
 			$data_siswa = $qb->RAW(
-    		"SELECT siswa.*,nilai.nilai FROM nilai 
+    		"SELECT siswa.*,nilai.* FROM nilai 
     		left join siswa on siswa.id=nilai.id_siswa
-    		where nilai.kelas=".$_POST['kelas']." and nilai.id_pelajaran=".$_POST['pelajaran']." and nilai.id_ujian=".$_POST['ujian']." and nilai.id_user=".$_SESSION['id_user'],[]);
+    		where nilai.kelas=".$_POST['kelas']." and nilai.id_pelajaran=".$_POST['pelajaran']." and nilai.id_ujian=".$_POST['ujian']." and
+    			nilai.tampil=1 and
+    			nilai.id_user=".$_SESSION['id_user'],[]);
     		if (!array_key_exists(0, $data_siswa)) {
     			$data_siswa = $qb->RAW(
     			"SELECT * FROM siswa where kelas=".$_POST['kelas']." and user_input=".$_SESSION['id_user'],[]);
 
+				echo'<input type="number" class="form-control" name="kkm" placeholder="Nilai KKM (Kriteria Ketuntasan Minimal)" required><br>';
 	    		foreach ($data_siswa as $siswa) {
 	    			echo'<div class="input-group">
 				  			<input type="text" class="form-control" value="'.$siswa->nis.'" readonly>
 				  			<input type="hidden" class="form-control" name="id_siswa[]" value="'.$siswa->id.'" readonly>
 				  			<input type="text" class="form-control" value="'.$siswa->nama.'" readonly>
-				  			<input type="number" class="form-control" name="nilai[]" placeholder="Nilai"></input>
 						  
 
 						</div>';
+    			echo'<div class="input-group">
+			  			<input type="number" class="form-control" name="nilai[]" placeholder="Nilai"></input>
+			  			<Textarea class="form-control" name="kelakuan[]" placeholder="">Kelakuan Siswa</textarea>
+					  
+
+					</div><br>';
 	    		}
 
     		}else{
+    			echo'<a href="input_nilai.php?kls='.$_POST['kelas'].'&&plj='.$_POST['pelajaran'].'&&uji='.$_POST['ujian'].'" class="btn btn-danger">Arsipkan</a>&nbsp;';
+    			echo'<a href="input_nilai.php?kls_hps='.$_POST['kelas'].'&&plj='.$_POST['pelajaran'].'&&uji='.$_POST['ujian'].'" class="btn btn-danger">Hapus</a>&nbsp;';
+    			echo'<a target="_blank" href="excel_nilai.php?kls='.$_POST['kelas'].'&&plj='.$_POST['pelajaran'].'&&uji='.$_POST['ujian'].'" class="btn btn-primary">Download Excel</a><br><br>';
+    			$nilaikkm=$data_siswa[0];
+    			$nilaikkm=$nilaikkm->kkm;
+				echo'<input type="number" class="form-control" name="kkm" value="'.$nilaikkm.'" placeholder="Nilai KKM (Kriteria Ketuntasan Minimal)" required><br>';
     			foreach ($data_siswa as $siswa) {
 	    			echo'<div class="input-group">
 				  			<input type="text" class="form-control" value="'.$siswa->nis.'" readonly>
 				  			<input type="hidden" class="form-control" name="id_siswa[]" value="'.$siswa->id.'" readonly>
 				  			<input type="text" class="form-control" value="'.$siswa->nama.'" readonly>
-				  			<input type="number" class="form-control" name="nilai[]" value="'.$siswa->nilai.'" placeholder="Nilai"></input>
 						  
 
 						</div>';
+    			echo'<div class="input-group">
+			  			<input type="number" class="form-control" name="nilai[]" value="'.$siswa->nilai.'" placeholder="Nilai"></input>
+			  			<Textarea class="form-control" name="kelakuan[]" placeholder="">'.$siswa->kelakuan.'</textarea>
+					  
+
+					</div><br>';
 	    		}
     		}
 			

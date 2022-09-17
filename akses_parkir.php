@@ -88,15 +88,13 @@
                         from rekap_parkir
                         left join siswa on rekap_parkir.norf=siswa.norf
                         left join kelas on siswa.kelas=kelas.id_kelas
-                        where siswa.user_input='".$_SESSION['id_user']."' and DATE(rekap_parkir.input) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."'
-                        group by rekap_parkir.norf",[]);
+                        where siswa.user_input='".$_SESSION['id_user']."' and DATE(rekap_parkir.input) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."'",[]);
                     }else{
                     $parkir_log = $qb->RAW("select *
                         from rekap_parkir
                         left join siswa on rekap_parkir.norf=siswa.norf
                         left join kelas on siswa.kelas=kelas.id_kelas
-                        where siswa.user_input='".$_SESSION['id_user']."' and DATE(rekap_parkir.input) = CURDATE() 
-                        group by rekap_parkir.norf",[]);
+                        where siswa.user_input='".$_SESSION['id_user']."' and DATE(rekap_parkir.input) = CURDATE()",[]);
                     }
                 ?>
                 <tbody>
