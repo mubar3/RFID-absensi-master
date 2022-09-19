@@ -142,7 +142,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                     </div> -->
                                     <div class="container my-auto">
                                         <div class="copyright text-center my-auto">
-                                            <span style="color: black; font-size: 15px;">Copyright &copy; KlikTap-NFC 2022</span>
+                                            <!-- <span style="color: black; font-size: 15px;">Copyright &copy; KlikTap-NFC 2022</span> -->
+                                            <span style="color: black; font-size: 15px;">Copyright &copy; PT.Bawana Cahaya Abadi 2022</span>
                                         </div>
                                     </div>
                                 </div>
