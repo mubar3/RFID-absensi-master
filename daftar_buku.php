@@ -46,6 +46,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             "',penerbit='".$_POST['penerbit'].
             "',rfid='".$rfid_baru.
             "',penulis='".$_POST['penulis'].
+            "',user='".$_SESSION['id_user'].
             "' where id_buku=".$_POST['id_buku'],[]);
             
             if($aksi){
@@ -97,7 +98,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
     $table='kelas';
     $data_buku = $qb->RAW(
-    "SELECT * FROM buku",[]);
+    "SELECT * FROM buku where user=?",[$_SESSION['id_user']]);
     // print_r($data_kelas);
     // die();
 

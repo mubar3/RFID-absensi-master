@@ -1,5 +1,5 @@
 <?php
-
+require "partials/head.php";
 require "vendor/autoload.php";
 require "partial/head.php";
 use StelinDB\Database\QueryBuilder;
@@ -27,7 +27,7 @@ if (isset($_POST['id'])) {
             for($x=0;$x<$total_buku;$x++) {
               $status=0;
               $data_rfid_buku = $qb->RAW(
-              "SELECT * FROM buku",[]);
+              "SELECT * FROM buku where user=?",[$_SESSION['id_user']]);
               foreach ($data_rfid_buku as $data_rfid_buku) {
                 if($data_buku[$x]==($data_rfid_buku->rfid)){
                   $status=1;

@@ -55,7 +55,8 @@ $rekapAbsen = $qb->insert('buku', [
           'judul_buku' => $judul,
           'tahun_terbit' => $tahun,
           'penerbit' => $penerbit,
-          'penulis' => $penulis
+          'penulis' => $penulis,
+          'user' => $_SESSION['id_user']
         ]);
 
 
