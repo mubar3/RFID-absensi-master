@@ -18,7 +18,7 @@ if (isset($_POST['id'])) {
     $id = $_POST['id'];
 
      $cek_bayar = $qb->RAW(
-    "SELECT * from saldo_log where id_rfid =".$id." and ket='Bayar SPP' order by waktu desc",
+    "SELECT * from saldo_log where id_rfid =".$id." and ket='Bayar Sumbangan Komite' order by waktu desc",
      []);
 
      if (array_key_exists(0, $cek_bayar)) {
@@ -27,7 +27,7 @@ if (isset($_POST['id'])) {
         $new_time = date('Y-m-d H:i',strtotime('+23 hour +30 minutes',strtotime($cek_bayar[0]->waktu)));
         date_default_timezone_set('Asia/Jakarta');
         $now_time = date("Y-m-d H:i");
-        if($now_time<$new_time){echo "<div class='p-3 mb-2 bg-danger'>Kartu telah Bayar SPP (tunggu selama 1 hari lagi)</div>";die();}
+        if($now_time<$new_time){echo "<div class='p-3 mb-2 bg-danger'>Kartu telah Bayar Sumbangan Komite (tunggu selama 1 hari lagi)</div>";die();}
       }
 
 
@@ -52,7 +52,7 @@ if (isset($_POST['id'])) {
 
     $isi = $spp->spp;
     // echo "<div class='p-3 mb-2 bg-danger'>".$isi."<div>";die();
-    $keperluan = 'Bayar SPP';
+    $keperluan = 'Bayar Sumbangan Komite';
     $merchan=$isi;
 
     if (array_key_exists(0, $data)) {
