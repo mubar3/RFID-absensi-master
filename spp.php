@@ -11,7 +11,7 @@
     }else{
         header("Location: index.php");
     } ?>
-        <h2 class="text-primary mt-4">Pembayaran SPP </h2>
+        <h2 class="text-primary mt-4">Pembayaran Sumbangan Komite </h2>
 
         <div class="form-group">
             <label for="rfidnumber">RFID Tag Number</label>

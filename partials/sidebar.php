@@ -51,6 +51,7 @@
             $akses_parkir=1;
             $akses_gerbang=1;
             $tracking=1;
+            $izin=1;
 
             if($_SESSION['role'] == 3){
                 $menu=explode(",",$_SESSION['sidebar_data']);
@@ -73,6 +74,7 @@
             // absen
             else if($page == 'absen.php' && $absen == 0){header("Location: home.php");}
             else if($page == 'rekap.php' && $absen == 0){header("Location: home.php");}
+            else if($page == 'izin_siswa.php' && $izin == 0){header("Location: home.php");}
             // perpus
             else if($page == 'perpus.php' && $perpustakaan == 0){header("Location: home.php");}
             else if($page == 'daftar_peminjaman.php' && $perpustakaan == 0){header("Location: home.php");}
@@ -156,7 +158,7 @@
                         }else{
                             echo 'class="collapse-item"';}
                         ?> 
-                        href="setting_absen.php">Setting Absensi & SPP</a>
+                        href="setting_absen.php">Setting Absensi & SK</a>
                         <a 
                         <?php 
                         if($page=='toko_setting.php'){
@@ -198,7 +200,7 @@
 
             <?php
             }if($absen == 1){ 
-            if($page=='absen.php' || $page=='rekap.php'){
+            if($page=='absen.php' || $page=='rekap.php' || $page=='izin_siswa.php'){
                 echo '<li class="nav-item active">';
             }else{
                 echo '<li class="nav-item">';}
@@ -211,7 +213,7 @@
                 </a>
                 <div id="collapseUtilities" 
                 <?php 
-                if($page=='absen.php' || $page=='rekap.php'){
+                if($page=='absen.php' || $page=='rekap.php' || $page=='izin_siswa.php'){
                     echo 'class="collapse show"';
                 }else{
                     echo 'class="collapse"';}
@@ -235,6 +237,16 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="rekap.php">Rekap Absen (Hari Ini)</a>
+                        <?php if($izin == 1){ ?>
+                        <a 
+                        <?php 
+                        if($page=='izin_siswa.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="izin_siswa.php">Izin dan Telat</a>
+                        <?php  } ?>
                     </div>
                 </div>
             </li>
@@ -449,7 +461,7 @@
             ?>
                 <a class="nav-link"  href="spp.php" >
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>SPP</span>
+                    <span>Sumbangan Komite</span>
                 </a>
             </li>
 

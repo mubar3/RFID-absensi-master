@@ -44,11 +44,13 @@ if (isset($_POST['id'])) {
 
     if (array_key_exists(0, $siswa_check)) {
 
-        $old_time = date('Y-m-d H:i',strtotime($siswa_check[0]->tanggal_absen));
-        $new_time = date('Y-m-d H:i',strtotime('+1 hour +30 minutes',strtotime($siswa_check[0]->tanggal_absen)));
-        date_default_timezone_set('Asia/Jakarta');
-        $now_time = date("Y-m-d H:i");
-        if($now_time<$new_time){echo "Kartu telah absen";die();}
+        if($siswa_check[0]->ket == ''){
+            $old_time = date('Y-m-d H:i',strtotime($siswa_check[0]->tanggal_absen));
+            $new_time = date('Y-m-d H:i',strtotime('+1 hour +30 minutes',strtotime($siswa_check[0]->tanggal_absen)));
+            date_default_timezone_set('Asia/Jakarta');
+            $now_time = date("Y-m-d H:i");
+            if($now_time<$new_time){echo "Kartu telah absen";die();}
+        }
     }
     $status=0;
     if (array_key_exists(0, $siswa)) {
@@ -71,6 +73,7 @@ if (isset($_POST['id'])) {
             $akhir_add = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->addHour();
             // $akhir_sub = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->subHour();
             
+        if(!isset($_POST['izin'])){    
             if($mulai_sub < $sekarang && $sekarang < $mulai){
                 $status=1;
             }else{
@@ -83,6 +86,9 @@ if (isset($_POST['id'])) {
                     echo "Harap absen sesuai jam pulang";die();
                 }
             }
+          }else{
+            $status=1;
+          }
 
         }
         
@@ -118,10 +124,18 @@ if (isset($_POST['id'])) {
         // if(isset($makul)){
         //Yang akan ditampilkan
         $formatTampilan = "<b>Nama:</b> %s, <b>Jam Absen:</b> %s, <b>Kelas:</b> %s";
+        $ket='';
+        $telat='';
+        if(isset($_POST['izin'])){
+            $ket=$_POST['izin'];
+            $telat=$_POST['telat'];
+        }
         $rekapAbsen = $qb->insert('rekap_absen', [
           'id' => '',
           'norf' => $id,
-          'makul_absen' => ''
+          'makul_absen' => '',
+          'ket' => $ket,
+          'telat' => $telat
         ]);
 
         echo sprintf($formatTampilan, $siswa->nama, $date, 

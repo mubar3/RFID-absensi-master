@@ -181,7 +181,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	    <div class="col-lg-12 mb-2">
 	    	<div class="input-group">
 	    		<?php
-	    			$data=[0,0,0,0,0,0,0,0,0,0,0,0]; 
+	    			$data=[0,0,0,0,0,0,0,0,0,0,0,0,0]; 
 	    			if(isset($_GET['edit_user'])){
 	    				 $status_data=explode(",",$_GET['status_data']);
 	    				 for ($i=0; $i < count($status_data); $i++) { 
@@ -224,6 +224,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 	    		<input type="radio" aria-label="Checkbox for following text input" value="1" name="data[tracking]" <?php if($data[11]==1){echo 'checked';}?>><a style="padding-left:2px;padding-right:3px;">Tracking</a>
 	    		<input type="radio" aria-label="Checkbox for following text input" value="0" name="data[tracking]"  <?php if($data[11]==0){echo 'checked';}?> ><a style="padding-right: 10px;">off</a>|&nbsp;
+
+	    		<input type="radio" aria-label="Checkbox for following text input" value="1" name="data[izin]" <?php if($data[12]==1){echo 'checked';}?>><a style="padding-left:2px;padding-right:3px;">Input Izin/Telat</a>
+	    		<input type="radio" aria-label="Checkbox for following text input" value="0" name="data[izin]"  <?php if($data[12]==0){echo 'checked';}?> ><a style="padding-right: 10px;">off</a>|&nbsp;
 	    	</div>
 	    </div>
 	    <div class="col-lg-12 mb-2">

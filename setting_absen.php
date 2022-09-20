@@ -224,7 +224,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         <tr>
                             <th>No</th>
                             <th>Kelas</th>
-                            <th>SPP</th>
+                            <th>Sumbangan Komite</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>

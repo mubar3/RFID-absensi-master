@@ -28,7 +28,7 @@
     $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     $jadwal = $qb->RAW("SELECT siswa.nama,siswa.NIM, rekap_absen.makul_absen, rekap_absen.tanggal_absen
         FROM siswa
-        INNER JOIN rekap_absen ON siswa.norf=rekap_absen.norf
+        left JOIN rekap_absen ON siswa.norf=rekap_absen.norf
         GROUP BY makul_absen", []);
     if (array_key_exists(0, $jadwal)) {
     // foreach ($jadwal[0] as $value[0]) {
@@ -53,6 +53,7 @@
             <th>Nama</th>
             <th>NIS</th>
             <th>Jam</th>
+            <th>Ket</th>
           </tr>
         </thead>
         <tbody>";
@@ -68,17 +69,29 @@
                 $pulang='';
             }
 
-            $table .= "<tr>";
-            $table .= "<td>$i</td>";
-            $table .= "<td>$siswa->nama</td>";
-            $table .= "<td>$siswa->nim</td>";
-            $table .= "<td>".$masuk." - ".$pulang."</td>";
-            $table .= "</tr>";
+            if(!empty($absen[0]->ket) && $absen[0]->telat == 0){
+              $table .= "<tr style='color:red; '>";
+              $table .= "<td>$i</td>";
+              $table .= "<td>$siswa->nama</td>";
+              $table .= "<td>$siswa->nim</td>";
+              $table .= "<td>".$masuk." - ".$pulang."</td>";
+              $table .= "<td>".$absen[0]->ket."</td>";
+              $table .= "</tr>";
+            }else{
+              $table .= "<tr>";
+              $table .= "<td>$i</td>";
+              $table .= "<td>$siswa->nama</td>";
+              $table .= "<td>$siswa->nim</td>";
+              $table .= "<td>".$masuk." - ".$pulang."</td>";
+              $table .= "<td>".$absen[0]->ket."</td>";
+              $table .= "</tr>";
+            }
           }else{
             $table .= "<tr style='color:red;'>";
             $table .= "<td>$i</td>";
             $table .= "<td>$siswa->nama</td>";
             $table .= "<td>$siswa->nis</td>";
+            $table .= "<td></td>";
             $table .= "<td></td>";
             $table .= "</tr>";
           }
