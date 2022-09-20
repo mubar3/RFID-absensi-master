@@ -395,6 +395,7 @@
 
             <?php 
         }
+            if($topup == 1 || $merchan == 1 ){
             if($page=='topup.php' || $page=='merchan.php'){
                 echo '<li class="nav-item active">';
             }else{
@@ -439,6 +440,7 @@
                 </div>
             </li>
             <?php 
+        }
         if($spp == 1 ){
             if($page=='spp.php'){
                 echo '<li class="nav-item active">';
