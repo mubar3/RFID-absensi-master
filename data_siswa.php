@@ -591,7 +591,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         $data_edit_siswa = $qb->RAW(
         "SELECT * FROM siswa where id=?",[$_GET['edit_siswa']]);
         $data_kelas = $qb->RAW(
-        "SELECT * FROM kelas",[]);
+        "SELECT * FROM kelas where id_user=?",[$_SESSION['id_user']]);
         ?>
     <br><br><br>
     <h1 class="h3 mb-2 text-gray-800">Edit Data</h1>
