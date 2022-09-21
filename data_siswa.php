@@ -82,31 +82,41 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
 
 
-                if($rekapAbsen){
+                // if($rekapAbsen){
+                //    echo '
+                //    <div class="col-lg-12 mb-4">
+                //         <div class="card bg-success text-white shadow">
+                //             <div class="card-body">
+                //                 Berhasil
+                //                 <div class="text-white-50 small">Data Tersimpan</div>
+                //             </div>
+                //         </div>
+                //     </div>
+                //     '; 
+                // }else{
+                //     echo'
+                //     <div class="col-lg-12 mb-4">
+                //         <div class="card bg-danger text-white shadow">
+                //             <div class="card-body">
+                //                 Gagal
+                //                 <div class="text-white-50 small">Data Gagal Tersimpan</div>
+                //             </div>
+                //         </div>
+                //     </div>
+                //     ';
+                // }
+              }
+        }
                    echo '
                    <div class="col-lg-12 mb-4">
                         <div class="card bg-success text-white shadow">
                             <div class="card-body">
                                 Berhasil
-                                <div class="text-white-50 small">Data Tersimpan</div>
+                                <div class="text-white-50 small">Import selesai</div>
                             </div>
                         </div>
                     </div>
                     '; 
-                }else{
-                    echo'
-                    <div class="col-lg-12 mb-4">
-                        <div class="card bg-danger text-white shadow">
-                            <div class="card-body">
-                                Gagal
-                                <div class="text-white-50 small">Data Gagal Tersimpan</div>
-                            </div>
-                        </div>
-                    </div>
-                    ';
-                }
-              }
-        }
 
         // hapus kembali file .xls yang di upload tadi
         unlink($_FILES['excel']['name']);
