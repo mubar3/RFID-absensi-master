@@ -55,9 +55,11 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 ';
               }else{
                 $user_input=$_SESSION['id_user'];
-                if(isset($_POST['data_user'])){
+                if($_POST['data_user'] != ''){
                     $user_input=$_POST['data_user'];
                 }
+                // print_r($user_input);
+                // die();
                 $rekapAbsen = $qb->insert('siswa', [
                           'nama' => $data->val($i, 3),
                           'nisn' => $data->val($i, 1),
@@ -442,6 +444,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         <div class="col-lg-12 mb-2">
                             <div class="input-group">
                                 <input type="file" name="excel" class="form-control">
+                                <input type="hidden" name="data_user" value="<?php if(isset($_POST['data_user'])){ echo $_POST['data_user']; } ?>">
                             <div class="input-group-prepend">
                                 <button type="submit" name="Upload" class="input-group-text"><span  id="">Upload</span></button>
                             </div>
