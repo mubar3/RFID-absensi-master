@@ -148,7 +148,7 @@ require "vendor/autoload.php";
 ?>
 
 <div style=" float: left;  padding-left: 30px; width: 550px;height: 350px; border-left: 2px dashed red;">
-<div style=" margin-left: 0px;  float: left;  margin-right: 30px; margin-top:-4px;width: 550px;height: 350px;margin-bottom: 6px;background-size: 550px 350px;
+<div style=" margin-left: 0px;  float: left;  margin-right: 30px; margin-top:-4px;width: 550px;height: 350px;margin-bottom: 0px;background-size: 550px 350px;
     <?php if(!empty($rr->foto)){?>
     /*background-image: url('kartu/depan.jpg');*/
     /*background-image: url('asset/desain/depan.jpg');*/
@@ -261,7 +261,7 @@ require "vendor/autoload.php";
 
 <div style="float: left; 
     margin-right: 30px;  margin-left: 30px;
-     margin-top:-4px;width: 550px;height: 350px;margin-bottom: 6px;background-size: 550px 350px;
+     margin-top:-4px;width: 550px;height: 350px;margin-bottom: 0px;background-size: 550px 350px;
      /*background-image: url('kartu/belakang.jpg');*/
      /*background-image: url('asset/desain/belakang.jpg');*/
      background-image: url('asset/desain/<?php echo $belakang;?>');
