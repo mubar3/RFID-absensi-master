@@ -26,14 +26,32 @@ $now->setTimezone('Asia/Jakarta');
 $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 echo'<br><br><h4 class="sidebar-brand-text mx-3" style="text-align:center;">E-Smart Card</h4>';
-
+$input=0;
 if(isset($_POST['cari_user'])){
+
+    $user = $qb->RAW(
+    "SELECT * FROM user WHERE id_user=?",[$_POST['data_user']]);
+    $user = $user[0];
+    // print_r($user->kode_input);die();
+    if($user->kode_input != $_POST['code_input']){
+        echo'
+            <div class="col-lg-12 mb-4">
+                <div class="card bg-danger text-white shadow">
+                    <div class="card-body">
+                        Gagal
+                        <div class="text-white-50 small">kode salah</div>
+                    </div>
+                </div>
+            </div>
+            ';
+    }else{$input=1;}
 
     $table='kelas';
     $data_kelas = $qb->RAW(
     "SELECT * FROM kelas where id_user=".$_POST['data_user'],[]);
     // print_r($data_kelas);
     // die();
+    }
  if(isset($_POST['simpan_data'])){
 
   $nama = $_POST['nama'];
@@ -225,7 +243,7 @@ if($rekapAbsen){
 // }
 }
 
-}
+
 
     ?>
 <br><br>
@@ -302,6 +320,14 @@ if($rekapAbsen){
             }
             ?>
         </select>
+    </div>
+</div>
+<div class="col-lg-12 mb-2">
+    <div class="input-group">
+      <div class="input-group-prepend">
+       <span  class="input-group-text" >Kode<sup style="color:brown;">*wajib</sup></span>
+      </div>
+      <input type="text" class="form-control" name="code_input" placeholder="Kode" required>
       <div class="input-group-prepend">
        <button type="submit" name="cari_user" class="btn btn-primary"><span  id="">Input</span></button>
      </div>
@@ -309,9 +335,10 @@ if($rekapAbsen){
 </div>
 <br>
 </form>
-<?php if(isset($_POST['cari_user'])){ ?>
+<?php if($input == 1){ ?>
 <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
     <div class="mb-3"><label for="exampleFormControlInput1">Nama<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="nama" type="text" placeholder="Masukkan Nama" required></div>
+    <input class="form-control" name="data_user" type="hidden" value="<?php echo $_POST['data_user'];?>" placeholder="Masukkan Nama" required>
     <div class="mb-3"><label for="exampleFormControlInput1">NISN<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="nisn" type="text" placeholder="Masukkan NISN" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">NIS<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="nis" type="text" placeholder="Masukkan NIS" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Agama<sup style="color:brown;">*wajib</sup></label>
@@ -356,7 +383,10 @@ if($rekapAbsen){
             ?>
             <option value="">Pilih</option>
             <?php foreach ($data as $data) {
-                echo '<option value="'.$data->id_prov.'">'.$data->nama_provinsi.'</option>';
+                // echo '<option value="'.$data->id_prov.'">'.$data->nama_provinsi.'</option>';
+                $selected='';
+                if($_POST['provinsi'] == $data->id_prov){$selected='selected';}
+                echo '<option value="'.$data->id_prov.'" '.$selected.'>'.$data->nama_provinsi.'</option>';
             }?>
         </select></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Kabupaten<sup style="color:brown;">*wajib</sup></label> <select id="kabupaten" name="kabupaten" class="form-control" required>
@@ -365,7 +395,10 @@ if($rekapAbsen){
             ?>
             <option value="">Pilih</option>
             <?php foreach ($data as $data) {
-                echo '<option id="kabupaten" class="'.$data->id_prov.'" value="'.$data->id_kab.'">'.$data->nama_kabupaten.'</option>';
+                // echo '<option id="kabupaten" class="'.$data->id_prov.'" value="'.$data->id_kab.'">'.$data->nama_kabupaten.'</option>';
+                $selected='';
+                if($_POST['kabupaten'] == $data->id_kab){$selected='selected';}
+                echo '<option id="kabupaten1" class="'.$data->id_prov.'" value="'.$data->id_kab.'" '.$selected.'>'.$data->nama_kabupaten.'</option>';
             }?>
         </select></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Kecamatan<sup style="color:brown;">*wajib</sup></label> <select onchange="myFunction()" id="kecamatan" name="kecamatan" class="form-control" required>

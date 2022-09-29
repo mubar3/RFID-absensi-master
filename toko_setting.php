@@ -15,9 +15,42 @@ $now = new Carbon;
 $now->setTimezone('Asia/Jakarta');
 
 $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
+		if(isset($_POST['simpan_ukuran'])){
+			$data=$_POST['data'];
+			$set=array();
+			foreach ($data as $key => $value) {
+				array_push($set,$key.'="'.$value.'"');
+			}
+			$set=implode(",",$set);
+			// print_r($set);die();
+
+			$aksi = $qb->RAW(
+            "UPDATE user SET ".$set." where id_user=".$_SESSION['id_user'],[]);
+
+	        if($aksi){
+	        	echo '<div class="col-lg-12 mb-4">
+			        <div class="card bg-success text-white shadow">
+			            <div class="card-body">
+			                Berhasil
+			                <div class="text-white-50 small">Tersimpan</div>
+			            </div>
+			        </div>
+			    </div>';
+	        }else{
+	        	echo '<div class="col-lg-12 mb-4">
+		        <div class="card bg-danger text-white shadow">
+		            <div class="card-body">
+		                Gagal
+		                <div class="text-white-50 small">Gagal Tersimpan</div>
+		            </div>
+		       	 </div>
+		    	</div>';
+	        }
+		}
 
      	if(isset($_POST['simpan_menu'])){
      		$filename=$_FILES['gambar']['name'];
+     	   if(!empty($filename)){
      		$ext = pathinfo($filename, PATHINFO_EXTENSION);
      		$name = pathinfo($filename, PATHINFO_FILENAME);
             $filename=$name.rand(111,9999).'.'.$ext;
@@ -28,7 +61,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                     {resizer("asset/menu/".$filename, "asset/menu/".$filename, 70);}else{ break;}
                     clearstatcache();
                 }
-
+            }
      		$aksi = $qb->insert('toko_menu', [
 	          'harga' => $_POST['harga'],
 	          'nama' => $_POST['nama'],
@@ -61,7 +94,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	        $aksi = $qb->RAW(
     		"DELETE from toko_menu where id=".$_GET['hapus_menu'],[]);
 	        if($aksi){
-                unlink('asset/menu/'.$_GET['foto_menu']);
+	        	if ($_GET['foto_menu'] != '') {
+                	unlink('asset/menu/'.$_GET['foto_menu']);
+            	}
 	        	echo '<div class="col-lg-12 mb-4">
 			        <div class="card bg-success text-white shadow">
 			            <div class="card-body">
@@ -101,7 +136,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	    <div class="col-lg-12 mb-2">
 				<h1 class="h3 mb-2 text-gray-800">Tambah</h1>
 	        <div class="input-group">
-			  <input type="file" name="gambar" placeholder="gambar" class="form-control" required>
+			  <input type="file" name="gambar" placeholder="gambar" class="form-control">
 			  <input type="text" name="nama" placeholder="Nama" class="form-control" required>
 			  <input type="number" name="harga" placeholder="Harga" class="form-control" required>
 			  <div class="input-group-prepend">
@@ -126,7 +161,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         foreach ($data_menu as $data_user) {
                             ?>
                         <tr>
-                            <td><img style="display: block; margin-left: auto;  margin-right: auto;   width: 70px;" class="img-responsive img" src="asset/menu/<?php echo $data_user->gambar;?>"></td>
+                            <td><?php if($data_user->gambar != ''){?><img style="display: block; margin-left: auto;  margin-right: auto;   width: 70px;" class="img-responsive img" src="asset/menu/<?php echo $data_user->gambar;?>"><?php } ?></td>
                             <td><?php echo $data_user->nama;?></td>
                             <td><?php echo $data_user->harga;?></td>
                             <td>
@@ -142,5 +177,36 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             </div>
         </div>
     </div>
+
+    <!-- setting ukuran kartu -->
+    <h1 class="h3 mb-2 text-gray-800">Pengaturan Toko</h1>
+    <?php 
+	    $data_user = $qb->RAW(
+			"SELECT * FROM user where id_user=?",[$_SESSION['id_user']]);
+	    $data_user=$data_user[0];
+    ?>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+        	<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+        	<table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Saldo Maksimal Kartu/saldo maksimal topup</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->saldo_max; ?>" name="data[saldo_max]"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <center><button type="submit" name="simpan_ukuran" class="btn btn-primary"><span  id="">Simpan</span></button></center>
+            	</form>
+        </div>
+    </div>
+
 </div>
+
 <?php require "partials/footer.php"; ?>

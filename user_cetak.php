@@ -246,9 +246,33 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             <td>Margin Atas 'DIkeluarkan tanggal'</td>
                             <td><input type="text" class="form-control" value="<?php echo $data_user->dikeluarkan_atas; ?>" name="data[dikeluarkan_atas]"></td>
                         </tr>
-                        <tr>
+                        <tr><!-- 
                             <td>Saldo Maksimal Kartu/saldo maksimal topup</td>
                             <td><input type="text" class="form-control" value="<?php echo $data_user->saldo_max; ?>" name="data[saldo_max]"></td>
+                        </tr> -->
+                    </tbody>
+                </table>
+                <center><button type="submit" name="simpan_ukuran" class="btn btn-primary"><span  id="">Simpan</span></button></center>
+            	</form>
+        </div>
+    </div>
+
+    <!-- setting ukuran kartu -->
+    <h1 class="h3 mb-2 text-gray-800">Pengaturan lainnya</h1>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+        	<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+        	<table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Kode Formulir</td>
+                            <td><input type="text" class="form-control" value="<?php echo $data_user->kode_input; ?>" name="data[kode_input]"></td>
                         </tr>
                     </tbody>
                 </table>
