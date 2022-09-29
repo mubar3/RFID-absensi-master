@@ -1,3 +1,4 @@
 RewriteEngine on
 
 RewriteRule ^data$ detail.php [L]
+RewriteRule ^form$ input_siswa_privat.php [L]

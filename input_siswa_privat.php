@@ -3,7 +3,14 @@ require "partials/head.php";
 // require "partials/sidebar.php"; 
 require "asset/phpqrcode/qrlib.php"; ?>
 
-<div class="container-fluid">
+<div class="container-fluid" style="
+color: white!important;
+background-color: skyblue; 
+/*background: url('https://baradesain.files.wordpress.com/2021/03/tut-wuri-handayani-logo-featured-03.jpg?w=1200');*/
+/*background: url('asset/desain/background.jpg');*/
+/*background-position: center;*/
+/*background-size: cover;*/
+">
         <?php
 
 require "vendor/autoload.php";
@@ -17,6 +24,8 @@ $now = new Carbon;
 $now->setTimezone('Asia/Jakarta');
 
 $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
+
+echo'<br><br><h4 class="sidebar-brand-text mx-3" style="text-align:center;">E-Smart Card</h4>';
 
 if(isset($_POST['cari_user'])){
 
@@ -442,7 +451,6 @@ if($rekapAbsen){
     <button name="simpan_data" type='submit' class="btn btn-primary btn-user btn-block">Simpan</button>
 </form>
 <?php } ?>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -501,3 +509,4 @@ if($rekapAbsen){
     $("#lembaga").chained("#kecamatan1");
   </script>
  <?php require "partials/footer.php"; ?>
+</div>
