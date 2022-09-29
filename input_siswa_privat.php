@@ -1,6 +1,6 @@
 <?php 
 require "partials/head.php";
-require "partials/sidebar.php"; 
+// require "partials/sidebar.php"; 
 require "asset/phpqrcode/qrlib.php"; ?>
 
 <div class="container-fluid">
@@ -18,10 +18,11 @@ $now->setTimezone('Asia/Jakarta');
 
 $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
+if(isset($_POST['cari_user'])){
 
     $table='kelas';
     $data_kelas = $qb->RAW(
-    "SELECT * FROM kelas where id_user=".$_SESSION['id_user'],[]);
+    "SELECT * FROM kelas where id_user=".$_POST['data_user'],[]);
     // print_r($data_kelas);
     // die();
  if(isset($_POST['simpan_data'])){
@@ -70,29 +71,29 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
   $kecamatan= $_POST['kecamatan'];
   $kabupaten= $_POST['kabupaten'];
   $provinsi= $_POST['provinsi'];
-  $user_input=$_SESSION['id_user'];
+  $user_input=$_POST['data_user'];
 
 $user = $qb->RAW(
     // "SELECT * FROM siswa WHERE norf='".$norfid."'",[]);
     "SELECT * FROM siswa WHERE nisn='".$nisn."'",[]);
-$rfid = $qb->RAW(
-    "SELECT * FROM siswa WHERE norf='".$norfid."'",[]);
-    // "SELECT * FROM siswa WHERE user_input=".$_SESSION['id_user']."and nisn='".$nisn."'",[]);
+// $rfid = $qb->RAW(
+//     "SELECT * FROM siswa WHERE norf='".$norfid."'",[]);
+//     // "SELECT * FROM siswa WHERE user_input=".$_SESSION['id_user']."and nisn='".$nisn."'",[]);
 
 
-// print_r($user);
-// die();
-  if (array_key_exists(0, $rfid)) {
-    echo'
-    <div class="col-lg-12 mb-4">
-        <div class="card bg-danger text-white shadow">
-            <div class="card-body">
-                Gagal
-                <div class="text-white-50 small">Data RFID Sudah Ada</div>
-            </div>
-        </div>
-    </div>
-    ';}else{
+// // print_r($user);
+// // die();
+//   if (array_key_exists(0, $rfid)) {
+//     echo'
+//     <div class="col-lg-12 mb-4">
+//         <div class="card bg-danger text-white shadow">
+//             <div class="card-body">
+//                 Gagal
+//                 <div class="text-white-50 small">Data RFID Sudah Ada</div>
+//             </div>
+//         </div>
+//     </div>
+//     ';}else{
   if (array_key_exists(0, $user)) {
     echo'
     <div class="col-lg-12 mb-4">
@@ -167,7 +168,8 @@ $rekapAbsen = $qb->insert('siswa', [
           'desa' => $desa,
           'kecamatan' => $kecamatan,
           'kabupaten' => $kabupaten,
-          'provinsi' => $provinsi
+          'provinsi' => $provinsi,
+          'input_role' => 2
         ]);
 
             // $nameqrcode    = $norfid.'.png';              
@@ -210,11 +212,95 @@ if($rekapAbsen){
     </div>
     ';
 }
-}}
+}
+// }
+}
+
 }
 
     ?>
-    
+<br><br>
+<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+<div class="col-lg-12 mb-2">
+    <div class="input-group">
+      <div class="input-group-prepend">
+       <span  class="input-group-text" >Provinsi<sup style="color:brown;">*wajib</sup></span>
+      </div>
+        <select id="provinsi1" name="provinsi" class="form-control" required>
+            <?php 
+            $data= $qb->RAW("SELECT * FROM provinsi",[]);
+            ?>
+            <option value="">Provinsi</option>
+            <?php foreach ($data as $data) {
+                $selected='';
+                if($_POST['provinsi'] == $data->id_prov){$selected='selected';}
+                echo '<option value="'.$data->id_prov.'" '.$selected.'>'.$data->nama_provinsi.'</option>';
+            }?>
+        </select>
+    </div>
+</div>
+<div class="col-lg-12 mb-2">
+    <div class="input-group">
+      <div class="input-group-prepend">
+       <span  class="input-group-text" >Kabupaten<sup style="color:brown;">*wajib</sup></span>
+      </div>
+        <select id="kabupaten1" name="kabupaten" class="form-control" required>
+            <?php 
+            $data= $qb->RAW("SELECT * FROM kabupaten",[]);
+            ?>
+            <option value="">Kab</option>
+            <?php foreach ($data as $data) {
+                $selected='';
+                if($_POST['kabupaten'] == $data->id_kab){$selected='selected';}
+                echo '<option id="kabupaten1" class="'.$data->id_prov.'" value="'.$data->id_kab.'" '.$selected.'>'.$data->nama_kabupaten.'</option>';
+            }?>
+        </select>
+    </div>
+</div>
+<div class="col-lg-12 mb-2">
+    <div class="input-group">
+      <div class="input-group-prepend">
+       <span  class="input-group-text" >Kecamatan<sup style="color:brown;">*wajib</sup></span>
+      </div>
+        <select id="kecamatan1" name="kecamatan" class="form-control" required>
+            <?php 
+            $data= $qb->RAW("SELECT * FROM kecamatan",[]);
+            ?>
+            <option value="">Kec</option>
+            <?php foreach ($data as $data) {
+                $selected='';
+                if($_POST['kecamatan'] == $data->id_kec){$selected='selected';}
+                echo '<option id="kecamatan1" class="'.$data->id_kab.'" value="'.$data->id_kec.'" '.$selected.'>'.$data->nama_kecamatan.'</option>';
+            }?>
+        </select>
+    </div>
+</div>
+<div class="col-lg-12 mb-2">
+    <div class="input-group">
+      <div class="input-group-prepend">
+       <span  class="input-group-text" >Lembaga<sup style="color:brown;">*wajib</sup></span>
+      </div>
+        <select id="lembaga" class="form-control" name="data_user" required>
+            <option value="">User</option>
+            <?php
+            $data_user = $qb->RAW(
+                    "SELECT * FROM user",[]);
+            foreach ($data_user as $user) {
+                if($user->id_user == $_POST['data_user']){
+                echo '<option id="lembaga" class="'.$user->kecamatan.'" value="'.$user->id_user.'" selected>'.$user->lembaga.'</option>';}
+                else{
+                echo '<option id="lembaga" class="'.$user->kecamatan.'" value="'.$user->id_user.'">'.$user->lembaga.'</option>';}
+            }
+            ?>
+        </select>
+      <div class="input-group-prepend">
+       <button type="submit" name="cari_user" class="btn btn-primary"><span  id="">Input</span></button>
+     </div>
+    </div>
+</div>
+<br>
+</form>
+<?php if(isset($_POST['cari_user'])){ ?>
 <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
     <div class="mb-3"><label for="exampleFormControlInput1">Nama<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="nama" type="text" placeholder="Masukkan Nama" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">NISN<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="nisn" type="text" placeholder="Masukkan NISN" required></div>
@@ -231,7 +317,7 @@ if($rekapAbsen){
         </select></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Tempat Lahir<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="tmp_lhr" type="text" placeholder="Tempat Lahir" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Tanggal Lahir<sup style="color:brown;">*wajib</sup></label><input id="tgl_lahir" class="form-control" name="tgl_lhr" type="date" placeholder="Tanggal Lahir" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Umur<sup style="color:brown;">*wajib</sup></label><input class="form-control" id="umur"name="umur" type="text" placeholder="Masukkan Umur" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Umur</label><input class="form-control" id="umur"name="umur" type="text" placeholder="Masukkan Umur" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Jenis Kelamin<sup style="color:brown;">*wajib</sup></label>
     <select name="jk" class="form-control" id="exampleFormControlSelect1" required>
             <?php 
@@ -242,7 +328,7 @@ if($rekapAbsen){
                 echo '<option value="'.$data_jk->id.'">'.$data_jk->jk.'</option>';
             }?>
         </select></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">No RFID<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="norfid" type="text" placeholder="RFID" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">No RFID</label><input class="form-control" name="norfid" type="text" placeholder="RFID" ></div>
     <div class="mb-3"><label for="exampleFormControlInput1">NIK<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="nim" type="text" placeholder="RFID" required></div>
     <div class="mb-3">
         <label for="exampleFormControlSelect1">Kelas<sup style="color:brown;">*wajib</sup></label>
@@ -355,6 +441,7 @@ if($rekapAbsen){
     <div class="mb-3"><label for="exampleFormControlInput1">Foto</label><input class="form-control" name="file_kirim" type="file" placeholder="RFID" ></div>
     <button name="simpan_data" type='submit' class="btn btn-primary btn-user btn-block">Simpan</button>
 </form>
+<?php } ?>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -401,11 +488,16 @@ if($rekapAbsen){
             }
     </script>
 
+
     <script src="asset/js/jquery-1.10.2.min.js"></script>
   <script src="asset/js/jquery.chained.min.js"></script>
 
   <script>
     $("#kabupaten").chained("#provinsi");
     $("#kecamatan").chained("#kabupaten");
+
+    $("#kabupaten1").chained("#provinsi1");
+    $("#kecamatan1").chained("#kabupaten1");
+    $("#lembaga").chained("#kecamatan1");
   </script>
  <?php require "partials/footer.php"; ?>

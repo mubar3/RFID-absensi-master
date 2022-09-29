@@ -604,10 +604,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
     <!-- udah -->
 
-    <div class="mb-3"><label for="exampleFormControlInput1">Nama</label><input class="form-control" name="nama" type="text" placeholder="Masukkan Nama" value="<?php echo $data_edit_siswa->nama;?>" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">NISN</label><input class="form-control" name="nisn" type="text" placeholder="Masukkan NISN" value="<?php echo $data_edit_siswa->nisn;?>" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">NIS</label><input class="form-control" name="nis" type="text" placeholder="Masukkan NIS" value="<?php echo $data_edit_siswa->nis;?>" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Agama</label>
+    <div class="mb-3"><label for="exampleFormControlInput1">Nama<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="nama" type="text" placeholder="Masukkan Nama" value="<?php echo $data_edit_siswa->nama;?>" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">NISN<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="nisn" type="text" placeholder="Masukkan NISN" value="<?php echo $data_edit_siswa->nisn;?>" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">NIS<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="nis" type="text" placeholder="Masukkan NIS" value="<?php echo $data_edit_siswa->nis;?>" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Agama<sup style="color:brown;">*wajib</sup></label>
     <select name="agama" class="form-control" id="exampleFormControlSelect1" required>
             <?php 
             $data_agama = $qb->RAW("SELECT * FROM tb_agama",[]);
@@ -621,10 +621,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 }
             }?>
         </select></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Tempat Lahir</label><input class="form-control" name="tmp_lhr" type="text" placeholder="Tempat Lahir" value="<?php echo $data_edit_siswa->tmp_lhr;?>" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Tanggal Lahir</label><input id="tgl_lahir" class="form-control" name="tgl_lhr" type="date" placeholder="Tanggal Lahir" value="<?php echo $data_edit_siswa->tgl_lhr;?>" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Umur</label><input class="form-control" id="umur"name="umur" type="text" placeholder="Masukkan Umur" value="<?php echo $data_edit_siswa->umur;?>" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Jenis Kelamin</label>
+    <div class="mb-3"><label for="exampleFormControlInput1">Tempat Lahir<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="tmp_lhr" type="text" placeholder="Tempat Lahir" value="<?php echo $data_edit_siswa->tmp_lhr;?>" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Tanggal Lahir<sup style="color:brown;">*wajib</sup></label><input id="tgl_lahir" class="form-control" name="tgl_lhr" type="date" placeholder="Tanggal Lahir" value="<?php echo $data_edit_siswa->tgl_lhr;?>" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Umur<sup style="color:brown;">*wajib</sup></label><input class="form-control" id="umur"name="umur" type="text" placeholder="Masukkan Umur" value="<?php echo $data_edit_siswa->umur;?>" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Jenis Kelamin<sup style="color:brown;">*wajib</sup></label>
     <select name="jk" class="form-control" id="exampleFormControlSelect1" required>
             <?php 
             $data_jk = $qb->RAW("SELECT * FROM tb_jk",[]);
@@ -638,10 +638,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 }
             }?>
         </select></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">No RFID</label><input class="form-control" name="norfid" type="text" placeholder="RFID" value="<?php echo $data_edit_siswa->norf;?>" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">NIK</label><input class="form-control" name="nim" type="text" placeholder="NIK" value="<?php echo $data_edit_siswa->nim;?>" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">No RFID<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="norfid" type="text" placeholder="RFID" value="<?php echo $data_edit_siswa->norf;?>" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">NIK<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="nim" type="text" placeholder="NIK" value="<?php echo $data_edit_siswa->nim;?>" required></div>
     <div class="mb-3">
-        <label for="exampleFormControlSelect1">Kelas</label>
+        <label for="exampleFormControlSelect1">Kelas<sup style="color:brown;">*wajib</sup></label>
         <select name="kelas" class="form-control" id="exampleFormControlSelect1" required>
             <option value="">Pilih Kelas</option>
             <?php foreach ($data_kelas as $data_kelas) {
@@ -653,9 +653,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             }?>
         </select>
     </div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Alamat Lengkap</label><input class="form-control" name="alamat" type="text" placeholder="Alamat" value="<?php echo $data_edit_siswa->alamat;?>"required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Alamat Lengkap<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="alamat" type="text" placeholder="Alamat" value="<?php echo $data_edit_siswa->alamat;?>"required></div>
 
-    <div class="mb-3"><label for="exampleFormControlInput1">Provinsi</label> <select id="provinsi" name="provinsi" class="form-control" required>
+    <div class="mb-3"><label for="exampleFormControlInput1">Provinsi<sup style="color:brown;">*wajib</sup></label> <select id="provinsi" name="provinsi" class="form-control" required>
             <?php 
             $data= $qb->RAW("SELECT * FROM provinsi",[]);
             ?>
@@ -668,7 +668,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 }
             }?>
         </select></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Kabupaten</label> <select id="kabupaten" name="kabupaten" class="form-control" required>
+    <div class="mb-3"><label for="exampleFormControlInput1">Kabupaten<sup style="color:brown;">*wajib</sup></label> <select id="kabupaten" name="kabupaten" class="form-control" required>
             <?php 
             $data= $qb->RAW("SELECT * FROM kabupaten",[]);
             ?>
@@ -681,7 +681,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 }
             }?>
         </select></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Kecamatan</label> <select onchange="myFunction()" id="kecamatan" name="kecamatan" class="form-control" required>
+    <div class="mb-3"><label for="exampleFormControlInput1">Kecamatan<sup style="color:brown;">*wajib</sup></label> <select onchange="myFunction()" id="kecamatan" name="kecamatan" class="form-control" required>
             <?php 
             $data= $qb->RAW("SELECT * FROM kecamatan",[]);
             ?>
@@ -694,7 +694,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 }
             }?>
         </select></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Desa</label> <select name="desa" id="selectdesa" class="form-control" required></select></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Desa<sup style="color:brown;">*wajib</sup></label> <select name="desa" id="selectdesa" class="form-control" required></select></div>
 
 
            
