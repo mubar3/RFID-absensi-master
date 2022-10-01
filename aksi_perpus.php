@@ -38,12 +38,15 @@ if (isset($_POST['id'])) {
             }
 
     $user = $qb->RAW(
-    "SELECT * FROM siswa WHERE norf=?",[$id]);
+    "SELECT * FROM siswa WHERE norf=? and user_input=?",[$id,$_SESSION['id_user']]);
   if (array_key_exists(0, $user)) {
-
+    $sub=0;
+    if($_SESSION['role'] == 3){$sub=$_SESSION['sub_user'];}
     $rekapAbsen = $qb->insert('peminjaman', [
           'peminjam' => $id,
-          'buku' => $isi
+          'buku' => $isi,
+          'user' => $_SESSION['id_user'],
+          'subuser' => $sub
         ]);
     if($rekapAbsen){
       echo 'Buku Dengan Judul'.implode('',$buku).'Berhasil Dipinjam';
