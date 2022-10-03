@@ -274,6 +274,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             <td>Kode Formulir</td>
                             <td><input type="text" class="form-control" value="<?php echo $data_user->kode_input; ?>" name="data[kode_input]"></td>
                         </tr>
+                        <tr>
+                            <td>lama Peminjaman</td>
+                            <td><input type="Number" class="form-control" value="<?php echo $data_user->pem_max; ?>" name="data[pem_max]" placeholder="Hari"></td>
+                        </tr>
                     </tbody>
                 </table>
                 <center><button type="submit" name="simpan_ukuran" class="btn btn-primary"><span  id="">Simpan</span></button></center>
