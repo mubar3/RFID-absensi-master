@@ -169,7 +169,7 @@ $rekapAbsen = $qb->insert('siswa', [
           'kabupaten' => $kabupaten,
           'provinsi' => $provinsi
         ]);
-
+    // print_r($qb->pdo->lastInsertId());die();
             // $nameqrcode    = $norfid.'.png';              
             // $tempdir        = "asset/qrcode/"; 
             // $isiqrcode     = $server."data?rfid=".$norfid;

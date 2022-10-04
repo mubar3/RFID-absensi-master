@@ -98,22 +98,33 @@ class QueryBuilder implements IQuery
      */
     public function insert($table, array $parameter)
     {
-        // $sql = "INSERT INTO rfid (id, norf) values ('',:id)";
-        $sql = sprintf(
-          'insert into %s (%s) values (%s)',
-          $table,
-          implode(', ', array_keys($parameter)),
-          ':'.implode(', :', array_keys($parameter))
-        );
+        foreach ($parameter as $key => $value) {
+            if($parameter[$key] == ''){
+                $parameter[$key]='null';
+            }else{
+                $parameter[$key]='"'.$parameter[$key].'"';
+            }
+        }
+        $this->RAW("insert into ".$table." (".implode(', ', array_keys($parameter)).") values (".implode(',', array_values($parameter)).")",[]);
 
-        // "insert into rfid (id, norf) values :id, :norf
-        $stmt = $this->pdo->prepare($sql);
+        return $this->pdo->lastInsertId(); 
 
-        $stmt->execute($parameter);
-        $this->logger->info('insert() errorCode: ');
-        $this->logger->info('insert parameter: ', $parameter);
+        // // $sql = "INSERT INTO rfid (id, norf) values ('',:id)";
+        // $sql = sprintf(
+        //   'insert into %s (%s) values (%s)',
+        //   $table,
+        //   implode(', ', array_keys($parameter)),
+        //   ''.implode(',', array_values($parameter))
+        // );
+        // print_r($sql);die();
+        // // "insert into rfid (id, norf) values :id, :norf
+        // $stmt = $this->pdo->prepare($sql);
 
-        return $stmt;
+        // // $stmt->execute($parameter);
+        // $this->logger->info('insert() errorCode: ');
+        // $this->logger->info('insert parameter: ', $parameter);
+
+        // return $stmt->execute($parameter);;
     }
 
       /**
