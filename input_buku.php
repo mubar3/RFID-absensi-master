@@ -72,6 +72,7 @@ $buku = $qb->insert('master_buku', [
           'jumlah' => $jumlah,
           't_pengadaan' => $t_pengadaan
         ]);
+$buku=$qb->pdo->lastInsertId();
 for ($i=0; $i < $jumlah; $i++) { 
     $id = $qb->RAW("SELECT count(id_buku) as id_buku FROM buku where user=?",[$_SESSION['id_user']]); 
     if (array_key_exists(0, $id)) {
