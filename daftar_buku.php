@@ -72,12 +72,121 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     //         echo '<script>setTimeout(function(){location.replace("daftar_buku.php"); }, 1000);</script>';
     //       }
     //     }
+
+        if(isset($_POST['Upload'])){
+        require "asset/excel_reader2.php";
+        // upload file xls
+        $target = basename($_FILES['excel']['name']) ;
+        move_uploaded_file($_FILES['excel']['tmp_name'], $target);
+
+        // beri permisi agar file xls dapat di baca
+        chmod($_FILES['excel']['name'],0777);
+
+        // mengambil isi file xls
+        $data = new Spreadsheet_Excel_Reader($_FILES['excel']['name'],false);
+        // menghitung jumlah baris data yang ada
+        $jumlah_baris = $data->rowcount($sheet_index=0);
+
+        // jumlah default data yang berhasil di import
+        for ($i=2; $i<=$jumlah_baris; $i++){
+            if($data->val($i, 3) == ''){break;}
+
+                  $judul = $data->val($i, 3);
+                  $tahun = $data->val($i, 4);
+                  $penerbit = $data->val($i, 5);
+                  $penulis = $data->val($i, 6);
+                  $jumlah = $data->val($i, 7);
+                  $induk = $data->val($i, 8);
+                  $kategori = $data->val($i, 2);
+                  $t_pengadaan = $data->val($i, 1);
+
+                $user = $qb->RAW(
+                    "SELECT * FROM buku WHERE induk>=".$induk." and induk<=".($induk+$jumlah)." and user='".$_SESSION['id_user']."'",[]);
+                // print_r("SELECT * FROM buku WHERE induk>=".$induk." and induk<=".($induk+$jumlah)." and user='".$_SESSION['id_user']."'");die();
+
+                  if (array_key_exists(0, $user)) {
+                    echo'
+                    <div class="col-lg-12 mb-4">
+                        <div class="card bg-danger text-white shadow">
+                            <div class="card-body">
+                                Gagal
+                                <div class="text-white-50 small">Buku dengan No Induk '.$induk.' Sudah Ada</div>
+                            </div>
+                        </div>
+                    </div>
+                    ';
+                  }else{
+
+
+                $buku = $qb->insert('master_buku', [
+                          'user' => $_SESSION['id_user'],
+                          'jumlah' => $jumlah,
+                          't_pengadaan' => $t_pengadaan
+                        ]);
+                $buku=$qb->pdo->lastInsertId();
+                for ($i=0; $i < $jumlah; $i++) { 
+                    $id = $qb->RAW("SELECT count(id_buku) as id_buku FROM buku where user=?",[$_SESSION['id_user']]); 
+                    if (array_key_exists(0, $id)) {
+                        $id=$id[0];
+                        $id=$id->id_buku + 1;
+                        $id = sprintf("%04s", $id);
+                    }else{
+                        $id=1;
+                        $id = sprintf("%04s", $id);
+                    }
+                    $norfid=$kategori.'.'.$id.'.'.$induk;
+                    $qb->insert('buku', [
+                              'rfid' => $norfid,
+                              'judul_buku' => $judul,
+                              'tahun_terbit' => $tahun,
+                              'penerbit' => $penerbit,
+                              'penulis' => $penulis,
+                              'user' => $_SESSION['id_user'],
+                              'master' => $buku,
+                              'induk' => $induk,
+                              'kategori' => $kategori
+                            ]);
+
+                            $nameqrcode    = $norfid.'.png';              
+                            $tempdir        = "asset/qrcode_buku/"; 
+                            $isiqrcode     = $norfid;
+                            $quality        = 'H';
+                            $Ukuran         = 10;
+                            $padding        = 0;
+
+                            QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
+
+                    $induk++;
+                }
+
+
+              
+        }
+                   echo '
+                   <div class="col-lg-12 mb-4">
+                        <div class="card bg-success text-white shadow">
+                            <div class="card-body">
+                                Berhasil
+                                <div class="text-white-50 small">Import selesai</div>
+                            </div>
+                        </div>
+                    </div>
+                    '; 
+
+        unlink($_FILES['excel']['name']);
+        }}
+
         if(isset($_POST['simpan_data'])){
 
+        $buku = $qb->RAW(
+        "SELECT rfid from buku where master=".$_POST['id_buku'],[]);
         $aksi = $qb->RAW(
         "DELETE from buku where master=".$_POST['id_buku'],[]);
         $aksi = $qb->RAW(
         "DELETE from master_buku where id=".$_POST['id_buku'],[]);
+        foreach ($buku as $key) {
+            unlink('asset/qrcode_buku/'.$key->rfid.'.png');
+        }
 
           // $norfid = $_POST['rfid'];
           $judul = $_POST['judul'];
@@ -188,10 +297,16 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         }
 
         if(isset($_GET['hapus_buku'])){
+            
+            $buku = $qb->RAW(
+            "SELECT rfid from buku where master=".$_GET['hapus_buku'],[]);
             $aksi = $qb->RAW(
             "DELETE from buku where master=".$_GET['hapus_buku'],[]);
             $aksi = $qb->RAW(
             "DELETE from master_buku where id=".$_GET['hapus_buku'],[]);
+            foreach ($buku as $key) {
+                unlink('asset/qrcode_buku/'.$key->rfid.'.png');
+            }
             if($aksi){
                 echo '<div class="col-lg-12 mb-4">
                     <div class="card bg-success text-white shadow">
@@ -221,6 +336,17 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     // die();
 
     ?>
+    <h4 class="h5 mb-2 text-gray-800">Import Data Buku</h4><a href="asset/sampel_perpus.xls">Template Excel</a>
+    <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+        <div class="col-lg-12 mb-2">
+            <div class="input-group">
+                <input type="file" name="excel" class="form-control">
+            <div class="input-group-prepend">
+                <button type="submit" name="Upload" class="input-group-text"><span  id="">Upload</span></button>
+            </div>
+            </div>
+        </div>
+    </form>
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Data Buku</h1>
@@ -248,6 +374,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <td><?php echo $buku->penulis;?></td>
                                             <td>
                                             <center>
+                                                <a target="_Blank" href="download_ZIP_buku.php?id=<?php echo $buku->master; ?>"><i class="fa-regular fa-file-zipper"></i></a>
+                                                &nbsp
+                                                <a target="_Blank" href="download_excel_buku.php?id=<?php echo $buku->master; ?>"><i class="fa-sharp fa-solid fa-file-excel"></i></a>
+                                                &nbsp
                                                 <a href="daftar_buku.php?edit_buku=<?php echo $buku->master;?>"><i class="fa-solid fa-pen-to-square"></i></a>
                                                 &nbsp
                                                 <a href="daftar_buku.php?hapus_buku=<?php echo $buku->master;?>"><i class="fa-solid fa-trash-can"></i></a>
