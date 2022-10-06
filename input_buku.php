@@ -149,13 +149,13 @@ if($buku){
         ?>
     </select>
     </div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Judul Buku<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="judul" type="text" placeholder="Judul Buku" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Judul Utama<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="judul" type="text" placeholder="Judul Buku" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Tahun Terbit<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="tahun" type="text" placeholder="Tahun" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Penerbit<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="penerbit" type="text" placeholder="Penerbit" required></div>
     <!-- <div class="mb-3"><label for="exampleFormControlInput1">RFID</label><input class="form-control" name="rfid" type="text" placeholder="RFID" ></div>        -->
     <div class="mb-3"><label for="exampleFormControlInput1">Penulis<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="penulis" type="text" placeholder="Penulis" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Jumlah Exemplar<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="jumlah" type="number" placeholder="jumlah" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">No Induk<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="induk" type="number" placeholder="jumlah" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Kode Barang<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="induk" type="number" placeholder="jumlah" required></div>
     <button name="simpan_data" type='submit' class="btn btn-primary btn-user btn-block">Simpan</button>
 </form>
 </div>

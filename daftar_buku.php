@@ -358,7 +358,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Judul Buku</th>
+                                            <th>Judul Utama</th>
                                             <th>Tahun Terbit</th>
                                             <th>Penulis</th>
                                             <th>Aksi</th>
