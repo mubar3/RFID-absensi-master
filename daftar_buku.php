@@ -76,14 +76,14 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         if(isset($_POST['Upload'])){
         require "asset/excel_reader2.php";
         // upload file xls
-        $target = basename($_FILES['excel']['name']) ;
+        $target = strtotime(date("Y-m-d H:i:s")).$_SESSION['id_user'].basename($_FILES['excel']['name']) ;
         move_uploaded_file($_FILES['excel']['tmp_name'], $target);
 
         // beri permisi agar file xls dapat di baca
-        chmod($_FILES['excel']['name'],0777);
+        chmod($target,0777);
 
         // mengambil isi file xls
-        $data = new Spreadsheet_Excel_Reader($_FILES['excel']['name'],false);
+        $data = new Spreadsheet_Excel_Reader($target,false);
         // menghitung jumlah baris data yang ada
         $jumlah_baris = $data->rowcount($sheet_index=0);
 
@@ -173,7 +173,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                     </div>
                     '; 
 
-        unlink($_FILES['excel']['name']);
+        unlink($target);
         }}
 
         if(isset($_POST['simpan_data'])){

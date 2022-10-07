@@ -118,6 +118,46 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
      	}
 
+     	 if(isset($_POST['Upload'])){
+        require "asset/excel_reader2.php";
+        // upload file xls
+        $target = strtotime(date("Y-m-d H:i:s")).$_SESSION['id_user'].basename($_FILES['excel']['name']);
+        // print_r(strtotime(date("Y-m-d H:i:s")).$target);die();
+        move_uploaded_file($_FILES['excel']['tmp_name'], $target);
+
+        // beri permisi agar file xls dapat di baca
+        chmod($target,0777);
+
+        // mengambil isi file xls
+        $data = new Spreadsheet_Excel_Reader($target,false);
+        // menghitung jumlah baris data yang ada
+        $jumlah_baris = $data->rowcount($sheet_index=0);
+
+        // jumlah default data yang berhasil di import
+        for ($i=2; $i<=$jumlah_baris; $i++){
+            if($data->val($i, 2) == ''){break;}
+
+                    $qb->insert('toko_menu', [
+                              'nama' => $data->val($i, 1),
+                              'harga' => $data->val($i, 2),
+                              'id_user' => $_SESSION['id_user']
+                            ]);
+
+        }           
+                   echo '
+                   <div class="col-lg-12 mb-4">
+                        <div class="card bg-success text-white shadow">
+                            <div class="card-body">
+                                Berhasil
+                                <div class="text-white-50 small">Import selesai</div>
+                            </div>
+                        </div>
+                    </div>
+                    '; 
+
+        unlink($target);
+        }
+
 
     $data_menu = $qb->RAW(
     "SELECT * FROM toko_menu where id_user=?",[$_SESSION['id_user']]);
@@ -130,6 +170,18 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-body">
+
+    <h4 class="h5 mb-2 text-gray-800">Import Data Toko</h4><a href="asset/sampel_toko.xls">Template Excel</a>
+    <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+        <div class="col-lg-12 mb-2">
+            <div class="input-group">
+                <input type="file" name="excel" class="form-control">
+            <div class="input-group-prepend">
+                <button type="submit" name="Upload" class="input-group-text"><span  id="">Upload</span></button>
+            </div>
+            </div>
+        </div>
+    </form>
 
     
     <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">

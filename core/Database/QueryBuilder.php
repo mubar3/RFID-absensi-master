@@ -63,7 +63,7 @@ class QueryBuilder implements IQuery
      * PDO Instance
      * @var PDO
      */
-    private $pdo;
+    public $pdo;
 
     /**
      * @param PDO $pdo
@@ -105,9 +105,9 @@ class QueryBuilder implements IQuery
                 $parameter[$key]='"'.$parameter[$key].'"';
             }
         }
-        $this->RAW("insert into ".$table." (".implode(', ', array_keys($parameter)).") values (".implode(',', array_values($parameter)).")",[]);
+        return $this->RAW("insert into ".$table." (".implode(', ', array_keys($parameter)).") values (".implode(',', array_values($parameter)).")",[]);
 
-        return $this->pdo->lastInsertId(); 
+        // return $this->pdo->lastInsertId(); 
 
         // // $sql = "INSERT INTO rfid (id, norf) values ('',:id)";
         // $sql = sprintf(
