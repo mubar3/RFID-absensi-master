@@ -331,8 +331,14 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
     $table='kelas';
     $data_buku = $qb->RAW(
-    "SELECT * FROM buku where user=? group by master",[$_SESSION['id_user']]);
-    // print_r($data_kelas);
+    "SELECT buku.*,
+    master_buku.jumlah,
+    master_buku.t_pengadaan,
+    concat(buku.induk,'-',(buku.induk+master_buku.jumlah)) as no_induk
+    FROM buku 
+    join master_buku on master_buku.id=buku.master
+    where buku.user=? group by buku.master",[$_SESSION['id_user']]);
+    // print_r();
     // die();
 
     ?>
@@ -361,6 +367,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <th>Judul Utama</th>
                                             <th>Tahun Terbit</th>
                                             <th>Penulis</th>
+                                            <th>Jumlah</th>
+                                            <th>Tanggal pengadaan</th>
+                                            <th>Kode Barang</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -372,6 +381,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <td><?php echo $buku->judul_buku;?></td>
                                             <td><?php echo $buku->tahun_terbit;?></td>
                                             <td><?php echo $buku->penulis;?></td>
+                                            <td><?php echo $buku->jumlah;?></td>
+                                            <td><?php echo $buku->t_pengadaan;?></td>
+                                            <td><?php echo $buku->no_induk;?></td>
                                             <td>
                                             <center>
                                                 <a target="_Blank" href="download_ZIP_buku.php?id=<?php echo $buku->master; ?>"><i class="fa-regular fa-file-zipper"></i></a>
