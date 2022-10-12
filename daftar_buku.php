@@ -386,7 +386,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <td><?php echo $buku->no_induk;?></td>
                                             <td>
                                             <center>
-                                                <a target="_Blank" href="download_ZIP_buku.php?id=<?php echo $buku->master; ?>"><i class="fa-regular fa-file-zipper"></i></a>
+                                                <a target="_Blank" href="download_zip_buku.php?id=<?php echo $buku->master; ?>"><i class="fa-regular fa-file-zipper"></i></a>
                                                 &nbsp
                                                 <a target="_Blank" href="download_excel_buku.php?id=<?php echo $buku->master; ?>"><i class="fa-sharp fa-solid fa-file-excel"></i></a>
                                                 &nbsp
