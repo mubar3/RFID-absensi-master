@@ -72,6 +72,33 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             }
           
         }
+    if(isset($_GET['hapus_peminjaman'])){
+            
+            $aksi = $qb->RAW(
+            "DELETE from  peminjaman where id_peminjaman=".$_GET['hapus_peminjaman'],[]);
+            
+            if($aksi){
+                echo '<div class="col-lg-12 mb-4">
+                    <div class="card bg-success text-white shadow">
+                        <div class="card-body">
+                            Berhasil
+                            <div class="text-white-50 small">Berhasil Hapus</div>
+                        </div>
+                    </div>
+                </div>';
+            }else{
+                echo '<div class="col-lg-12 mb-4">
+                <div class="card bg-danger text-white shadow">
+                    <div class="card-body">
+                        Gagal
+                        <div class="text-white-50 small">Harap Ulangi</div>
+                    </div>
+                 </div>
+                </div>';
+            }
+            echo '<script>setTimeout(function(){location.replace("daftar_peminjaman.php"); }, 1000);</script>';
+          
+        }
 
     $table='kelas';
     $data_buku = $qb->RAW(
@@ -130,6 +157,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             $total_buku=count($data);
                                             // print_r($data);
                                             // die();
+                                            $i=1;
                                             for($x=0;$x<$total_buku;$x++){
                                                 $nama_buku = $qb->RAW(
                                                     "SELECT * FROM buku where rfid=?
@@ -144,8 +172,33 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                                 <a href="daftar_peminjaman.php?peminjaman=<?php echo $buku->id_peminjaman;?>" title="Telah Dikembalikan"><i class="fa-solid fa-check"></i> Telah Dikembalikan</a>
                                             </center>
                                             </td> -->
+                                            <td>
+                                            <center>
+                                                <a href="#" data-toggle="modal" data-target="#logoutModal<?php echo $i; ?>" ><i class="fa-solid fa-trash-can"></i></a>
+                                                <div class="modal-dialog" role="document">
+            <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Peringatan</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Apa anda yakin untuk Hapus?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="daftar_peminjaman.php?hapus_peminjaman=<?php echo $buku->id_peminjaman;?>">Hapus</a>
+                </div>
+            </div>
+        </div>
+    </div>
+                                            </center>
+                                            </td>
                                         </tr>
-                                        <?php } ?>
+                                        <?php $i++;} ?>
                                         
                                     </tbody>
                                 </table>
