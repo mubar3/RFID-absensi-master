@@ -163,9 +163,11 @@
 	                <tr>
 	                    <th>Nama</th>
 	                    <th>NIS</th>
-	                    <th>Lembaga/Sekolah Siswa</th>
-	                    <th>Lembaga/Sekolah Transaksi</th>
-	                    <th>SubUser Transaksi</th>
+	                    <!-- <th>Lembaga/Sekolah Siswa</th> -->
+	                    <th>Lembaga/Sekolah</th>
+	                    <!-- <th>Lembaga/Sekolah Transaksi</th> -->
+	                    <!-- <th>SubUser Transaksi</th> -->
+	                    <th>Toko</th>
 	                    <th>Pembelian</th>
 	                    <th>Banyak</th>
 	                    <th>Harga</th>
@@ -203,7 +205,7 @@
 	                    <td><?php echo $log->nama; ?></td>
 	                    <td><?php echo $log->nis; ?></td>
 	                    <td><?php echo $log->lembaga; ?></td>
-	                    <td><?php echo $log->userutama; ?></td>
+	                    <!-- <td><?php echo $log->userutama; ?></td> -->
 	                    <td><?php echo $log->subuser; ?></td>
 	                    <td><?php echo $log->ket; ?></td>
 	                    <td><?php echo $log->banyak_pemb; ?></td>
