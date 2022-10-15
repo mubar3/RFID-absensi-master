@@ -89,6 +89,49 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		    	</div>';
 	        }
      	}
+
+     	if(isset($_POST['update_menu'])){
+
+     		$filename=$_FILES['gambar']['name'];
+     		if(!empty($filename)){
+            	unlink('asset/menu/'.$_GET['foto']);
+        	}
+     	   if(!empty($filename)){
+     		$ext = pathinfo($filename, PATHINFO_EXTENSION);
+     		$name = pathinfo($filename, PATHINFO_FILENAME);
+            $filename=$name.rand(111,9999).'.'.$ext;
+            // print_r($filename);die();
+            $upload=move_uploaded_file($_FILES['gambar']['tmp_name'],  "asset/menu/".$filename);
+                for($x=0;$x<20;$x++){
+                    if(filesize("asset/menu/".$filename)>50000)
+                    {resizer("asset/menu/".$filename, "asset/menu/".$filename, 70);}else{ break;}
+                    clearstatcache();
+                }
+            }
+
+     		$aksi = $qb->RAW("UPDATE toko_menu set harga=?,nama=?,gambar=? WHERE id=?",[$_POST['harga'],$_POST['nama'],$filename,$_POST['id_menu']]);
+
+	        if($aksi){
+	        	echo '<div class="col-lg-12 mb-4">
+			        <div class="card bg-success text-white shadow">
+			            <div class="card-body">
+			                Berhasil
+			                <div class="text-white-50 small">Data Tersimpan</div>
+			            </div>
+			        </div>
+			    </div>';
+	        }else{
+	        	echo '<div class="col-lg-12 mb-4">
+		        <div class="card bg-danger text-white shadow">
+		            <div class="card-body">
+		                Gagal
+		                <div class="text-white-50 small">Data Gagal Tersimpan</div>
+		            </div>
+		       	 </div>
+		    	</div>';
+	        }
+            echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
+     	}
      	
      	if(isset($_GET['hapus_menu'])){
 	        $aksi = $qb->RAW(
@@ -215,13 +258,24 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     
     <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
 	    <div class="col-lg-12 mb-2">
+	        	<?php if(isset($_GET['edit_menu'])){ ?>
+				<h1 class="h3 mb-2 text-gray-800">Edit</h1>
+	        		<?php }else{ ?>
 				<h1 class="h3 mb-2 text-gray-800">Tambah</h1>
+	        		<?php } ?>
 	        <div class="input-group">
+	        	<?php if(isset($_GET['edit_menu'])){ ?>
+	        	<input type="hidden" name="id_menu" value="<?php echo $_GET['edit_menu']; ?>" class="form-control">
+	        		<?php } ?>
 			  <input type="file" name="gambar" placeholder="gambar" class="form-control">
-			  <input type="text" name="nama" placeholder="Nama" class="form-control" required>
-			  <input type="number" name="harga" placeholder="Harga" class="form-control" required>
+			  <input type="text" name="nama" placeholder="Nama" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['menu'];}?>" class="form-control" required>
+			  <input type="number" name="harga" placeholder="Harga" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['harga'];}?>" class="form-control" required>
 			  <div class="input-group-prepend">
+	        	<?php if(isset($_GET['edit_menu'])){ ?>
+			  	<button type="submit" name="update_menu" class="input-group-text"><span  id="">Update</span></button>
+	        		<?php }else{ ?>
 			  	<button type="submit" name="simpan_menu" class="input-group-text"><span  id="">Simpan</span></button>
+	        		<?php } ?>
 			  </div>
 
 			</div>
@@ -247,6 +301,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             <td><?php echo $data_user->harga;?></td>
                             <td>
                             <center>
+                            	<a href="toko_setting.php?edit_menu=<?php echo $data_user->id;?>&&menu=<?php echo $data_user->nama;?>&&harga=<?php echo $data_user->harga;?>&&foto=<?php echo $data_user->gambar;?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                            	&nbsp
                             	<a href="toko_setting.php?hapus_menu=<?php echo $data_user->id;?>&&foto_menu=<?php echo $data_user->gambar;?>"><i class="fa-solid fa-trash-can"></i></a>
                             </center>
                             </td>
