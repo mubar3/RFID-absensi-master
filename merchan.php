@@ -155,22 +155,27 @@
 		</div>
 		</form>
 	</div>
-    <div class="card shadow mb-4">
+    <div class="card shadow mb-4" id='here'>
         <div class="card-body">
         	<div class="table-responsive">
         	<table class="table table-bordered" width="100%" cellspacing="0">
 	            <thead>
 	                <tr>
-	                    <th>Nama</th>
+	                    <!-- <th>Nama</th>
 	                    <th>NIS</th>
-	                    <!-- <th>Lembaga/Sekolah Siswa</th> -->
-	                    <th>Lembaga/Sekolah</th>
-	                    <!-- <th>Lembaga/Sekolah Transaksi</th> -->
-	                    <!-- <th>SubUser Transaksi</th> -->
+	                    <th>Lembaga/Sekolah Siswa</th>
+	                    <th>Lembaga/Sekolah Transaksi</th>
+	                    <th>SubUser Transaksi</th>
 	                    <th>Toko</th>
 	                    <th>Pembelian</th>
 	                    <th>Banyak</th>
-	                    <th>Harga</th>
+	                    <th>Harga</th> -->
+
+	                    <th>Nama</th>
+	                    <th>NIS</th>
+	                    <th>Lembaga/Sekolah</th>
+	                    <th>Toko</th>
+	                    <th>Total</th>
 	                </tr>
 	            </thead>
 	            <?php
@@ -178,38 +183,62 @@
 	            	$id_user="user='".$_SESSION['id_user']."'";
 	            	if($_SESSION['role'] == 3){$id_user="subuser='".$_SESSION['sub_user']."'";}
 	            	if(isset($_POST['cari_transaksi'])){
-	            	$saldo_log = $qb->RAW("SELECT (select count(id_log) from saldo_log x where ket=saldo_log.ket) as banyak_pemb,u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
-	            		left join siswa on siswa.norf=saldo_log.id_rfid
-	            		left join user on siswa.user_input=user.id_user
-	            		left join user u1 on saldo_log.user=u1.id_user
-	            		left join user u2 on saldo_log.subuser=u2.id_user
-	            		where saldo_log.".$id_user." and DATE(saldo_log.waktu) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."' and saldo_log.jenis='keluar' 
-	            		group by saldo_log.ket",[]);
+	            	// $saldo_log = $qb->RAW("SELECT (select count(id_log) from saldo_log x where ket=saldo_log.ket) as banyak_pemb,u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
+	            	// 	left join siswa on siswa.norf=saldo_log.id_rfid
+	            	// 	left join user on siswa.user_input=user.id_user
+	            	// 	left join user u1 on saldo_log.user=u1.id_user
+	            	// 	left join user u2 on saldo_log.subuser=u2.id_user
+	            	// 	where saldo_log.".$id_user." and DATE(saldo_log.waktu) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."' and saldo_log.jenis='keluar' 
+	            	// 	group by saldo_log.ket",[]);
+            		$saldo_log = $qb->RAW("select 
+            			u1.lembaga as userutama,u2.lembaga as subuser,siswa.nama,siswa.nis,t_toko.jumlah,user.lembaga
+            			from t_toko
+            			left join siswa on siswa.norf=t_toko.rfid
+            			left join user on siswa.user_input=user.id_user
+            			left join user u1 on t_toko.user=u1.id_user
+            			left join user u2 on t_toko.subuser=u2.id_user
+            			where t_toko.".$id_user." and DATE(t_toko.waktu) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."'",[]);
 	            	}else{
-	            	$saldo_log = $qb->RAW("SELECT (select count(id_log) from saldo_log y where ket=saldo_log.ket) as banyak_pemb,u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
-	            		left join siswa on siswa.norf=saldo_log.id_rfid
-	            		left join user on siswa.user_input=user.id_user
-	            		left join user u1 on saldo_log.user=u1.id_user
-	            		left join user u2 on saldo_log.subuser=u2.id_user
-	            		where saldo_log.".$id_user." and DATE(saldo_log.waktu) = CURDATE() and saldo_log.jenis='keluar' 
-	            		group by saldo_log.ket",[]);
+	            	// $saldo_log = $qb->RAW("SELECT (select count(id_log) from saldo_log y where ket=saldo_log.ket) as banyak_pemb,u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
+	            	// 	left join siswa on siswa.norf=saldo_log.id_rfid
+	            	// 	left join user on siswa.user_input=user.id_user
+	            	// 	left join user u1 on saldo_log.user=u1.id_user
+	            	// 	left join user u2 on saldo_log.subuser=u2.id_user
+	            	// 	where saldo_log.".$id_user." and DATE(saldo_log.waktu) = CURDATE() and saldo_log.jenis='keluar' 
+	            	// 	group by saldo_log.ket",[]);
+            		$saldo_log = $qb->RAW("select 
+            			u1.lembaga as userutama,u2.lembaga as subuser,siswa.nama,siswa.nis,t_toko.jumlah,user.lembaga
+            			from t_toko
+            			left join siswa on siswa.norf=t_toko.rfid
+            			left join user on siswa.user_input=user.id_user
+            			left join user u1 on t_toko.user=u1.id_user
+            			left join user u2 on t_toko.subuser=u2.id_user
+            			where t_toko.".$id_user." and DATE(t_toko.waktu) = CURDATE()",[]);
 	            	}
 	            ?>
 	            <tbody>
 	            	
 
 	            	<?php foreach ($saldo_log as $log) { 
-	            		$harga=enkripsiDekripsi($log->banyak, $kunciRahasia);
-	            		$total=$total+($harga*$log->banyak_pemb);?>
+	            		// $harga=enkripsiDekripsi($log->banyak, $kunciRahasia);
+	            		// $total=$total+($harga*$log->banyak_pemb);
+	            		$total=$total+(enkripsiDekripsi($log->jumlah, $kunciRahasia));
+	            		?>
 	                <tr>
-	                    <td><?php echo $log->nama; ?></td>
+	                    <!-- <td><?php echo $log->nama; ?></td>
 	                    <td><?php echo $log->nis; ?></td>
 	                    <td><?php echo $log->lembaga; ?></td>
-	                    <!-- <td><?php echo $log->userutama; ?></td> -->
+	                    <td><?php echo $log->userutama; ?></td>
 	                    <td><?php echo $log->subuser; ?></td>
 	                    <td><?php echo $log->ket; ?></td>
 	                    <td><?php echo $log->banyak_pemb; ?></td>
-	                    <td><?php echo convertToRupiah($harga); ?></td>
+	                    <td><?php echo convertToRupiah($harga); ?></td> -->
+
+	                    <td><?php echo $log->nama; ?></td>
+	                    <td><?php echo $log->nis; ?></td>
+	                    <td><?php echo $log->lembaga; ?></td>
+	                    <td><?php echo $log->subuser; ?></td>
+	                    <td><?php echo convertToRupiah(enkripsiDekripsi($log->jumlah, $kunciRahasia)); ?></td>
 	                </tr>
 	                `<?php } ?>
 	            </tbody>
@@ -285,6 +314,7 @@ $(document).ready(function() {
       .fail(function(data1) {
         console.log(data1);
       });
+      updateDiv()
   });
 
   $("#inputs2").change(function() {
@@ -325,8 +355,14 @@ $(document).ready(function() {
       .fail(function(data1) {
         console.log(data1);
       });
+      updateDiv()
   });
 });
+
+  function updateDiv()
+	{ 
+	    $( "#here" ).load(window.location.href + " #here" );
+	}
 
 var rupiah = document.getElementById('rp');
 		rupiah.addEventListener('keyup', function(e){

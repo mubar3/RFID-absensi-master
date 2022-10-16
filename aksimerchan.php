@@ -59,13 +59,21 @@ if (isset($_POST['id'])) {
     if(!empty($merchan)){
       $subuser='';
       if($_SESSION['role'] == 3){$subuser=$_SESSION['sub_user'];}
+    $transaksi = $qb->insert('t_toko', [
+        'rfid' => $id,
+        'user' => $_SESSION['id_user'],
+        'subuser' => $subuser,
+        'jumlah' => enkripsiDekripsi(strval($merchan), $kunciRahasia)
+      ]);
+    $transaksi=$qb->pdo->lastInsertId();
     $qb->insert('saldo_log', [
         'id_rfid' => $id,
         'banyak' => enkripsiDekripsi(strval($merchan), $kunciRahasia),
         'ket' => $keperluan,
         'jenis' => 'keluar',
         'user' => $_SESSION['id_user'],
-        'subuser' => $subuser
+        'subuser' => $subuser,
+        'id_transaksi' => $transaksi
       ]);     
     }
     // input log
@@ -161,22 +169,31 @@ else {
          []);
 
         // input log
+                $subuser='';
+                if($_SESSION['role'] == 3){$subuser=$_SESSION['sub_user'];}
+              $transaksi = $qb->insert('t_toko', [
+                  'rfid' => $_POST['id2'],
+                  'user' => $_SESSION['id_user'],
+                  'subuser' => $subuser
+                ]);
+              $transaksi=$qb->pdo->lastInsertId();
+        $jumlah=0;
         for($x=0;$x<$total_menu;$x++) {
               $data_harga_menu = $qb->RAW(
               "SELECT * FROM toko_menu where id=".$data_menu[$x],[]);
               $data_harga_menu=$data_harga_menu[0];
-                $subuser='';
-                if($_SESSION['role'] == 3){$subuser=$_SESSION['sub_user'];}
               $qb->insert('saldo_log', [
                   'id_rfid' => $_POST['id2'],
                   'banyak' => enkripsiDekripsi(strval($data_harga_menu->harga), $kunciRahasia),
                   'ket' => $data_harga_menu->nama,
                   'jenis' => 'keluar',
                   'user' => $_SESSION['id_user'],
-                  'subuser' => $subuser
+                  'subuser' => $subuser,
+                  'id_transaksi' => $transaksi
                 ]);     
-
+              $jumlah=$jumlah+$data_harga_menu->harga;
             }
+        $qb->RAW("UPDATE t_toko set jumlah=? where id = ?",[enkripsiDekripsi(strval($jumlah), $kunciRahasia),$transaksi]);
         // input log
 
         $merchan=$total;
