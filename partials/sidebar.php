@@ -1,7 +1,9 @@
 
  <?php if(empty($_SESSION['id_user'])){
       header("Location: index.php");
-  } ?>
+  } 
+  date_default_timezone_set("Asia/Jakarta");
+  ?>
 
 <body id="page-top">
 

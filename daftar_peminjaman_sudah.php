@@ -71,6 +71,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                         <tr>
                                             <th>Peminjam</th>
                                             <th>Buku</th>
+                                            <th>Waktu Peminjaman</th>
+                                            <th>Waktu Pengembalian</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -95,6 +97,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             ?>  
                                             </ul>  
                                             </td>
+                                            <td><?php echo $buku->tanggal;?></td>
+                                            <td><?php echo $buku->pengembalian;?></td>
                                         </tr>
                                         <?php } ?>
                                         

@@ -1,4 +1,4 @@
-<?php 
+<?php
 require "partials/head.php";
 require "partials/sidebar.php"; ?>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous" />
@@ -49,7 +49,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             
             $aksi = $qb->RAW(
             "UPDATE peminjaman SET 
-            status=1 where id_peminjaman=".$_GET['peminjaman'],[]);
+            status=1,pengembalian=? where id_peminjaman=".$_GET['peminjaman'],[date("Y-m-d H:i:s")]);
             
             if($aksi){
                 echo '<div class="col-lg-12 mb-4">
@@ -169,13 +169,12 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             ?>  
                                             </ul>  
                                             </td>
-                                            <!-- <td>
-                                            <center>
-                                                <a href="daftar_peminjaman.php?peminjaman=<?php echo $buku->id_peminjaman;?>" title="Telah Dikembalikan"><i class="fa-solid fa-check"></i> Telah Dikembalikan</a>
-                                            </center>
-                                            </td> -->
                                             <td>
                                             <center>
+                                                <?php if($_SESSION['role'] != 3){?>
+                                                <a href="daftar_peminjaman.php?peminjaman=<?php echo $buku->id_peminjaman;?>" title="Telah Dikembalikan"><i class="fa-solid fa-check"></i></a>
+                                                &nbsp
+                                                <?php } ?>
                                                 <a href="#" data-toggle="modal" data-target="#logoutModal<?php echo $i; ?>" ><i class="fa-solid fa-trash-can"></i></a>
                                                 <div class="modal-dialog" role="document">
             <!-- Logout Modal-->

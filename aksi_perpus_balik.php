@@ -5,6 +5,8 @@ require "partial/head.php";
 use StelinDB\Database\QueryBuilder;
 use Carbon\Carbon;
 
+date_default_timezone_set("Asia/Jakarta");
+
 $dotenv = new \Dotenv\Dotenv(__DIR__);
             $dotenv->load();
 $now = new Carbon;
@@ -40,7 +42,7 @@ if (isset($_POST['id'])) {
     $user = $qb->RAW(
     "SELECT * FROM siswa WHERE norf=? and user_input=?",[$id,$_SESSION['id_user']]);
   if (array_key_exists(0, $user)) {
-    $buku = $qb->RAW("SELECT * FROM peminjaman WHERE user=?",[$_SESSION['id_user']]);
+    $buku = $qb->RAW("SELECT *,date(tanggal) as tanggal FROM peminjaman WHERE user=?",[$_SESSION['id_user']]);
     if (array_key_exists(0, $user)) {
         $status=0;
         $id='';
@@ -54,8 +56,21 @@ if (isset($_POST['id'])) {
         }
         // echo 1;die();
         if($status == 1){
-            $save=$qb->RAW("UPDATE peminjaman set status=1 WHERE id_peminjaman=?",[$id]);
-            echo 'Pengembalian Berhasil';
+            $data_user = $qb->RAW("SELECT * FROM user where id_user=?",[$_SESSION['id_user']]);
+
+            $date1=date_create($buku[0]->tanggal);
+            $date2=date_create(date("Y-m-d"));
+            $diff=date_diff($date1,$date2);
+            $hari=$diff->format("%a");
+            // echo $hari;
+
+            if($hari > $data_user[0]->pem_max){
+              echo 'Peminjaman melebihi batas waktu yang telah ditentukan';
+            }else{
+              $save=$qb->RAW("UPDATE peminjaman set status=1,pengembalian=? WHERE id_peminjaman=?",[date("Y-m-d H:i:s"),$id]);
+              echo 'Pengembalian Berhasil';
+            }
+            
         }else{
             echo 'Jumlah dan jenis id buku tidak sesuai';
         }
