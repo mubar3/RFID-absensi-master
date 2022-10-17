@@ -176,6 +176,7 @@
 	                    <th>Lembaga/Sekolah</th>
 	                    <th>Toko</th>
 	                    <th>Total</th>
+	                    <th>Aksi</th>
 	                </tr>
 	            </thead>
 	            <?php
@@ -191,7 +192,7 @@
 	            	// 	where saldo_log.".$id_user." and DATE(saldo_log.waktu) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."' and saldo_log.jenis='keluar' 
 	            	// 	group by saldo_log.ket",[]);
             		$saldo_log = $qb->RAW("select 
-            			u1.lembaga as userutama,u2.lembaga as subuser,siswa.nama,siswa.nis,t_toko.jumlah,user.lembaga
+            			u1.lembaga as userutama,u2.lembaga as subuser,siswa.nama,siswa.nis,t_toko.jumlah,user.lembaga,t_toko.id
             			from t_toko
             			left join siswa on siswa.norf=t_toko.rfid
             			left join user on siswa.user_input=user.id_user
@@ -207,7 +208,7 @@
 	            	// 	where saldo_log.".$id_user." and DATE(saldo_log.waktu) = CURDATE() and saldo_log.jenis='keluar' 
 	            	// 	group by saldo_log.ket",[]);
             		$saldo_log = $qb->RAW("select 
-            			u1.lembaga as userutama,u2.lembaga as subuser,siswa.nama,siswa.nis,t_toko.jumlah,user.lembaga
+            			u1.lembaga as userutama,u2.lembaga as subuser,siswa.nama,siswa.nis,t_toko.jumlah,user.lembaga,t_toko.id
             			from t_toko
             			left join siswa on siswa.norf=t_toko.rfid
             			left join user on siswa.user_input=user.id_user
@@ -239,6 +240,11 @@
 	                    <td><?php echo $log->lembaga; ?></td>
 	                    <td><?php echo $log->subuser; ?></td>
 	                    <td><?php echo convertToRupiah(enkripsiDekripsi($log->jumlah, $kunciRahasia)); ?></td>
+	                    <td>
+                        <center>
+                            <a href="faktur_toko.php?id=<?php echo $log->id;?>" target="_blank"><i class="fa-solid fa-print"></i></a>
+                        </center>
+                    	</td>
 	                </tr>
 	                `<?php } ?>
 	            </tbody>
