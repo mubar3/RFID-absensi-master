@@ -101,12 +101,6 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         }
 
     $table='kelas';
-    $data_buku = $qb->RAW(
-    "SELECT * FROM peminjaman
-    join siswa on siswa.norf=peminjaman.peminjam
-    where peminjaman.status=0
-    and peminjaman.user=?
-    ",[$_SESSION['id_user']]);
     // print_r($data_kelas);
     // die();
 
@@ -133,7 +127,15 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                     <h1 class="h3 mb-2 text-gray-800">Data Peminjaman Buku (Belum Dikembalikan)</h1>
 
                     <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
+                    <div class="card shadow mb-4" id='here'>
+                        <?php
+                            $data_buku = $qb->RAW(
+                            "SELECT * FROM peminjaman
+                            join siswa on siswa.norf=peminjaman.peminjam
+                            where peminjaman.status=0
+                            and peminjaman.user=?
+                            ",[$_SESSION['id_user']]);
+                        ?>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -141,7 +143,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                         <tr>
                                             <th>Peminjam</th>
                                             <th>Buku</th>
-                                            <!-- <th>Aksi</th> -->
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -219,6 +221,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $('#time').html(Date(timestamp));
             timestamp++;
         }
+        function updateDiv()
+        { 
+            $( "#here" ).load(window.location.href + " #here" );
+        }
         $(function() {
             setInterval(updateTime, 1000);
         });
@@ -270,6 +276,7 @@ $(document).ready(function() {
       .fail(function(data) {
         console.log(data);
       });
+      updateDiv()
   });
 });
 

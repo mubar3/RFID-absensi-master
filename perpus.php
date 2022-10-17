@@ -29,6 +29,19 @@
     </style>
 	<div class="container"><span class="float-md-right"><i class="fa fa-clock-o" aria-hidden="true"></i><st id="time"></st></span>
 		<?php 
+    require "vendor/autoload.php";
+
+    use StelinDB\Database\QueryBuilder;
+    use Carbon\Carbon;
+
+    $dotenv = new \Dotenv\Dotenv(__DIR__);
+                $dotenv->load();
+    $now = new Carbon;
+    $now->setTimezone('Asia/Jakarta');
+
+    $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
+
+
 		if(!empty($_SESSION['id_user'])){
 		// if($_SESSION['role']!=2){
 		// 	session_destroy();
@@ -57,6 +70,123 @@
 			<div class="alert" role="alert"></div>
 		</div>
 
+    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Data Peminjaman Buku Hari Ini</h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4" >
+                        <?php
+                        if(isset($_GET['hapus_peminjaman'])){
+            
+                              $aksi = $qb->RAW(
+                              "DELETE from  peminjaman where id_peminjaman=".$_GET['hapus_peminjaman'],[]);
+                              
+                              if($aksi){
+                                  echo '<div class="col-lg-12 mb-4">
+                                      <div class="card bg-success text-white shadow">
+                                          <div class="card-body">
+                                              Berhasil
+                                              <div class="text-white-50 small">Berhasil Hapus</div>
+                                          </div>
+                                      </div>
+                                  </div>';
+                              }else{
+                                  echo '<div class="col-lg-12 mb-4">
+                                  <div class="card bg-danger text-white shadow">
+                                      <div class="card-body">
+                                          Gagal
+                                          <div class="text-white-50 small">Harap Ulangi</div>
+                                      </div>
+                                   </div>
+                                  </div>';
+                              }
+                              echo '<script>setTimeout(function(){location.replace("perpus.php"); }, 1000);</script>';
+                            
+                          }
+                        ?>
+                        <div class="card-body" id='here'>
+                          <?php
+                            $data_buku = $qb->RAW(
+                            "SELECT * FROM peminjaman
+                            join siswa on siswa.norf=peminjaman.peminjam
+                            where peminjaman.status=0
+                            and peminjaman.user=? and DATE(peminjaman.tanggal) = CURDATE()
+                            ",[$_SESSION['id_user']]);
+                          ?>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Peminjam</th>
+                                            <th>Buku</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        foreach ($data_buku as $buku) {
+                                            ?>
+                                        <tr>
+                                            <td><?php echo $buku->nama;?></td>
+                                            <td>
+                                            <ul>
+                                            <?php 
+                                            $data=explode(',',$buku->buku);
+                                            $total_buku=count($data);
+                                            // print_r($data);
+                                            // die();
+                                            $i=1;
+                                            for($x=0;$x<$total_buku;$x++){
+                                                $nama_buku = $qb->RAW(
+                                                    "SELECT * FROM buku where rfid=?
+                                                    ",[$data[$x]]);
+                                                echo '<li>'.$nama_buku[0]->judul_buku.'</li>';
+                                            }
+                                            ?>  
+                                            </ul>  
+                                            </td>
+                                            <!-- <td>
+                                            <center>
+                                                <a href="daftar_peminjaman.php?peminjaman=<?php echo $buku->id_peminjaman;?>" title="Telah Dikembalikan"><i class="fa-solid fa-check"></i> Telah Dikembalikan</a>
+                                            </center>
+                                            </td> -->
+                                            <td>
+                                            <center>
+                                                <a href="faktur_perpus.php?id=<?php echo $buku->id_peminjaman;?>" target="_blank"><i class="fa-solid fa-print"></i></a>
+                                                &nbsp
+                                                <a href="#" data-toggle="modal" data-target="#logoutModal<?php echo $i; ?>" ><i class="fa-solid fa-trash-can"></i></a>
+                                                <div class="modal-dialog" role="document">
+            <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Peringatan</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Apa anda yakin untuk Hapus?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="perpus.php?hapus_peminjaman=<?php echo $buku->id_peminjaman;?>">Hapus</a>
+                </div>
+            </div>
+        </div>
+    </div>
+                                            </center>
+                                            </td>
+                                        </tr>
+                                        <?php $i++;} ?>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+    
+                        </div>
+                    </div>
+
 		
 
 		
@@ -70,6 +200,10 @@
 			$('#time').html(Date(timestamp));
 			timestamp++;
 		}
+    function updateDiv()
+    { 
+        $( "#here" ).load(window.location.href + " #here" );
+    }
 		$(function() {
 			setInterval(updateTime, 1000);
 		});
@@ -121,6 +255,8 @@ $(document).ready(function() {
       .fail(function(data) {
         console.log(data);
       });
+
+      updateDiv()
   });
 });
 
