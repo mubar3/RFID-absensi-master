@@ -152,7 +152,7 @@ else {
          $data = $qb->RAW(
           "SELECT * from saldo_rfid where id_rfid =?",
            [$_POST['id2']]);
-
+          if (!array_key_exists(0, $data)) {echo "<div class='p-3 mb-2 bg-danger'>Saldo Kartu Kosong<div>";die();}
         $data = $data[0];
         $saldo=enkripsiDekripsi($data->saldo, $kunciRahasia);
         $saldo=(int)$saldo;

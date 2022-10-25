@@ -34,29 +34,30 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
   $penulis = $_POST['penulis'];
   $jumlah = $_POST['jumlah'];
   $induk = $_POST['induk'];
+  $ddc = $_POST['ddc'];
   $kategori = $_POST['kategori'];
   $t_pengadaan = $_POST['t_pengadaan'];
 
 // $user = $qb->RAW(
     // "SELECT * FROM buku WHERE rfid='".$norfid."'",[]);
-$user = $qb->RAW(
-    "SELECT * FROM buku WHERE induk>=".$induk." and induk<=".($induk+$jumlah)." and user='".$_SESSION['id_user']."'",[]);
+// $user = $qb->RAW(
+//     "SELECT * FROM buku WHERE induk>=".$induk." and induk<=".($induk+$jumlah)." and user='".$_SESSION['id_user']."'",[]);
 
 
 // print_r("SELECT * FROM buku WHERE induk>=".$induk." and induk<=".($induk+$jumlah)." and user='".$_SESSION['id_user']."'");
 // die();
-  if (array_key_exists(0, $user)) {
-    echo'
-    <div class="col-lg-12 mb-4">
-        <div class="card bg-danger text-white shadow">
-            <div class="card-body">
-                Gagal
-                <div class="text-white-50 small">No Induk buku Sudah Ada</div>
-            </div>
-        </div>
-    </div>
-    ';
-  }else{
+  // if (array_key_exists(0, $user)) {
+  //   echo'
+  //   <div class="col-lg-12 mb-4">
+  //       <div class="card bg-danger text-white shadow">
+  //           <div class="card-body">
+  //               Gagal
+  //               <div class="text-white-50 small">No Induk buku Sudah Ada</div>
+  //           </div>
+  //       </div>
+  //   </div>
+  //   ';
+  // }else{
 
 
 // $rekapAbsen = $qb->insert('buku', [
@@ -74,16 +75,17 @@ $buku = $qb->insert('master_buku', [
         ]);
 $buku=$qb->pdo->lastInsertId();
 for ($i=0; $i < $jumlah; $i++) { 
-    $id = $qb->RAW("SELECT count(id_buku) as id_buku FROM buku where user=?",[$_SESSION['id_user']]); 
-    if (array_key_exists(0, $id)) {
-        $id=$id[0];
-        $id=$id->id_buku + 1;
-        $id = sprintf("%04s", $id);
-    }else{
-        $id=1;
-        $id = sprintf("%04s", $id);
-    }
-    $norfid=$kategori.'.'.$id.'.'.$induk;
+    // $id = $qb->RAW("SELECT count(id_buku) as id_buku FROM buku where user=?",[$_SESSION['id_user']]); 
+    // if (array_key_exists(0, $id)) {
+    //     $id=$id[0];
+    //     $id=$id->id_buku + 1;
+    //     $id = sprintf("%04s", $id);
+    // }else{
+    //     $id=1;
+    //     $id = sprintf("%04s", $id);
+    // }
+    $id = sprintf("%04s", $ddc);
+    $norfid=$kategori.'.'.$id.'.'.$induk.'.'.($i+1);
     $qb->insert('buku', [
               'rfid' => $norfid,
               'judul_buku' => $judul,
@@ -93,6 +95,7 @@ for ($i=0; $i < $jumlah; $i++) {
               'user' => $_SESSION['id_user'],
               'master' => $buku,
               'induk' => $induk,
+              'ddc' => $ddc,
               'kategori' => $kategori
             ]);
 
@@ -105,7 +108,7 @@ for ($i=0; $i < $jumlah; $i++) {
 
             QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
 
-    $induk++;
+    // $induk++;
 }
 
 
@@ -132,7 +135,7 @@ if($buku){
     </div>
     ';
 }
-}
+// }
 }
 
     ?>
@@ -149,13 +152,14 @@ if($buku){
         ?>
     </select>
     </div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Judul Utama<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="judul" type="text" placeholder="Judul Buku" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Tahun Terbit<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="tahun" type="text" placeholder="Tahun" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Penerbit<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="penerbit" type="text" placeholder="Penerbit" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Judul Utama/Nama Barang<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="judul" type="text" placeholder="Judul Buku" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Tahun Terbit</label><input class="form-control" name="tahun" type="text" placeholder="Tahun" ></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Penerbit</label><input class="form-control" name="penerbit" type="text" placeholder="Penerbit" ></div>
     <!-- <div class="mb-3"><label for="exampleFormControlInput1">RFID</label><input class="form-control" name="rfid" type="text" placeholder="RFID" ></div>        -->
-    <div class="mb-3"><label for="exampleFormControlInput1">Penulis<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="penulis" type="text" placeholder="Penulis" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">Penulis</label><input class="form-control" name="penulis" type="text" placeholder="Penulis" ></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Jumlah Exemplar<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="jumlah" type="number" placeholder="jumlah" required></div>
-    <div class="mb-3"><label for="exampleFormControlInput1">Kode Barang<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="induk" type="number" placeholder="jumlah" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">No DDC<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="ddc" type="text" placeholder="No DDC" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">No Induk<sup style="color:brown;">*wajib</sup></label><input class="form-control" name="induk" type="text" placeholder="No Induk" required></div>
     <button name="simpan_data" type='submit' class="btn btn-primary btn-user btn-block">Simpan</button>
 </form>
 </div>

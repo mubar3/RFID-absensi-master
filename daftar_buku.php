@@ -334,7 +334,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     "SELECT buku.*,
     master_buku.jumlah,
     master_buku.t_pengadaan,
-    concat(buku.induk,'-',(buku.induk+master_buku.jumlah)) as no_induk
+    -- concat(buku.induk,'-',(buku.induk+master_buku.jumlah)) as no_induk
+    buku.induk as no_induk
     FROM buku 
     join master_buku on master_buku.id=buku.master
     where buku.user=? group by buku.master",[$_SESSION['id_user']]);
@@ -369,7 +370,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <th>Penulis</th>
                                             <th>Jumlah</th>
                                             <th>Tanggal pengadaan</th>
-                                            <th>Kode Barang</th>
+                                            <th>No Induk</th>
+                                            <th>No DDC</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -380,10 +382,12 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                         <tr>
                                             <td><?php echo $buku->judul_buku;?></td>
                                             <td><?php echo $buku->tahun_terbit;?></td>
-                                            <td><?php echo $buku->penulis;?></td>
+                                            <td><?php echo $buku->penerbit;?></td>
+                                            <!-- <td><?php echo $buku->penulis;?></td> -->
                                             <td><?php echo $buku->jumlah;?></td>
                                             <td><?php echo $buku->t_pengadaan;?></td>
                                             <td><?php echo $buku->no_induk;?></td>
+                                            <td><?php echo $buku->ddc;?></td>
                                             <td>
                                             <center>
                                                 <a target="_Blank" href="download_zip_buku.php?id=<?php echo $buku->master; ?>"><i class="fa-regular fa-file-zipper"></i></a>

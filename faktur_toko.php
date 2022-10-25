@@ -15,7 +15,8 @@
 
     $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     $aksi = $qb->RAW("SELECT 
-        (select count(id_log) from saldo_log where ket=s1.ket) as jumlah,
+        (select count(id_log) from saldo_log where ket=s1.ket and id_transaksi=?
+            ) as jumlah,
         u1.lembaga as user,
         user.lembaga as user2,
         provinsi.nama_provinsi,  
@@ -34,7 +35,7 @@
         left join kecamatan on kecamatan.id_kec=u1.kecamatan
         where s1.id_transaksi=? 
         group by s1.ket
-     ",[$_GET['id']]);
+     ",[$_GET['id'],$_GET['id']]);
     $aksi1=$aksi[0];
     // print_r($aksi);die();
  ?>

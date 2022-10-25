@@ -283,7 +283,7 @@
                         }else{
                             echo 'class="collapse-item"';}
                         ?> 
-                        href="perpus.php">Pinjam</a>
+                        href="perpus.php">Sirkulasi</a>
                         <a
                         <?php 
                         if($page=='daftar_peminjaman.php'){
@@ -299,7 +299,7 @@
                         }else{
                             echo 'class="collapse-item"';}
                         ?> 
-                        href="daftar_peminjaman_sudah.php">Daftar sudah</a>
+                        href="daftar_peminjaman_sudah.php">Daftar Pengembalian</a>
                         <a 
                         <?php 
                         if($page=='daftar_buku.php'){
@@ -307,7 +307,7 @@
                         }else{
                             echo 'class="collapse-item"';}
                         ?> 
-                        href="daftar_buku.php">Daftar Buku</a>
+                        href="daftar_buku.php">Data Barang</a>
                         <a 
                         <?php 
                         if($page=='input_buku.php'){
@@ -315,7 +315,7 @@
                         }else{
                             echo 'class="collapse-item"';}
                         ?> 
-                        href="input_buku.php">Input Buku</a>
+                        href="input_buku.php">Input Barang</a>
                     </div>
                 </div>
             </li>
