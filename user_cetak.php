@@ -258,7 +258,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     </div>
 
     <!-- setting ukuran kartu -->
-    <h1 class="h3 mb-2 text-gray-800">Pengaturan lainnya</h1>
+    <!-- <h1 class="h3 mb-2 text-gray-800">Pengaturan lainnya</h1>
     <div class="card shadow mb-4">
         <div class="card-body">
         	<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
@@ -283,7 +283,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 <center><button type="submit" name="simpan_ukuran" class="btn btn-primary"><span  id="">Simpan</span></button></center>
             	</form>
         </div>
-    </div>
+    </div> -->
 
     <!-- setting urutan data kartu -->
     <h1 class="h3 mb-2 text-gray-800">Data Kartu</h1>

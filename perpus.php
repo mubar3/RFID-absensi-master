@@ -27,7 +27,7 @@
             border-color .15s ease-in-out,box-shadow .15s ease-in-out;
         }
     </style>
-	<div class="container"><span class="float-md-right"><i class="fa fa-clock-o" aria-hidden="true"></i><st id="time"></st></span>
+	<div class="container"><span class="float-md-right"><i class="fa fa-clock-o" aria-hidden="true"></i><st id="time"></st></span><br>
 		<?php 
     require "vendor/autoload.php";
 
@@ -52,7 +52,24 @@
 		header("Location: index.php");
 	} 
 	?>
-		<h2 class="text-primary mt-4">Pinjam Perpus </h2>
+    <script type="text/javascript">
+    function Check() {
+        if (document.getElementById('yesCheck').checked) {
+            document.getElementById('ifYes').style.display = 'block';
+            document.getElementById('ifNo').style.display = 'none';
+        } 
+        else {
+            document.getElementById('ifYes').style.display = 'none';
+            document.getElementById('ifNo').style.display = 'block';
+
+       }
+    }
+
+    </script>
+        <input type="radio" onclick="Check();" class="" value="1" name="pakai_resep[]" checked><label>Kunjungan</label> 
+        <input type="radio" onclick="Check();" class="" id="yesCheck" value="0" name="pakai_resep[]"><label>Peminjaman</label>
+    <div id="ifYes" style="display:none">
+		<h2 class="text-primary mt-4">Peminjaman Perpustakaan </h2>
 
 		<div class="form-group">
 			<label for="rfidnumber">RFID Buku</label>
@@ -183,6 +200,63 @@
                                     </tbody>
                                 </table>
                             </div>
+                            </div>
+    
+                        </div>
+                    </div>
+
+        <div id="ifNo" style="display:block;">
+        <h2 class="text-primary mt-4">Kunjungan Perpustakaan </h2>
+
+        <div class="form-group">
+            <label for="rfidnumber">RFID Tag Number</label>
+            <input type="text" class="form-control" id="inputs_k" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
+            <small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Book</small>
+        </div>
+
+        <div class="container mb-4">
+            <h3 id="classInformation"></h3>
+            <div class="p-3 mb-2 text-white" id="tampilMessagek">
+                <!-- <b>Name</b> : Daniel Aditama <b>Course</b> : ERP Planning <b>Date/Time</b> : Mon,9-10-17/07:59:59 <b>Status</b>: Early -->
+            </div>
+            <div class="alert" role="alert"></div>
+        </div>
+
+    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Data Pengunjung Hari Ini</h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4" >
+                        <div class="card-body" id='here_k'>
+                          <?php
+                            $data_buku = $qb->RAW(
+                            "SELECT * FROM kunjungan
+                            join siswa on siswa.norf=kunjungan.siswa
+                            where kunjungan.user=? and DATE(kunjungan.tanggal) = CURDATE()
+                            ",[$_SESSION['id_user']]);
+                          ?>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Siswa</th>
+                                            <th>NIS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        foreach ($data_buku as $buku) {
+                                            ?>
+                                        <tr>
+                                            <td><?php echo $buku->nama;?></td>
+                                            <td><?php echo $buku->nis;?></td>
+                                        </tr>
+                                        <?php } ?>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            </div>
     
                         </div>
                     </div>
@@ -203,6 +277,10 @@
     function updateDiv()
     { 
         $( "#here" ).load(window.location.href + " #here" );
+    }
+    function updateDiv_k()
+    { 
+        $( "#here_k" ).load(window.location.href + " #here_k" );
     }
 		$(function() {
 			setInterval(updateTime, 1000);
@@ -257,6 +335,44 @@ $(document).ready(function() {
       });
 
       updateDiv()
+  });
+  $("#inputs_k").change(function() {
+    var id = $('#inputs_k').val();
+    $.ajax({
+        url: 'aksi_perpus_k.php',
+        type: 'post',
+        data: {
+          id: id
+        }
+      })
+      .done(function(data) {
+        console.log(data);
+
+        // hapus alert danger dan sukses agar bisa bergantian class
+        // $('.alert').removeClass('alert-danger alert-success');
+        $('#tampilMessagek').removeClass('bg-danger bg-success');
+
+        if (data.match(/Berhasil.*/)) {
+          // $('.alert').addClass('alert-success').html(data);
+          // $('#classInformation').html("Class Information").addClass('display-4');
+          $('#tampilMessagek').addClass('bg-success').html(data);
+        } else {
+          // $('.alert').addClass('alert-danger').html("RFID belum terdaftar di dalam system kami: " + "<b>{ " + id + " }</b>");
+          // $('#classInformation').html("Whoops, there was an error").addClass('display-4');
+          $('#tampilMessagek').addClass('bg-danger').html(data);
+        }
+
+        $('#inputs_k').val(""); //Mengkosongkan input field
+        // $('#books').val("");
+        // $('#books').tagsinput('focus');
+        // $('#inputs').focus(); //mengembalikan cursor ke input field
+        // setTimeout(location.reload.bind(location), 1200);
+      })
+      .fail(function(data) {
+        console.log(data);
+      });
+
+      updateDiv_k()
   });
 });
 

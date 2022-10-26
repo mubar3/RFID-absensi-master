@@ -283,6 +283,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $qb->RAW(
             "UPDATE peminjaman SET peminjam='".$rfid_baru."' where peminjam=".$rfid_lama,[]);
             $qb->RAW(
+            "UPDATE kunjungan SET siswa='".$rfid_baru."' where siswa=".$rfid_lama,[]);
+            $qb->RAW(
             "UPDATE rekap_absen SET norf='".$rfid_baru."' where norf=".$rfid_lama,[]);
             $qb->RAW(
             "UPDATE rekap_parkir SET norf='".$rfid_baru."' where norf=".$rfid_lama,[]);

@@ -73,6 +73,7 @@
             else if($page == 'user_cetak.php' && $setting == 0){header("Location: home.php");}
             else if($page == 'users.php' && $setting == 0){header("Location: home.php");}
             else if($page == 'subusers.php' && $setting == 0){header("Location: home.php");}
+            else if($page == 'setting_lain.php' && $setting == 0){header("Location: home.php");}
             // absen
             else if($page == 'absen.php' && $absen == 0){header("Location: home.php");}
             else if($page == 'rekap.php' && $absen == 0){header("Location: home.php");}
@@ -124,7 +125,7 @@
             <!-- Nav Item - Pages Collapse Menu -->
             <?php 
             if($setting == 1){
-            if($page=='setting_raport.php' || $page=='users.php'|| $page=='subusers.php' || $page=='setting_absen.php' || $page=='toko_setting.php' || $page=='user_cetak.php'){
+            if($page=='setting_raport.php' || $page=='users.php'|| $page=='subusers.php' || $page=='setting_absen.php' || $page=='toko_setting.php' || $page=='user_cetak.php'|| $page=='setting_lain.php'){
                 echo '<li class="nav-item active">';
             }else{
                 echo '<li class="nav-item">';}
@@ -137,7 +138,7 @@
                 </a>
                 <div id="collapseUtilitiessetting" 
                 <?php 
-                if($page=='setting_raport.php' || $page=='setting_absen.php' || $page=='users.php'|| $page=='subusers.php' || $page=='toko_setting.php' || $page=='user_cetak.php'){
+                if($page=='setting_raport.php' || $page=='setting_absen.php' || $page=='users.php'|| $page=='subusers.php' || $page=='toko_setting.php' || $page=='user_cetak.php'|| $page=='setting_lain.php'){
                     echo 'class="collapse show"';
                 }else{
                     echo 'class="collapse"';}
@@ -196,6 +197,14 @@
                         ?> 
                         href="subusers.php">Data subUsers</a>
                     <?php } ?>
+                        <a 
+                        <?php 
+                        if($page=='setting_lain.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="setting_lain.php">Setting Lainnya</a>
                     </div>
                 </div>
             </li>
@@ -291,7 +300,7 @@
                         }else{
                             echo 'class="collapse-item"';}
                         ?> 
-                        href="daftar_peminjaman.php">Daftar belum</a>
+                        href="daftar_peminjaman.php">Pengembalian</a>
                         <a
                         <?php 
                         if($page=='daftar_peminjaman_sudah.php'){
