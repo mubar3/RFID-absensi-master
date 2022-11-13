@@ -401,7 +401,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                     <option value="">Provinsi</option>
                                     <?php foreach ($data as $data) {
                                         $selected='';
-                                        if($_POST['provinsi'] == $data->id_prov){$selected='selected';}
+                                        if(!empty($_POST['provinsi']) && $_POST['provinsi'] == $data->id_prov){$selected='selected';}
                                         echo '<option value="'.$data->id_prov.'" '.$selected.'>'.$data->nama_provinsi.'</option>';
                                     }?>
                                 </select>
@@ -412,7 +412,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                     <option value="">Kab</option>
                                     <?php foreach ($data as $data) {
                                         $selected='';
-                                        if($_POST['kabupaten'] == $data->id_kab){$selected='selected';}
+                                        if(!empty($_POST['kabupaten']) && $_POST['kabupaten'] == $data->id_kab){$selected='selected';}
                                         echo '<option id="kabupaten1" class="'.$data->id_prov.'" value="'.$data->id_kab.'" '.$selected.'>'.$data->nama_kabupaten.'</option>';
                                     }?>
                                 </select>
@@ -423,7 +423,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                     <option value="">Kec</option>
                                     <?php foreach ($data as $data) {
                                         $selected='';
-                                        if($_POST['kecamatan'] == $data->id_kec){$selected='selected';}
+                                        if(!empty($_POST['kecamatan']) && $_POST['kecamatan'] == $data->id_kec){$selected='selected';}
                                         echo '<option id="kecamatan1" class="'.$data->id_kab.'" value="'.$data->id_kec.'" '.$selected.'>'.$data->nama_kecamatan.'</option>';
                                     }?>
                                 </select>
