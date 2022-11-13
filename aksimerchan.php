@@ -165,9 +165,9 @@ else {
 
 
         $data = $qb->RAW(
-        "UPDATE saldo_rfid SET saldo='".$isi2."'where id_rfid =".$_POST['id2'],
-         []);
-
+        "UPDATE saldo_rfid SET saldo='".$isi2."'where id_rfid =?",
+         [$_POST['id2']]);
+        
         // input log
                 $subuser='';
                 if($_SESSION['role'] == 3){$subuser=$_SESSION['sub_user'];}

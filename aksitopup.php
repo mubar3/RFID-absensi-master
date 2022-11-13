@@ -40,9 +40,9 @@ if (isset($_POST['id'])) {
     $saldo=enkripsiDekripsi($data->saldo, $kunciRahasia);
     $saldo=(int)$saldo;
     $isi=(int)$isi;
-    $isi=strval($saldo+$isi);
-    
+    // echo "<div class='p-3 mb-2 bg-danger'>Saldo Maksimumhshs ".$isi."<div>"; die();
     if(($saldo+$isi) > $data_user->saldo_max){echo "<div class='p-3 mb-2 bg-danger'>Saldo Maksimum ".convertToRupiah($data_user->saldo_max)."<div>"; die();}
+    $isi=strval($saldo+$isi);
 
     $isi2 = strval(enkripsiDekripsi($isi, $kunciRahasia));
 
