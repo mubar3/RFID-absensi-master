@@ -119,6 +119,8 @@
 		  	</div>
 		  </div>
 		</div>
+			<label for="rfidnumber">Qrcode</label>
+			<input type="text" id="qrcode" class="form-control" class="form-control">
 			<label for="rfidnumber">Data Barang</label>
 			<input type="text" id="datas" class="form-control" data-role="tagsinput"  name="tags" class="form-control">
 			<label for="rfidnumber">RFID Tag Number</label>
@@ -407,6 +409,37 @@ var rupiah = document.getElementById('rp');
 			const myArray = text.split(",");
 				$("#datas").tagsinput('add', { id:myArray[1] , label: myArray[0] });
 	    });
+		let text = '';
+		$("#qrcode").change(function() {
+			// let text = '';
+			$.ajax({
+				url: 'name_toko.php?id='+$('#qrcode').val(),
+				type: 'get'
+			})
+			.done(function(data1) {
+				// console.log(data1);
+				text = data1;
+				// processResult(data1);
+				$('#qrcode').val(""); //Mengkosongkan input field
+				
+			})
+
+			// console.log(text);
+			// alert(text);
+			// return;
+			if(text == ''){
+				alert('Data Kosong');
+			}else{
+				const myArray = text.split(",");
+				$("#datas").tagsinput('add', { id:myArray[1] , label: myArray[0] });
+			}
+
+		});
+
+		// function processResult(result){
+		// 	// console.log("The result is: " + result)
+		// 	text=result;
+		// 	}
 		
 	</script>
 

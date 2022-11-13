@@ -1,6 +1,7 @@
 <?php 
 require "partials/head.php";
-require "partials/sidebar.php"; ?>
+require "partials/sidebar.php";
+require "asset/phpqrcode/qrlib.php"; ?>
 <div class="container-fluid">
 <?php
 
@@ -69,6 +70,18 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	          'id_user' => $_SESSION['id_user']
 
 	        ]);
+
+			$id_toko=$qb->pdo->lastInsertId();
+
+			$nameqrcode    = $id_toko.'.png';              
+            $tempdir        = "asset/qrcode_toko/"; 
+            $isiqrcode     = $id_toko;
+            $quality        = 'H';
+            $Ukuran         = 10;
+            $padding        = 0;
+
+            QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
+
 	        if($aksi){
 	        	echo '<div class="col-lg-12 mb-4">
 			        <div class="card bg-success text-white shadow">
@@ -136,6 +149,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
      	if(isset($_GET['hapus_menu'])){
 	        $aksi = $qb->RAW(
     		"DELETE from toko_menu where id=".$_GET['hapus_menu'],[]);
+			if(file_exists('asset/qrcode_toko/'.$_GET['hapus_menu'].'.png')){
+				unlink('asset/qrcode_toko/'.$_GET['hapus_menu'].'.png');
+			}
 	        if($aksi){
 	        	if ($_GET['foto_menu'] != '') {
                 	unlink('asset/menu/'.$_GET['foto_menu']);
@@ -185,6 +201,17 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                               'harga' => $data->val($i, 2),
                               'id_user' => $_SESSION['id_user']
                             ]);
+
+					$id_toko=$qb->pdo->lastInsertId();
+		
+					$nameqrcode    = $id_toko.'.png';              
+					$tempdir        = "asset/qrcode_toko/"; 
+					$isiqrcode     = $id_toko;
+					$quality        = 'H';
+					$Ukuran         = 10;
+					$padding        = 0;
+		
+					QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
 
         }           
                    echo '
@@ -242,10 +269,17 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-body">
+		<a class="btn btn-primary" target="_Blank" href="download_excel_toko.php">
+                                    <span class="glyphicon glyphicon-download"></span>
+                                    Download excel</a>
+		<a class="btn btn-primary" target="_Blank" href="download_zip_toko.php">
+                                    <span class="glyphicon glyphicon-download"></span>
+                                    Download Qrcode</a>
 
-    <h4 class="h5 mb-2 text-gray-800">Import Data Toko</h4><a href="asset/sampel_toko.xls">Template Excel</a>
+    <!-- <h4 class="h3 mb-2 text-gray-800">Import Data Toko</h4><a href="asset/sampel_toko.xls">Template Excel</a> -->
     <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
-        <div class="col-lg-12 mb-2">
+		<div class="col-lg-12 mb-2">
+			<h4 class="h3 mb-2 text-gray-800">Import Data Toko</h4><a href="asset/sampel_toko.xls">Template Excel</a>
             <div class="input-group">
                 <input type="file" name="excel" class="form-control">
             <div class="input-group-prepend">
