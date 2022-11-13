@@ -44,6 +44,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                     <!-- <th>Jenis</th> -->
                     <th>Jumlah</th>
                     <th>Waktu</th>
+                    <th>Keterangan</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,6 +60,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 					echo convertToRupiah(enkripsiDekripsi(strval($user->banyak), $kunciRahasia));}
 					?></td>
                     <td><?php echo $user->waktu;?></td>
+                    <td><?php echo $user->ket;?></td>
                 </tr>
                 <?php } ?>
                 

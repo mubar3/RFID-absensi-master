@@ -15,6 +15,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 if (isset($_POST['id'])) {
     $id = $_POST['id'];
     $isi = $_POST['isi'];
+    $keperluan = $_POST['keperluan'];
     $total = $isi;
     if(empty($isi)){$isi=0;}
 
@@ -59,6 +60,7 @@ if (isset($_POST['id'])) {
         'id_rfid' => $id,
         'banyak' => enkripsiDekripsi(strval($total), $kunciRahasia),
         'jenis' => 'masuk',
+        'ket' => $keperluan,
         'user' => $_SESSION['id_user'],
         'subuser' => $subuser
       ]);     
@@ -104,6 +106,7 @@ if (isset($_POST['id'])) {
             'id_rfid' => $id,
             'banyak' => enkripsiDekripsi(strval($total), $kunciRahasia),
             'jenis' => 'masuk',
+            'ket' => $keperluan,
             'user' => $_SESSION['id_user'],
             'subuser' => $subuser
           ]);     

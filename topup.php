@@ -16,6 +16,8 @@
 		<h2 class="text-primary mt-4">TopUp Saldo </h2>
 
 		<div class="form-group">
+			<label for="rfidnumber">Keperluan</label>
+			<input type="text" class="form-control" id="keperluan" aria-describedby="rfidnumber" placeholder="Keperluan">
 			<label for="rfidnumber">Banyak (Rp)</label>
 			<input class="form-control" id="rp" aria-describedby="rfidnumber" placeholder="Rp.">
 			<label for="rfidnumber">RFID Tag Number</label>
@@ -57,6 +59,7 @@ $(document).ready(function() {
   $("#inputs").change(function() {
     var id = $('#inputs').val();
     var isi = $('#rp').val();
+    var keperluan = $('#keperluan').val();
     isi=isi.replace(/Rp. /g,'')
 		isi=isi.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'')
 
@@ -65,7 +68,8 @@ $(document).ready(function() {
         type: 'post',
         data: {
           id: id,
-          isi: isi
+          isi: isi,
+          keperluan: keperluan
         }
       })
       .done(function(data) {
@@ -85,6 +89,7 @@ $(document).ready(function() {
           $('#tampilMessage').html(data);
         // }
 
+        $('#keperluan').val(""); //Mengkosongkan input field
         $('#rp').val(""); //Mengkosongkan input field
         $('#inputs').val(""); //Mengkosongkan input field
         $('#inputs').focus(); //mengembalikan cursor ke input field

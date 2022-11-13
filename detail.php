@@ -183,6 +183,7 @@ background-size: cover;">
                             <!-- <th>Jenis</th> -->
                             <th>Jumlah</th>
                             <th>Waktu</th>
+                            <th>Keterangan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -198,6 +199,7 @@ background-size: cover;">
                   echo convertToRupiah(enkripsiDekripsi(strval($user->banyak), $kunciRahasia));}
                   ?></td>
                             <td><?php echo $user->waktu;?></td>
+                            <td><?php echo $user->ket;?></td>
                         </tr>
                         <?php } ?>
                         
