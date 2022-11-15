@@ -133,6 +133,7 @@ else {
   if(empty($_POST['id_isi'])){echo "<div class='p-3 mb-2 bg-danger'>Pembelian Kosong<div>"; die();}
     else{
       $data_menu=explode(',', $_POST['id_isi']);
+      $banyak_pesanan=array_count_values($data_menu);
       $total_menu=count($data_menu);
       $total=0;
             for($x=0;$x<$total_menu;$x++) {
@@ -159,6 +160,24 @@ else {
         $isi=$saldo-$total;
 
         if($isi < 0){echo "<div class='p-3 mb-2 bg-danger'>Saldo Kurang<div>"; die();}
+        
+        $stok=array();
+        $id_stok=array();
+        foreach ($banyak_pesanan as $key => $value) {
+          $data = $qb->RAW("SELECT * from toko_menu where id =?",[$key]);
+            if (!array_key_exists(0, $data)) {echo "<div class='p-3 mb-2 bg-danger'>Barang tidak tersedia<div>";die();}
+            $data = $data[0];
+            if($value > $data->stok){echo "<div class='p-3 mb-2 bg-danger'>Stok ".$data->nama." kurang<div>";die();}
+            array_push($stok,$data->stok);;
+            array_push($id_stok,$data->id);;
+        }
+        $i=0;
+        foreach ($banyak_pesanan as $key => $value){
+          $stok_akhir=(int)$stok[$i]-$value;
+          // echo $stok[$i];die();
+          $data = $qb->RAW( "UPDATE toko_menu SET stok=? where id =?",[$stok_akhir,$id_stok[$i]]);
+          $i++;
+        }
 
         $isi=strval($isi);
         $isi2 = strval(enkripsiDekripsi($isi, $kunciRahasia));

@@ -66,6 +66,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
      		$aksi = $qb->insert('toko_menu', [
 	          'harga' => $_POST['harga'],
 	          'nama' => $_POST['nama'],
+	          'stok' => $_POST['stok'],
 	          'gambar' => $filename,
 	          'id_user' => $_SESSION['id_user']
 
@@ -122,7 +123,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                 }
             }
 
-     		$aksi = $qb->RAW("UPDATE toko_menu set harga=?,nama=?,gambar=? WHERE id=?",[$_POST['harga'],$_POST['nama'],$filename,$_POST['id_menu']]);
+     		$aksi = $qb->RAW("UPDATE toko_menu set harga=?,nama=?,gambar=?,stok=? WHERE id=?",[$_POST['harga'],$_POST['nama'],$filename,$_POST['stok'],$_POST['id_menu']]);
 
 	        if($aksi){
 	        	echo '<div class="col-lg-12 mb-4">
@@ -199,6 +200,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                     $qb->insert('toko_menu', [
                               'nama' => $data->val($i, 1),
                               'harga' => $data->val($i, 2),
+                              'stok' => $data->val($i, 3),
                               'id_user' => $_SESSION['id_user']
                             ]);
 
@@ -304,6 +306,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 			  <input type="file" name="gambar" placeholder="gambar" class="form-control">
 			  <input type="text" name="nama" placeholder="Nama" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['menu'];}?>" class="form-control" required>
 			  <input type="number" name="harga" placeholder="Harga" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['harga'];}?>" class="form-control" required>
+			  <input type="number" name="stok" placeholder="Stok" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['stok'];}?>" class="form-control" required>
 			  <div class="input-group-prepend">
 	        	<?php if(isset($_GET['edit_menu'])){ ?>
 			  	<button type="submit" name="update_menu" class="input-group-text"><span  id="">Update</span></button>
@@ -322,6 +325,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             <th>Gambar</th>
                             <th>Nama</th>
                             <th>Harga</th>
+                            <th>Stok</th>
                             <th>Hapus</th>
                         </tr>
                     </thead>
@@ -333,9 +337,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             <td><?php if($data_user->gambar != ''){?><img style="display: block; margin-left: auto;  margin-right: auto;   width: 70px;" class="img-responsive img" src="asset/menu/<?php echo $data_user->gambar;?>"><?php } ?></td>
                             <td><?php echo $data_user->nama;?></td>
                             <td><?php echo $data_user->harga;?></td>
+                            <td><?php echo $data_user->stok;?></td>
                             <td>
                             <center>
-                            	<a href="toko_setting.php?edit_menu=<?php echo $data_user->id;?>&&menu=<?php echo $data_user->nama;?>&&harga=<?php echo $data_user->harga;?>&&foto=<?php echo $data_user->gambar;?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                            	<a href="toko_setting.php?edit_menu=<?php echo $data_user->id;?>&&menu=<?php echo $data_user->nama;?>&&harga=<?php echo $data_user->harga;?>&&foto=<?php echo $data_user->gambar;?>&&stok=<?php echo $data_user->stok;?>"><i class="fa-solid fa-pen-to-square"></i></a>
                             	&nbsp
                             	<a href="toko_setting.php?hapus_menu=<?php echo $data_user->id;?>&&foto_menu=<?php echo $data_user->gambar;?>"><i class="fa-solid fa-trash-can"></i></a>
                             </center>
