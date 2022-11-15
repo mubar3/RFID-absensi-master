@@ -27,14 +27,17 @@ if (isset($_POST['id'])) {
             for($x=0;$x<$total_buku;$x++) {
               $status=0;
               $data_rfid_buku = $qb->RAW(
-              "SELECT * FROM buku where user=?",[$_SESSION['id_user']]);
-              foreach ($data_rfid_buku as $data_rfid_buku) {
-                if($data_buku[$x]==($data_rfid_buku->rfid)){
-                  $status=1;
-                  array_push($buku,'<li>'.$data_rfid_buku->judul_buku.'</li>');
+                "SELECT * FROM buku where pinjam=0 and user=?",[$_SESSION['id_user']]);
+                foreach ($data_rfid_buku as $data_rfid_buku) {
+                  if($data_buku[$x]==($data_rfid_buku->rfid)){
+                    $status=1;
+                    array_push($buku,'<li>'.$data_rfid_buku->judul_buku.'</li>');
+                  }
                 }
-              }
-              if($status==0){echo 'RFID buku ada yang tidak terdaftar';die();}  
+                if($status==0){echo 'RFID buku ada yang tidak terdaftar/sedang dipinjam';die();}  
+            }
+            for($x=0;$x<$total_buku;$x++) {
+              $qb->RAW("UPDATE buku set pinjam=1 where rfid=?",[$data_buku[$x]]);
             }
 
     $user = $qb->RAW(

@@ -38,6 +38,9 @@ if (isset($_POST['id'])) {
               }
               if($status==0){echo 'RFID buku ada yang tidak terdaftar';die();}  
             }
+            for($x=0;$x<$total_buku;$x++) {
+              $qb->RAW("UPDATE buku set pinjam=0 where rfid=?",[$data_buku[$x]]);
+            }
 
     $user = $qb->RAW(
     "SELECT * FROM siswa WHERE norf=? and user_input=?",[$id,$_SESSION['id_user']]);

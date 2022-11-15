@@ -50,6 +50,14 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $aksi = $qb->RAW(
             "UPDATE peminjaman SET 
             status=1,pengembalian=? where id_peminjaman=".$_GET['peminjaman'],[date("Y-m-d H:i:s")]);
+
+            $data_rfid_buku = $qb->RAW("SELECT * FROM peminjaman where id_peminjaman=?",[$_GET['peminjaman']]);
+            $isi=$data_rfid_buku[0]->buku;
+            $data_buku=explode(',', $isi);
+            $total_buku=count($data_buku);
+                for($x=0;$x<$total_buku;$x++) {
+                    $qb->RAW("UPDATE buku set pinjam=0 where rfid=?",[$data_buku[$x]]);
+                }
             
             if($aksi){
                 echo '<div class="col-lg-12 mb-4">
@@ -73,9 +81,17 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
           
         }
     if(isset($_GET['hapus_peminjaman'])){
-            
-            $aksi = $qb->RAW(
-            "DELETE from  peminjaman where id_peminjaman=".$_GET['hapus_peminjaman'],[]);
+        
+        $data_rfid_buku = $qb->RAW("SELECT * FROM peminjaman where id_peminjaman=?",[$_GET['hapus_peminjaman']]);
+        $isi=$data_rfid_buku[0]->buku;
+        $data_buku=explode(',', $isi);
+        $total_buku=count($data_buku);
+        for($x=0;$x<$total_buku;$x++) {
+            $qb->RAW("UPDATE buku set pinjam=0 where rfid=?",[$data_buku[$x]]);
+        }
+        
+        $aksi = $qb->RAW(
+        "DELETE from  peminjaman where id_peminjaman=".$_GET['hapus_peminjaman'],[]);
             
             if($aksi){
                 echo '<div class="col-lg-12 mb-4">
@@ -128,14 +144,6 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4" id='here'>
-                        <?php
-                            $data_buku = $qb->RAW(
-                            "SELECT * FROM peminjaman
-                            join siswa on siswa.norf=peminjaman.peminjam
-                            where peminjaman.status=0
-                            and peminjaman.user=?
-                            ",[$_SESSION['id_user']]);
-                        ?>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -146,8 +154,14 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <?php 
+                                    <tbody id='here'>
+                                        <?php
+                                            $data_buku = $qb->RAW(
+                                            "SELECT * FROM peminjaman
+                                            join siswa on siswa.norf=peminjaman.peminjam
+                                            where peminjaman.status=0
+                                            and peminjaman.user=?
+                                            ",[$_SESSION['id_user']]);
                                         foreach ($data_buku as $buku) {
                                             ?>
                                         <tr>
@@ -176,26 +190,27 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                                 &nbsp
                                                 <?php } ?>
                                                 <a href="#" data-toggle="modal" data-target="#logoutModal<?php echo $i; ?>" ><i class="fa-solid fa-trash-can"></i></a>
+                                            <!-- <div class="modal-dialog" role="document"> -->
+                                                    <!-- Logout Modal-->
+                                            <div class="modal fade" id="logoutModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
-            <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Peringatan</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Apa anda yakin untuk Hapus?</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="daftar_peminjaman.php?hapus_peminjaman=<?php echo $buku->id_peminjaman;?>">Hapus</a>
-                </div>
-            </div>
-        </div>
-    </div>
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Peringatan</h5>
+                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">Apa anda yakin untuk Hapus?</div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                            <a class="btn btn-primary" href="daftar_peminjaman.php?hapus_peminjaman=<?php echo $buku->id_peminjaman;?>">Hapus</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- </div> -->
                                             </center>
                                             </td>
                                         </tr>

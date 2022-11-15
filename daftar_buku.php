@@ -97,6 +97,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                   $penulis = $data->val($i, 6);
                   $jumlah = $data->val($i, 7);
                   $induk = $data->val($i, 8);
+                  $ddc = $data->val($i, 9);
                   $kategori = $data->val($i, 2);
                   $t_pengadaan = $data->val($i, 1);
 
@@ -144,6 +145,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                               'user' => $_SESSION['id_user'],
                               'master' => $buku,
                               'induk' => $induk,
+                              'ddc' => $ddc,
                               'kategori' => $kategori
                             ]);
 
@@ -196,6 +198,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
           $penulis = $_POST['penulis'];
           $jumlah = $_POST['jumlah'];
           $induk = $_POST['induk'];
+          $ddc = $_POST['ddc'];
           $kategori = $_POST['kategori'];
           $t_pengadaan = $_POST['t_pengadaan'];
 
@@ -255,6 +258,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                       'user' => $_SESSION['id_user'],
                       'master' => $buku,
                       'induk' => $induk,
+                      'ddc' => $ddc,
                       'kategori' => $kategori
                     ]);
 
@@ -440,6 +444,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     <div class="mb-3"><label for="exampleFormControlInput1">Penulis</label><input class="form-control" name="penulis" value="<?php echo $data_edit_buku->penulis;?>" type="text" placeholder="Penulis" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">Jumlah Exemplar</label><input class="form-control" name="jumlah" type="number" placeholder="jumlah" value="<?php echo $data_edit_buku->jumlah;?>" required></div>
     <div class="mb-3"><label for="exampleFormControlInput1">No Induk</label><input class="form-control" name="induk" type="number" placeholder="jumlah" value="<?php echo $data_edit_buku->induk;?>" required></div>
+    <div class="mb-3"><label for="exampleFormControlInput1">No Induk</label><input class="form-control" name="ddc" type="text" placeholder="DDC" value="<?php echo $data_edit_buku->ddc;?>" required></div>
     <button name="simpan_data" type='submit' class="btn btn-primary btn-user btn-block">Simpan</button>
     </form>
     <?php break;}} ?>
