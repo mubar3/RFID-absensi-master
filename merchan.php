@@ -420,19 +420,20 @@ var rupiah = document.getElementById('rp');
 				// console.log(data1);
 				text = data1;
 				// processResult(data1);
-				$('#qrcode').val(""); //Mengkosongkan input field
 				
+				if(text == ''){
+					alert('Data Kosong');
+				}else{
+					const myArray = text.split(",");
+					$("#datas").tagsinput('add', { id:myArray[1] , label: myArray[0] });
+				}
+				
+				$('#qrcode').val(""); //Mengkosongkan input field
 			})
 
 			// console.log(text);
 			// alert(text);
 			// return;
-			if(text == ''){
-				alert('Data Kosong');
-			}else{
-				const myArray = text.split(",");
-				$("#datas").tagsinput('add', { id:myArray[1] , label: myArray[0] });
-			}
 
 		});
 

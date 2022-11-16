@@ -17,6 +17,7 @@ $data_menu = $qb->RAW("SELECT * FROM toko_menu where id_user=? and id=?",[$_SESS
 if (array_key_exists(0, $data_menu)) {
     $data_menu=$data_menu[0];
     echo $data_menu->nama.','.$data_menu->id;
-}
+}else{
 echo '';
+}
 ?>
