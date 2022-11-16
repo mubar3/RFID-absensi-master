@@ -336,6 +336,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     $table='kelas';
     $data_buku = $qb->RAW(
     "SELECT buku.*,
+    (select count(id_buku) from buku b2 where b2.pinjam=0 and b2.master=buku.master )as stok,
     master_buku.jumlah,
     master_buku.t_pengadaan,
     -- concat(buku.induk,'-',(buku.induk+master_buku.jumlah)) as no_induk
@@ -376,6 +377,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <th>Tanggal pengadaan</th>
                                             <th>No Induk</th>
                                             <th>No DDC</th>
+                                            <th>Stock</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -392,6 +394,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <td><?php echo $buku->t_pengadaan;?></td>
                                             <td><?php echo $buku->no_induk;?></td>
                                             <td><?php echo $buku->ddc;?></td>
+                                            <td><?php echo $buku->stok;?></td>
                                             <td>
                                             <center>
                                                 <a target="_Blank" href="download_zip_buku.php?id=<?php echo $buku->master; ?>"><i class="fa-regular fa-file-zipper"></i></a>
