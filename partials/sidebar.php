@@ -300,7 +300,7 @@
                         }else{
                             echo 'class="collapse-item"';}
                         ?> 
-                        href="daftar_peminjaman.php">Pengembalian</a>
+                        href="daftar_peminjaman.php">Kunjungan</a>
                         <a
                         <?php 
                         if($page=='daftar_peminjaman_sudah.php'){

@@ -66,10 +66,193 @@
     }
 
     </script>
-        <input type="radio" onclick="Check();" class="" value="1" name="pakai_resep[]" checked><label>Kunjungan</label> 
-        <input type="radio" onclick="Check();" class="" id="yesCheck" value="0" name="pakai_resep[]"><label>Peminjaman</label>
+        <input type="radio" onclick="Check();" class="" value="1" name="pakai_resep[]" checked><label>Peminjaman</label> 
+        <input type="radio" onclick="Check();" class="" id="yesCheck" value="0" name="pakai_resep[]"><label>Pengembalian</label>
     <div id="ifYes" style="display:none">
-		<h2 class="text-primary mt-4">Peminjaman Perpustakaan </h2>
+		<?php 
+        if(isset($_GET['peminjaman'])){
+            
+            $aksi = $qb->RAW(
+            "UPDATE peminjaman SET 
+            status=1,pengembalian=? where id_peminjaman=".$_GET['peminjaman'],[date("Y-m-d H:i:s")]);
+
+            $data_rfid_buku = $qb->RAW("SELECT * FROM peminjaman where id_peminjaman=?",[$_GET['peminjaman']]);
+            $isi=$data_rfid_buku[0]->buku;
+            $data_buku=explode(',', $isi);
+            $total_buku=count($data_buku);
+                for($x=0;$x<$total_buku;$x++) {
+                    $qb->RAW("UPDATE buku set pinjam=0 where rfid=?",[$data_buku[$x]]);
+                }
+            
+            if($aksi){
+                echo '<div class="col-lg-12 mb-4">
+                    <div class="card bg-success text-white shadow">
+                        <div class="card-body">
+                            Berhasil
+                            <div class="text-white-50 small">Buku Telah Dikembalikan</div>
+                        </div>
+                    </div>
+                </div>';
+            }else{
+                echo '<div class="col-lg-12 mb-4">
+                <div class="card bg-danger text-white shadow">
+                    <div class="card-body">
+                        Gagal
+                        <div class="text-white-50 small">Harap Ulangi</div>
+                    </div>
+                 </div>
+                </div>';
+            }
+          
+        }
+    if(isset($_GET['hapus_peminjaman'])){
+        
+        $data_rfid_buku = $qb->RAW("SELECT * FROM peminjaman where id_peminjaman=?",[$_GET['hapus_peminjaman']]);
+        $isi=$data_rfid_buku[0]->buku;
+        $data_buku=explode(',', $isi);
+        $total_buku=count($data_buku);
+        for($x=0;$x<$total_buku;$x++) {
+            $qb->RAW("UPDATE buku set pinjam=0 where rfid=?",[$data_buku[$x]]);
+        }
+        
+        $aksi = $qb->RAW(
+        "DELETE from  peminjaman where id_peminjaman=".$_GET['hapus_peminjaman'],[]);
+            
+            if($aksi){
+                echo '<div class="col-lg-12 mb-4">
+                    <div class="card bg-success text-white shadow">
+                        <div class="card-body">
+                            Berhasil
+                            <div class="text-white-50 small">Berhasil Hapus</div>
+                        </div>
+                    </div>
+                </div>';
+            }else{
+                echo '<div class="col-lg-12 mb-4">
+                <div class="card bg-danger text-white shadow">
+                    <div class="card-body">
+                        Gagal
+                        <div class="text-white-50 small">Harap Ulangi</div>
+                    </div>
+                 </div>
+                </div>';
+            }
+            echo '<script>setTimeout(function(){location.replace("daftar_peminjaman.php"); }, 1000);</script>';
+          
+        }
+
+    $table='kelas';
+    // print_r($data_kelas);
+    // die();
+
+    ?>
+                    <h2 class="text-primary mt-4">Pengembalian Perpus </h2>
+
+        <div class="form-group">
+            <label for="rfidnumber">RFID Buku</label>
+            <input type="text" id="books_p" class="form-control" data-role="tagsinput"  name="tags" class="form-control">
+            <label for="rfidnumber">RFID Tag Number</label>
+            <input type="text" class="form-control" id="inputs_p" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
+            <small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Book</small>
+        </div>
+
+        <div class="container mb-4">
+            <h3 id="classInformation"></h3>
+            <div class="p-3 mb-2 text-white" id="tampilMessage_p">
+                <!-- <b>Name</b> : Daniel Aditama <b>Course</b> : ERP Planning <b>Date/Time</b> : Mon,9-10-17/07:59:59 <b>Status</b>: Early -->
+            </div>
+            <div class="alert" role="alert"></div>
+        </div>
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Data Peminjaman Buku (Belum Dikembalikan)</h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4" id='here'>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="display table table-bordered" id="table1" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Peminjam</th>
+                                            <th>Buku</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id='here'>
+                                        <?php
+                                            $data_buku = $qb->RAW(
+                                            "SELECT * FROM peminjaman
+                                            join siswa on siswa.norf=peminjaman.peminjam
+                                            where peminjaman.status=0
+                                            and peminjaman.user=?
+                                            ",[$_SESSION['id_user']]);
+                                        foreach ($data_buku as $buku) {
+                                            ?>
+                                        <tr>
+                                            <td><?php echo $buku->nama;?></td>
+                                            <td>
+                                            <ul>
+                                            <?php 
+                                            $data=explode(',',$buku->buku);
+                                            $total_buku=count($data);
+                                            // print_r($data);
+                                            // die();
+                                            $i=1;
+                                            for($x=0;$x<$total_buku;$x++){
+                                                $nama_buku = $qb->RAW(
+                                                    "SELECT * FROM buku where rfid=?
+                                                    ",[$data[$x]]);
+                                                echo '<li>'.$nama_buku[0]->judul_buku.'</li>';
+                                            }
+                                            ?>  
+                                            </ul>  
+                                            </td>
+                                            <td>
+                                            <center>
+                                                <?php if($_SESSION['role'] != 3){?>
+                                                <a href="daftar_peminjaman.php?peminjaman=<?php echo $buku->id_peminjaman;?>" title="Telah Dikembalikan"><i class="fa-solid fa-check"></i></a>
+                                                &nbsp
+                                                <?php } ?>
+                                                <a href="#" data-toggle="modal" data-target="#logoutModal<?php echo $i; ?>" ><i class="fa-solid fa-trash-can"></i></a>
+                                            <!-- <div class="modal-dialog" role="document"> -->
+                                                    <!-- Logout Modal-->
+                                            <div class="modal fade" id="logoutModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Peringatan</h5>
+                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">Apa anda yakin untuk Hapus?</div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                            <a class="btn btn-primary" href="daftar_peminjaman.php?hapus_peminjaman=<?php echo $buku->id_peminjaman;?>">Hapus</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- </div> -->
+                                            </center>
+                                            </td>
+                                        </tr>
+                                        <?php $i++;} ?>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+    
+                        </div>
+                    </div>
+
+                <!-- </div> -->
+        </div>
+
+        <div id="ifNo" style="display:block;">
+        <h2 class="text-primary mt-4">Peminjaman Perpustakaan </h2>
 
 		<div class="form-group">
 			<label for="rfidnumber">RFID Buku</label>
@@ -131,7 +314,7 @@
                             ",[$_SESSION['id_user']]);
                           ?>
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="display table table-bordered" id="table2" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Peminjam</th>
@@ -203,67 +386,7 @@
                             </div>
     
                         </div>
-                    </div>
-
-        <div id="ifNo" style="display:block;">
-        <h2 class="text-primary mt-4">Kunjungan Perpustakaan </h2>
-
-        <div class="form-group">
-            <label for="rfidnumber">RFID Tag Number</label>
-            <input type="text" class="form-control" id="inputs_k" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
-            <small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Book</small>
-        </div>
-
-        <div class="container mb-4">
-            <h3 id="classInformation"></h3>
-            <div class="p-3 mb-2 text-white" id="tampilMessagek">
-                <!-- <b>Name</b> : Daniel Aditama <b>Course</b> : ERP Planning <b>Date/Time</b> : Mon,9-10-17/07:59:59 <b>Status</b>: Early -->
-            </div>
-            <div class="alert" role="alert"></div>
-        </div>
-
-    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Data Pengunjung Hari Ini</h1>
-
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4" >
-                        <div class="card-body" id='here_k'>
-                          <?php
-                            $data_buku = $qb->RAW(
-                            "SELECT * FROM kunjungan
-                            join siswa on siswa.norf=kunjungan.siswa
-                            where kunjungan.user=? and DATE(kunjungan.tanggal) = CURDATE()
-                            ",[$_SESSION['id_user']]);
-                          ?>
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Siswa</th>
-                                            <th>NIS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php 
-                                        foreach ($data_buku as $buku) {
-                                            ?>
-                                        <tr>
-                                            <td><?php echo $buku->nama;?></td>
-                                            <td><?php echo $buku->nis;?></td>
-                                        </tr>
-                                        <?php } ?>
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                            </div>
-    
                         </div>
-                    </div>
-
-		
-
-		
 
 	</div>
 	<?php require "partial/footer.php"; ?>
@@ -336,13 +459,18 @@ $(document).ready(function() {
 
       updateDiv()
   });
-  $("#inputs_k").change(function() {
-    var id = $('#inputs_k').val();
+
+  $("#inputs_p").change(function() {
+    var id = $('#inputs_p').val();
+    var buku = $('#books_p').val();
+    // alert(buku);
+    // return;
     $.ajax({
-        url: 'aksi_perpus_k.php',
+        url: 'aksi_perpus_balik.php',
         type: 'post',
         data: {
-          id: id
+          id: id,
+          isi: buku
         }
       })
       .done(function(data) {
@@ -350,19 +478,20 @@ $(document).ready(function() {
 
         // hapus alert danger dan sukses agar bisa bergantian class
         // $('.alert').removeClass('alert-danger alert-success');
-        $('#tampilMessagek').removeClass('bg-danger bg-success');
+        $('#tampilMessage_p').removeClass('bg-danger bg-success');
 
         if (data.match(/Berhasil.*/)) {
           // $('.alert').addClass('alert-success').html(data);
           // $('#classInformation').html("Class Information").addClass('display-4');
-          $('#tampilMessagek').addClass('bg-success').html(data);
+          $('#tampilMessage_p').addClass('bg-success').html(data);
         } else {
           // $('.alert').addClass('alert-danger').html("RFID belum terdaftar di dalam system kami: " + "<b>{ " + id + " }</b>");
           // $('#classInformation').html("Whoops, there was an error").addClass('display-4');
-          $('#tampilMessagek').addClass('bg-danger').html(data);
+          $('#tampilMessage_p').addClass('bg-danger').html(data);
         }
 
-        $('#inputs_k').val(""); //Mengkosongkan input field
+        $('#inputs_p').val(""); //Mengkosongkan input field
+        $("#books_p").tagsinput('removeAll');
         // $('#books').val("");
         // $('#books').tagsinput('focus');
         // $('#inputs').focus(); //mengembalikan cursor ke input field
@@ -371,9 +500,9 @@ $(document).ready(function() {
       .fail(function(data) {
         console.log(data);
       });
-
-      updateDiv_k()
+      updateDiv()
   });
+  $('table.display').DataTable();
 });
 
 		
