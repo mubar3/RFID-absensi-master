@@ -92,7 +92,6 @@
                     <h1 class="h3 mb-2 text-gray-800">Data Peminjaman Buku Hari Ini</h1>
 
                     <!-- DataTales Example -->
-                    <div class="card shadow mb-4" >
                         <?php
                         if(isset($_GET['hapus_peminjaman'])){
             
@@ -122,7 +121,8 @@
                             
                           }
                         ?>
-                        <div class="card-body" id='here'>
+                    <div class="card shadow mb-4" id='here' >
+                        <div class="card-body">
                           <?php
                             $data_buku = $qb->RAW(
                             "SELECT * FROM peminjaman
@@ -172,10 +172,10 @@
                                             <center>
                                                 <a href="faktur_perpus.php?id=<?php echo $buku->id_peminjaman;?>" target="_blank"><i class="fa-solid fa-print"></i></a>
                                                 &nbsp
-                                                <a href="#" data-toggle="modal" data-target="#logoutModal<?php echo $i; ?>" ><i class="fa-solid fa-trash-can"></i></a>
-                                                <div class="modal-dialog" role="document">
+                                                <!-- <a href="#" data-toggle="modal" data-target="#logoutModal<?php echo $i; ?>" ><i class="fa-solid fa-trash-can"></i></a> -->
+                                                <!-- <div class="modal-dialog" role="document"> -->
             <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <!-- <div class="modal fade" id="logoutModal<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -192,7 +192,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
                                             </center>
                                             </td>
                                         </tr>
@@ -205,7 +205,7 @@
     
                         </div>
                         </div>
-                        
+
     <div id="ifYes" style="display:none">
 		<?php 
         if(isset($_GET['peminjaman'])){
@@ -243,9 +243,9 @@
             }
           
         }
-    if(isset($_GET['hapus_peminjaman'])){
+    if(isset($_GET['hapus_peminjaman_p'])){
         
-        $data_rfid_buku = $qb->RAW("SELECT * FROM peminjaman where id_peminjaman=?",[$_GET['hapus_peminjaman']]);
+        $data_rfid_buku = $qb->RAW("SELECT * FROM peminjaman where id_peminjaman=?",[$_GET['hapus_peminjaman_p']]);
         $isi=$data_rfid_buku[0]->buku;
         $data_buku=explode(',', $isi);
         $total_buku=count($data_buku);
@@ -254,7 +254,7 @@
         }
         
         $aksi = $qb->RAW(
-        "DELETE from  peminjaman where id_peminjaman=".$_GET['hapus_peminjaman'],[]);
+        "DELETE from  peminjaman where id_peminjaman=".$_GET['hapus_peminjaman_p'],[]);
             
             if($aksi){
                 echo '<div class="col-lg-12 mb-4">
@@ -275,7 +275,7 @@
                  </div>
                 </div>';
             }
-            echo '<script>setTimeout(function(){location.replace("daftar_peminjaman.php"); }, 1000);</script>';
+            echo '<script>setTimeout(function(){location.replace("perpus.php"); }, 1000);</script>';
           
         }
 
@@ -306,7 +306,7 @@
                     <h1 class="h3 mb-2 text-gray-800">Data Peminjaman Buku (Belum Dikembalikan)</h1>
 
                     <!-- DataTales Example -->
-                    <div class="card shadow mb-4" id='here'>
+                    <div class="card shadow mb-4" id='here_p'>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="display table table-bordered" id="table1" width="100%" cellspacing="0">
@@ -317,7 +317,7 @@
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody id='here'>
+                                    <tbody>
                                         <?php
                                             $data_buku = $qb->RAW(
                                             "SELECT * FROM peminjaman
@@ -349,7 +349,7 @@
                                             <td>
                                             <center>
                                                 <?php if($_SESSION['role'] != 3){?>
-                                                <a href="daftar_peminjaman.php?peminjaman=<?php echo $buku->id_peminjaman;?>" title="Telah Dikembalikan"><i class="fa-solid fa-check"></i></a>
+                                                <a href="perpus.php?peminjaman=<?php echo $buku->id_peminjaman;?>" title="Telah Dikembalikan"><i class="fa-solid fa-check"></i></a>
                                                 &nbsp
                                                 <?php } ?>
                                                 <a href="#" data-toggle="modal" data-target="#logoutModal<?php echo $i; ?>" ><i class="fa-solid fa-trash-can"></i></a>
@@ -368,7 +368,7 @@
                                                         <div class="modal-body">Apa anda yakin untuk Hapus?</div>
                                                         <div class="modal-footer">
                                                             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                                            <a class="btn btn-primary" href="daftar_peminjaman.php?hapus_peminjaman=<?php echo $buku->id_peminjaman;?>">Hapus</a>
+                                                            <a class="btn btn-primary" href="perpus.php?hapus_peminjaman_p=<?php echo $buku->id_peminjaman;?>">Hapus</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -403,10 +403,11 @@
     function updateDiv()
     { 
         $( "#here" ).load(window.location.href + " #here" );
+        updateDiv_p()
     }
-    function updateDiv_k()
+    function updateDiv_p()
     { 
-        $( "#here_k" ).load(window.location.href + " #here_k" );
+        $( "#here_p" ).load(window.location.href + " #here_p" );
     }
 		$(function() {
 			setInterval(updateTime, 1000);
@@ -433,7 +434,7 @@ $(document).ready(function() {
         }
       })
       .done(function(data) {
-        console.log(data);
+        // console.log(data);
 
         // hapus alert danger dan sukses agar bisa bergantian class
         // $('.alert').removeClass('alert-danger alert-success');
@@ -477,7 +478,7 @@ $(document).ready(function() {
         }
       })
       .done(function(data) {
-        console.log(data);
+        // console.log(data);
 
         // hapus alert danger dan sukses agar bisa bergantian class
         // $('.alert').removeClass('alert-danger alert-success');
@@ -503,7 +504,7 @@ $(document).ready(function() {
       .fail(function(data) {
         console.log(data);
       });
-      updateDiv()
+      updateDiv_p()
   });
   $('table.display').DataTable();
 });
