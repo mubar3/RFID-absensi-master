@@ -70,6 +70,13 @@
 		</div>
 
 		<div class="form-group" id="ifNo" style="display:block">
+			<label for="rfidnumber">Qrcode</label>
+			<input type="text" id="qrcode" class="form-control" class="form-control">
+			<label for="rfidnumber">Data Barang</label>
+			<input type="text" id="datas" class="form-control" data-role="tagsinput"  name="tags" class="form-control">
+			<label for="rfidnumber">RFID Tag Number</label>
+			<input type="text" class="form-control" id="inputs2" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
+			<small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Abscence</small>
 			<div class="card shadow mb-4">
         <div class="card-body">
 						<center><h5>Daftar Barang</h5></center>
@@ -120,13 +127,6 @@
 		  	</div>
 		  </div>
 		</div>
-			<label for="rfidnumber">Qrcode</label>
-			<input type="text" id="qrcode" class="form-control" class="form-control">
-			<label for="rfidnumber">Data Barang</label>
-			<input type="text" id="datas" class="form-control" data-role="tagsinput"  name="tags" class="form-control">
-			<label for="rfidnumber">RFID Tag Number</label>
-			<input type="text" class="form-control" id="inputs2" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
-			<small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Abscence</small>
 
 
 		
