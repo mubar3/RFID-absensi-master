@@ -192,5 +192,5 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 		</div>
 	</div>
-</div>
+<!-- </div> -->
 <?php require "partials/footer.php"; ?>

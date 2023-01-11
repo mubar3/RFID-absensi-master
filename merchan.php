@@ -107,7 +107,47 @@
 							  </div>
 							</div>
 						</div> -->
-  					<?php foreach ($data_menu as $menu) {?>
+						
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+							<thead>
+								<tr>
+									<th>Gambar</th>
+									<th>Barang</th>
+									<th>Stok</th>
+									<th>Satuan Konversi</th>
+									<th>Harga</th>
+									<th>Aksi</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php foreach ($data_menu as $menu) {?>
+								<tr>
+									<td>
+										<?php if($menu->gambar != ''){?>
+											<img class="card-img-top" style="display: block; margin-left: auto; margin-right: auto; " src="asset/menu/<?php echo $menu->gambar;?>">
+										<?php } ?>
+									</td>
+									<td><?php echo $menu->nama; ?></td>
+									<td><?php echo $menu->stok; ?></td>
+									<td>
+										<?php $dt = $qb->RAW("SELECT * FROM konversi where barang=?",[$menu->id]);?>
+										<select>
+											<?php foreach ($dt as $row) {?>
+												<option value="<?php echo $row->id ?>"><?php echo $row->konversi ?></option>
+											<?php } ?>
+										</select>
+									</td>
+									<td><?php echo convertToRupiah($menu->harga); ?></td>
+									<td><button href="javascript:void(0);" value="<?php echo $menu->nama.','.$menu->id;?>" class="datas btn btn-primary"style=" font-size:12px!important;">Tambah</button></td>
+								</tr>
+							<?php } ?>
+								
+							</tbody>
+						</table>
+					</div>
+
+  					<!-- <?php foreach ($data_menu as $menu) {?>
   					<div class="col-sm-2">        	
 		        	<div class="card">
 		        		<?php if($menu->gambar != ''){?>
@@ -121,7 +161,7 @@
 							  </div>
 							</div>
 						</div>
-						<?php } ?>
+						<?php } ?> -->
 
 		  	
 		  	</div>

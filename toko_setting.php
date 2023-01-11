@@ -63,87 +63,135 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                     clearstatcache();
                 }
             }
-     		$aksi = $qb->insert('toko_menu', [
-	          'harga' => $_POST['harga'],
-	          'nama' => $_POST['nama'],
-	          'stok' => $_POST['stok'],
-	          'gambar' => $filename,
-	          'id_user' => $_SESSION['id_user']
-
-	        ]);
 
 			$id_toko=$qb->pdo->lastInsertId();
-
-			$nameqrcode    = $id_toko.'.png';              
-            $tempdir        = "asset/qrcode_toko/"; 
-            $isiqrcode     = $id_toko;
-            $quality        = 'H';
-            $Ukuran         = 10;
-            $padding        = 0;
-
-            QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
-
-	        if($aksi){
-	        	echo '<div class="col-lg-12 mb-4">
-			        <div class="card bg-success text-white shadow">
-			            <div class="card-body">
-			                Berhasil
-			                <div class="text-white-50 small">Data Tersimpan</div>
-			            </div>
-			        </div>
-			    </div>';
-	        }else{
+			$isiqr=$id_toko;
+			$cek='';
+			if($_POST['qr'] != ''){
+				$cek = $qb->RAW("SELECT * FROM toko_menu where qr = ? and qr != '' ",[$_POST['qr']]);
+				$isiqr=$_POST['qr'];
+			}
+			if(array_key_exists(0, $cek)){
 	        	echo '<div class="col-lg-12 mb-4">
 		        <div class="card bg-danger text-white shadow">
 		            <div class="card-body">
 		                Gagal
-		                <div class="text-white-50 small">Data Gagal Tersimpan</div>
+		                <div class="text-white-50 small">Kode qr sudah tersimpan</div>
 		            </div>
 		       	 </div>
 		    	</div>';
-	        }
+			}else{
+
+				$nameqrcode    = $id_toko.'.png';              
+				$tempdir        = "asset/qrcode_toko/"; 
+				$isiqrcode     = $isiqr;
+				$quality        = 'H';
+				$Ukuran         = 10;
+				$padding        = 0;
+
+				QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
+				
+				$aksi = $qb->insert('toko_menu', [
+				'harga' => $_POST['harga'],
+				'nama' => $_POST['nama'],
+				'stok' => $_POST['stok'],
+				'satuan' => $_POST['satuan'],
+				'jenis' => $_POST['jenis'],
+				'qr' => $_POST['qr'],
+				'gambar' => $filename,
+				'id_user' => $_SESSION['id_user']
+
+				]);
+
+				if($aksi){
+					echo '<div class="col-lg-12 mb-4">
+						<div class="card bg-success text-white shadow">
+							<div class="card-body">
+								Berhasil
+								<div class="text-white-50 small">Data Tersimpan</div>
+							</div>
+						</div>
+					</div>';
+				}else{
+					echo '<div class="col-lg-12 mb-4">
+					<div class="card bg-danger text-white shadow">
+						<div class="card-body">
+							Gagal
+							<div class="text-white-50 small">Data Gagal Tersimpan</div>
+						</div>
+					</div>
+					</div>';
+				}
+			}
      	}
 
      	if(isset($_POST['update_menu'])){
 
-     		$filename=$_FILES['gambar']['name'];
-     		if(!empty($filename)){
-            	unlink('asset/menu/'.$_GET['foto']);
-        	}
-     	   if(!empty($filename)){
-     		$ext = pathinfo($filename, PATHINFO_EXTENSION);
-     		$name = pathinfo($filename, PATHINFO_FILENAME);
-            $filename=$name.rand(111,9999).'.'.$ext;
-            // print_r($filename);die();
-            $upload=move_uploaded_file($_FILES['gambar']['tmp_name'],  "asset/menu/".$filename);
-                for($x=0;$x<20;$x++){
-                    if(filesize("asset/menu/".$filename)>50000)
-                    {resizer("asset/menu/".$filename, "asset/menu/".$filename, 70);}else{ break;}
-                    clearstatcache();
-                }
-            }
+			$cek='';
+			if($_POST['qr'] != ''){
+				$cek = $qb->RAW("SELECT * FROM toko_menu where qr = ? and qr != '' and id != ? ",[$_POST['qr'],$_POST['id_menu']]);
+			}
 
-     		$aksi = $qb->RAW("UPDATE toko_menu set harga=?,nama=?,gambar=?,stok=? WHERE id=?",[$_POST['harga'],$_POST['nama'],$filename,$_POST['stok'],$_POST['id_menu']]);
-
-	        if($aksi){
-	        	echo '<div class="col-lg-12 mb-4">
-			        <div class="card bg-success text-white shadow">
-			            <div class="card-body">
-			                Berhasil
-			                <div class="text-white-50 small">Data Tersimpan</div>
-			            </div>
-			        </div>
-			    </div>';
-	        }else{
+			if(array_key_exists(0, $cek)){
 	        	echo '<div class="col-lg-12 mb-4">
 		        <div class="card bg-danger text-white shadow">
 		            <div class="card-body">
 		                Gagal
-		                <div class="text-white-50 small">Data Gagal Tersimpan</div>
+		                <div class="text-white-50 small">Kode qr sudah tersimpan</div>
 		            </div>
 		       	 </div>
 		    	</div>';
-	        }
+			}else{
+				if($_POST['qr'] != ''){
+					$nameqrcode    = $_POST['id_menu'].'.png';              
+					$tempdir        = "asset/qrcode_toko/"; 
+					$isiqrcode     = $_POST['qr'];
+					$quality        = 'H';
+					$Ukuran         = 10;
+					$padding        = 0;
+
+					QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
+				}
+
+				$filename=$_FILES['gambar']['name'];
+				if(!empty($filename)){
+					unlink('asset/menu/'.$_GET['foto']);
+				}
+				if(!empty($filename)){
+				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+				$name = pathinfo($filename, PATHINFO_FILENAME);
+				$filename=$name.rand(111,9999).'.'.$ext;
+				// print_r($filename);die();
+				$upload=move_uploaded_file($_FILES['gambar']['tmp_name'],  "asset/menu/".$filename);
+					for($x=0;$x<20;$x++){
+						if(filesize("asset/menu/".$filename)>50000)
+						{resizer("asset/menu/".$filename, "asset/menu/".$filename, 70);}else{ break;}
+						clearstatcache();
+					}
+				}
+
+				$aksi = $qb->RAW("UPDATE toko_menu set harga=?,nama=?,gambar=?,stok=?,satuan=?,jenis=?,qr=? WHERE id=?",[$_POST['harga'],$_POST['nama'],$filename,$_POST['stok'],$_POST['satuan'],$_POST['jenis'],$_POST['qr'],$_POST['id_menu']]);
+
+				if($aksi){
+					echo '<div class="col-lg-12 mb-4">
+						<div class="card bg-success text-white shadow">
+							<div class="card-body">
+								Berhasil
+								<div class="text-white-50 small">Data Tersimpan</div>
+							</div>
+						</div>
+					</div>';
+				}else{
+					echo '<div class="col-lg-12 mb-4">
+					<div class="card bg-danger text-white shadow">
+						<div class="card-body">
+							Gagal
+							<div class="text-white-50 small">Data Gagal Tersimpan</div>
+						</div>
+					</div>
+					</div>';
+				}
+			}
             echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
      	}
      	
@@ -192,47 +240,97 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         $data = new Spreadsheet_Excel_Reader($target,false);
         // menghitung jumlah baris data yang ada
         $jumlah_baris = $data->rowcount($sheet_index=0);
+		
+		// cek data
+		$cek=true;
+		for ($i=2; $i<=$jumlah_baris; $i++){
+            if($data->val($i, 2) == ''){break;}
+			IF($data->val($i, 6) != ''){
+				$cek = $qb->RAW("SELECT * FROM toko_menu where qr = ? and qr != '' ",[$data->val($i, 6)]);
+				if(array_key_exists(0, $cek)){$cek=false;break;}
+			}
+			IF($data->val($i, 5) != ''){
+				$cek = $qb->RAW("SELECT * FROM jenis where id = ? ",[$data->val($i, 5)]);
+				if(array_key_exists(0, $cek)){$cek=true;}else{$cek=false;break;}
+			}
+			IF($data->val($i, 4) != ''){
+				$cek = $qb->RAW("SELECT * FROM satuan where id = ? ",[$data->val($i, 4)]);
+				if(array_key_exists(0, $cek)){$cek=true;}else{$cek=false;break;}
+			}
+		}
 
         // jumlah default data yang berhasil di import
-        for ($i=2; $i<=$jumlah_baris; $i++){
-            if($data->val($i, 2) == ''){break;}
+		if($cek){
+			for ($i=2; $i<=$jumlah_baris; $i++){
+				if($data->val($i, 2) == ''){break;}
 
-                    $qb->insert('toko_menu', [
-                              'nama' => $data->val($i, 1),
-                              'harga' => $data->val($i, 2),
-                              'stok' => $data->val($i, 3),
-                              'id_user' => $_SESSION['id_user']
-                            ]);
+						$qb->insert('toko_menu', [
+								'nama' => $data->val($i, 1),
+								'harga' => $data->val($i, 2),
+								'stok' => $data->val($i, 3),
+								'satuan' => $data->val($i, 4),
+								'jenis' => $data->val($i, 5),
+								'qr' => $data->val($i, 6),
+								'id_user' => $_SESSION['id_user']
+								]);
 
-					$id_toko=$qb->pdo->lastInsertId();
-		
-					$nameqrcode    = $id_toko.'.png';              
-					$tempdir        = "asset/qrcode_toko/"; 
-					$isiqrcode     = $id_toko;
-					$quality        = 'H';
-					$Ukuran         = 10;
-					$padding        = 0;
-		
-					QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
+						$id_toko=$qb->pdo->lastInsertId();
+						$isiqr=$id_toko;
+						IF($data->val($i, 6) != ''){
+							$isiqr=$data->val($i, 6);
+						}
+						
+						$nameqrcode    = $id_toko.'.png';              
+						$tempdir        = "asset/qrcode_toko/"; 
+						$isiqrcode     = $isiqr;
+						$quality        = 'H';
+						$Ukuran         = 10;
+						$padding        = 0;
+			
+						QRCode::png($isiqrcode,$tempdir.$nameqrcode,$quality,$Ukuran,$padding);
 
-        }           
-                   echo '
-                   <div class="col-lg-12 mb-4">
-                        <div class="card bg-success text-white shadow">
-                            <div class="card-body">
-                                Berhasil
-                                <div class="text-white-50 small">Import selesai</div>
-                            </div>
-                        </div>
-                    </div>
-                    '; 
+			}
+			echo '
+			<div class="col-lg-12 mb-4">
+				 <div class="card bg-success text-white shadow">
+					 <div class="card-body">
+						 Berhasil
+						 <div class="text-white-50 small">Import selesai</div>
+					 </div>
+				 </div>
+			 </div>
+			 '; 
+		}else{
+			echo '<div class="col-lg-12 mb-4">
+			<div class="card bg-danger text-white shadow">
+				<div class="card-body">
+					Gagal
+					<div class="text-white-50 small">Data ada yang eror</div>
+				</div>
+				</div>
+			</div>';
+
+		}           
 
         unlink($target);
         }
 
 
     $data_menu = $qb->RAW(
-    "SELECT * FROM toko_menu where id_user=?",[$_SESSION['id_user']]);
+    "SELECT 
+		toko_menu.*,
+		jenis.nama as nama_jenis,
+		satuan.nama as nama_satuan
+	FROM toko_menu
+	left join satuan on satuan.id=toko_menu.satuan 
+	left join jenis on jenis.id=toko_menu.jenis 
+	where toko_menu.id_user=?",[$_SESSION['id_user']]);
+
+	$data_satuan = $qb->RAW(
+	"SELECT * FROM satuan where id_user=?",[$_SESSION['id_user']]);
+
+	$data_jenis = $qb->RAW(
+	"SELECT * FROM jenis where id_user=?",[$_SESSION['id_user']]);
 
     ?>
 
@@ -304,26 +402,51 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	        	<input type="hidden" name="id_menu" value="<?php echo $_GET['edit_menu']; ?>" class="form-control">
 	        		<?php } ?>
 			  <input type="file" name="gambar" placeholder="gambar" class="form-control">
-			  <input type="text" name="nama" placeholder="Nama" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['menu'];}?>" class="form-control" required>
-			  <input type="number" name="harga" placeholder="Harga" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['harga'];}?>" class="form-control" required>
-			  <input type="number" name="stok" placeholder="Stok" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['stok'];}?>" class="form-control" required>
-			  <div class="input-group-prepend">
-	        	<?php if(isset($_GET['edit_menu'])){ ?>
-			  	<button type="submit" name="update_menu" class="input-group-text"><span  id="">Update</span></button>
-	        		<?php }else{ ?>
-			  	<button type="submit" name="simpan_menu" class="input-group-text"><span  id="">Simpan</span></button>
-	        		<?php } ?>
-			  </div>
+			  <input type="text" name="nama" placeholder="Nama*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['menu'];}?>" class="form-control" required>
+			  <input type="number" name="harga" placeholder="Harga*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['harga'];}?>" class="form-control" required>
+			  <input type="number" name="stok" placeholder="Stok*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['stok'];}?>" class="form-control" required>
 
+			</div>
+			<div class="input-group">
+				<select class="form-control" name="satuan">
+					<option value="">Satuan</option>
+					<?php foreach ($data_satuan as $row) {
+						if(isset($_GET['edit_menu']) && $_GET['satuan'] == $row->id){ ?>
+							<option value="<?php echo $row->id ?>" selected><?php echo $row->nama ?></option>
+						<?php }else{ ?>
+							<option value="<?php echo $row->id ?>"><?php echo $row->nama ?></option>
+						<?php }
+					} ?>
+				</select>
+				<select class="form-control" name="jenis">
+					<option value="">Jenis</option>
+					<?php foreach ($data_jenis as $row) { 
+						if(isset($_GET['edit_menu']) && $_GET['jenis'] == $row->id){ ?>
+							<option value="<?php echo $row->id ?>" selected><?php echo $row->nama ?></option>
+						<?php }else{ ?>
+							<option value="<?php echo $row->id ?>"><?php echo $row->nama ?></option>
+						<?php } 
+					} ?>
+				</select>
+			  <input type="text" name="qr" placeholder="Kode qr" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['qr'];}?>" class="form-control">
+				<div class="input-group-prepend">
+					<?php if(isset($_GET['edit_menu'])){ ?>
+					<button type="submit" name="update_menu" class="input-group-text"><span  id="">Update</span></button>
+						<?php }else{ ?>
+					<button type="submit" name="simpan_menu" class="input-group-text"><span  id="">Simpan</span></button>
+						<?php } ?>
+				</div>
 			</div>
 	    </div>
 	</form>
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="display table table-bordered" id="table1" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Gambar</th>
                             <th>Nama</th>
+                            <th>Satuan</th>
+                            <th>Jenis</th>
                             <th>Harga</th>
                             <th>Stok</th>
                             <th>Hapus</th>
@@ -336,11 +459,13 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         <tr>
                             <td><?php if($data_user->gambar != ''){?><img style="display: block; margin-left: auto;  margin-right: auto;   width: 70px;" class="img-responsive img" src="asset/menu/<?php echo $data_user->gambar;?>"><?php } ?></td>
                             <td><?php echo $data_user->nama;?></td>
+                            <td><?php echo $data_user->nama_satuan;?></td>
+                            <td><?php echo $data_user->nama_jenis;?></td>
                             <td><?php echo $data_user->harga;?></td>
                             <td><?php echo $data_user->stok;?></td>
                             <td>
                             <center>
-                            	<a href="toko_setting.php?edit_menu=<?php echo $data_user->id;?>&&menu=<?php echo $data_user->nama;?>&&harga=<?php echo $data_user->harga;?>&&foto=<?php echo $data_user->gambar;?>&&stok=<?php echo $data_user->stok;?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                            	<a href="toko_setting.php?edit_menu=<?php echo $data_user->id;?>&&menu=<?php echo $data_user->nama;?>&&harga=<?php echo $data_user->harga;?>&&foto=<?php echo $data_user->gambar;?>&&stok=<?php echo $data_user->stok;?>&&satuan=<?php echo $data_user->satuan;?>&&jenis=<?php echo $data_user->jenis;?>&&qr=<?php echo $data_user->qr;?>"><i class="fa-solid fa-pen-to-square"></i></a>
                             	&nbsp
                             	<a href="toko_setting.php?hapus_menu=<?php echo $data_user->id;?>&&foto_menu=<?php echo $data_user->gambar;?>"><i class="fa-solid fa-trash-can"></i></a>
                             </center>
@@ -354,6 +479,491 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         </div>
     </div>
 
+<?php
+
+
+if(isset($_POST['simpan_jenis'])){
+	$aksi = $qb->insert('jenis', [
+	 'id' => $_POST['kode'],
+	 'nama' => $_POST['jenis'],
+	 'id_user' => $_SESSION['id_user']
+   ]);
+
+   if($aksi){
+	   echo '<div class="col-lg-12 mb-4">
+		   <div class="card bg-success text-white shadow">
+			   <div class="card-body">
+				   Berhasil
+				   <div class="text-white-50 small">Data Tersimpan</div>
+			   </div>
+		   </div>
+	   </div>';
+   }else{
+	   echo '<div class="col-lg-12 mb-4">
+	   <div class="card bg-danger text-white shadow">
+		   <div class="card-body">
+			   Gagal
+			   <div class="text-white-50 small">Data Gagal Tersimpan</div>
+		   </div>
+		   </div>
+	   </div>';
+   }
+}
+
+if(isset($_POST['update_jenis'])){
+
+	$aksi = $qb->RAW("UPDATE jenis set nama=?,id=? WHERE id=?",[$_POST['jenis'],$_POST['kode'],$_POST['id_jenis']]);
+
+   if($aksi){
+	   echo '<div class="col-lg-12 mb-4">
+		   <div class="card bg-success text-white shadow">
+			   <div class="card-body">
+				   Berhasil
+				   <div class="text-white-50 small">Data Tersimpan</div>
+			   </div>
+		   </div>
+	   </div>';
+   }else{
+	   echo '<div class="col-lg-12 mb-4">
+	   <div class="card bg-danger text-white shadow">
+		   <div class="card-body">
+			   Gagal
+			   <div class="text-white-50 small">Data Gagal Tersimpan</div>
+		   </div>
+		   </div>
+	   </div>';
+   }
+   echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
+}
+
+if(isset($_GET['hapus_jenis'])){
+   $aksi = $qb->RAW(
+   "DELETE from jenis where id=?",[$_GET['hapus_jenis']]);
+   if($aksi){
+	   echo '<div class="col-lg-12 mb-4">
+		   <div class="card bg-success text-white shadow">
+			   <div class="card-body">
+				   Berhasil
+				   <div class="text-white-50 small">Data Terhapus</div>
+			   </div>
+		   </div>
+	   </div>';
+   }else{
+	   echo '<div class="col-lg-12 mb-4">
+	   <div class="card bg-danger text-white shadow">
+		   <div class="card-body">
+			   Gagal
+			   <div class="text-white-50 small">Data Gagal Terhapus</div>
+		   </div>
+		   </div>
+	   </div>';
+   }
+   echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
+}
+
+?>
+
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Daftar Jenis Barang</h1>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+	<div class="card-body">
+
+<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+	<div class="col-lg-12 mb-2">
+			<?php if(isset($_GET['edit_jenis'])){ ?>
+			<h1 class="h3 mb-2 text-gray-800">Edit</h1>
+				<?php }else{ ?>
+			<h1 class="h3 mb-2 text-gray-800">Tambah</h1>
+				<?php } ?>
+		<div class="input-group">
+			<?php if(isset($_GET['edit_jenis'])){ ?>
+			<input type="hidden" name="id_jenis" value="<?php echo $_GET['edit_jenis']; ?>" class="form-control">
+				<?php } ?>
+		  <input type="text" name="kode" placeholder="Kode" value="<?php if(isset($_GET['edit_jenis'])){ echo $_GET['edit_jenis'];}?>" class="form-control" required>
+		  <input type="text" name="jenis" placeholder="Nama" value="<?php if(isset($_GET['edit_jenis'])){ echo $_GET['nama_jenis'];}?>" class="form-control" required>
+		  <div class="input-group-prepend">
+			<?php if(isset($_GET['edit_jenis'])){ ?>
+			  <button type="submit" name="update_jenis" class="input-group-text"><span  id="">Update</span></button>
+				<?php }else{ ?>
+			  <button type="submit" name="simpan_jenis" class="input-group-text"><span  id="">Simpan</span></button>
+				<?php } ?>
+		  </div>
+
+		</div>
+	</div>
+</form>
+		<div class="table-responsive">
+			<table class="display table table-bordered" id="table2" width="100%" cellspacing="0">
+				<thead>
+					<tr>
+						<th>Kode</th>
+						<th>Nama</th>
+						<th>Aksi</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+					foreach ($data_jenis as $row) {
+						?>
+					<tr>
+						<td><?php echo $row->id;?></td>
+						<td><?php echo $row->nama;?></td>
+						<td>
+						<center>
+							<a href="toko_setting.php?edit_jenis=<?php echo $row->id;?>&&nama_jenis=<?php echo $row->nama;?>"><i class="fa-solid fa-pen-to-square"></i></a>
+							&nbsp
+							<a href="toko_setting.php?hapus_jenis=<?php echo $row->id;?>"><i class="fa-solid fa-trash-can"></i></a>
+						</center>
+						</td>
+					</tr>
+					<?php } ?>
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<?php
+
+
+if(isset($_POST['simpan_satuan'])){
+	$aksi = $qb->insert('satuan', [
+	 'id' => $_POST['kode'],
+	 'nama' => $_POST['satuan'],
+	 'id_user' => $_SESSION['id_user']
+   ]);
+
+   if($aksi){
+	   echo '<div class="col-lg-12 mb-4">
+		   <div class="card bg-success text-white shadow">
+			   <div class="card-body">
+				   Berhasil
+				   <div class="text-white-50 small">Data Tersimpan</div>
+			   </div>
+		   </div>
+	   </div>';
+   }else{
+	   echo '<div class="col-lg-12 mb-4">
+	   <div class="card bg-danger text-white shadow">
+		   <div class="card-body">
+			   Gagal
+			   <div class="text-white-50 small">Data Gagal Tersimpan</div>
+		   </div>
+		   </div>
+	   </div>';
+   }
+}
+
+if(isset($_POST['update_satuan'])){
+
+	$aksi = $qb->RAW("UPDATE satuan set nama=?,id=? WHERE id=?",[$_POST['satuan'],$_POST['kode'],$_POST['id_satuan']]);
+
+   if($aksi){
+	   echo '<div class="col-lg-12 mb-4">
+		   <div class="card bg-success text-white shadow">
+			   <div class="card-body">
+				   Berhasil
+				   <div class="text-white-50 small">Data Tersimpan</div>
+			   </div>
+		   </div>
+	   </div>';
+   }else{
+	   echo '<div class="col-lg-12 mb-4">
+	   <div class="card bg-danger text-white shadow">
+		   <div class="card-body">
+			   Gagal
+			   <div class="text-white-50 small">Data Gagal Tersimpan</div>
+		   </div>
+		   </div>
+	   </div>';
+   }
+   echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
+}
+
+if(isset($_GET['hapus_satuan'])){
+   $aksi = $qb->RAW(
+   "DELETE from satuan where id=?",[$_GET['hapus_satuan']]);
+   if($aksi){
+	   echo '<div class="col-lg-12 mb-4">
+		   <div class="card bg-success text-white shadow">
+			   <div class="card-body">
+				   Berhasil
+				   <div class="text-white-50 small">Data Terhapus</div>
+			   </div>
+		   </div>
+	   </div>';
+   }else{
+	   echo '<div class="col-lg-12 mb-4">
+	   <div class="card bg-danger text-white shadow">
+		   <div class="card-body">
+			   Gagal
+			   <div class="text-white-50 small">Data Gagal Terhapus</div>
+		   </div>
+		   </div>
+	   </div>';
+   }
+   echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
+}
+
+?>
+
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Daftar Satuan</h1>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+	<div class="card-body">
+
+<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+	<div class="col-lg-12 mb-2">
+			<?php if(isset($_GET['edit_satuan'])){ ?>
+			<h1 class="h3 mb-2 text-gray-800">Edit</h1>
+				<?php }else{ ?>
+			<h1 class="h3 mb-2 text-gray-800">Tambah</h1>
+				<?php } ?>
+		<div class="input-group">
+			<?php if(isset($_GET['edit_satuan'])){ ?>
+			<input type="hidden" name="id_satuan" value="<?php echo $_GET['edit_satuan']; ?>" class="form-control">
+				<?php } ?>
+		  <input type="text" name="kode" placeholder="Kode" value="<?php if(isset($_GET['edit_satuan'])){ echo $_GET['edit_satuan'];}?>" class="form-control" required>
+		  <input type="text" name="satuan" placeholder="Nama" value="<?php if(isset($_GET['edit_satuan'])){ echo $_GET['nama_satuan'];}?>" class="form-control" required>
+		  <div class="input-group-prepend">
+			<?php if(isset($_GET['edit_satuan'])){ ?>
+			  <button type="submit" name="update_satuan" class="input-group-text"><span  id="">Update</span></button>
+				<?php }else{ ?>
+			  <button type="submit" name="simpan_satuan" class="input-group-text"><span  id="">Simpan</span></button>
+				<?php } ?>
+		  </div>
+
+		</div>
+	</div>
+</form>
+		<div class="table-responsive">
+			<table class="display table table-bordered" id="table2" width="100%" cellspacing="0">
+				<thead>
+					<tr>
+						<th>Kode</th>
+						<th>Nama</th>
+						<th>Aksi</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+					foreach ($data_satuan as $row) {
+						?>
+					<tr>
+						<td><?php echo $row->id;?></td>
+						<td><?php echo $row->nama;?></td>
+						<td>
+						<center>
+							<a href="toko_setting.php?edit_satuan=<?php echo $row->id;?>&&nama_satuan=<?php echo $row->nama;?>"><i class="fa-solid fa-pen-to-square"></i></a>
+							&nbsp
+							<a href="toko_setting.php?hapus_satuan=<?php echo $row->id;?>"><i class="fa-solid fa-trash-can"></i></a>
+						</center>
+						</td>
+					</tr>
+					<?php } ?>
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<?php
+
+
+if(isset($_POST['simpan_konversi'])){
+	$aksi = $qb->insert('konversi', [
+	 'barang' => $_POST['barang'],
+	 'konversi' => $_POST['konversi'],
+	 'nilai' => $_POST['nilai'],
+	 'harga' => $_POST['harga'],
+	 'id_user' => $_SESSION['id_user']
+   ]);
+
+   if($aksi){
+	   echo '<div class="col-lg-12 mb-4">
+		   <div class="card bg-success text-white shadow">
+			   <div class="card-body">
+				   Berhasil
+				   <div class="text-white-50 small">Data Tersimpan</div>
+			   </div>
+		   </div>
+	   </div>';
+   }else{
+	   echo '<div class="col-lg-12 mb-4">
+	   <div class="card bg-danger text-white shadow">
+		   <div class="card-body">
+			   Gagal
+			   <div class="text-white-50 small">Data Gagal Tersimpan</div>
+		   </div>
+		   </div>
+	   </div>';
+   }
+}
+
+if(isset($_POST['update_konversi'])){
+
+	$aksi = $qb->RAW("UPDATE konversi set barang=?,konversi=?,nilai=?,harga=? WHERE id=?",[$_POST['barang'],$_POST['konversi'],$_POST['nilai'],$_POST['harga'],$_POST['id_konversi']]);
+
+   if($aksi){
+	   echo '<div class="col-lg-12 mb-4">
+		   <div class="card bg-success text-white shadow">
+			   <div class="card-body">
+				   Berhasil
+				   <div class="text-white-50 small">Data Tersimpan</div>
+			   </div>
+		   </div>
+	   </div>';
+   }else{
+	   echo '<div class="col-lg-12 mb-4">
+	   <div class="card bg-danger text-white shadow">
+		   <div class="card-body">
+			   Gagal
+			   <div class="text-white-50 small">Data Gagal Tersimpan</div>
+		   </div>
+		   </div>
+	   </div>';
+   }
+   echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
+}
+
+if(isset($_GET['hapus_konversi'])){
+   $aksi = $qb->RAW(
+   "DELETE from konversi where id=".$_GET['hapus_konversi'],[]);
+   if($aksi){
+	   echo '<div class="col-lg-12 mb-4">
+		   <div class="card bg-success text-white shadow">
+			   <div class="card-body">
+				   Berhasil
+				   <div class="text-white-50 small">Data Terhapus</div>
+			   </div>
+		   </div>
+	   </div>';
+   }else{
+	   echo '<div class="col-lg-12 mb-4">
+	   <div class="card bg-danger text-white shadow">
+		   <div class="card-body">
+			   Gagal
+			   <div class="text-white-50 small">Data Gagal Terhapus</div>
+		   </div>
+		   </div>
+	   </div>';
+   }
+   echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
+}
+
+$data_konversi = $qb->RAW(
+"SELECT
+	 *
+	,toko_menu.id as id_barang
+	,toko_menu.nama as nama_barang
+	, konversi.id as id
+	, satuan.id as id_satuan
+	, satuan.nama as nama_satuan
+FROM konversi
+join toko_menu on toko_menu.id=konversi.barang 
+join satuan on satuan.id=konversi.konversi 
+where konversi.id_user=?",[$_SESSION['id_user']]);
+
+?>
+
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Daftar Konversi barang</h1>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+	<div class="card-body">
+
+<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
+	<div class="col-lg-12 mb-2">
+			<?php if(isset($_GET['edit_konversi'])){ ?>
+			<h1 class="h3 mb-2 text-gray-800">Edit</h1>
+				<?php }else{ ?>
+			<h1 class="h3 mb-2 text-gray-800">Tambah</h1>
+				<?php } ?>
+		<div class="input-group">
+			<?php if(isset($_GET['edit_konversi'])){ ?>
+			<input type="hidden" name="id_konversi" value="<?php echo $_GET['edit_konversi']; ?>" class="form-control">
+				<?php } ?>
+		  <select class="form-control" name="barang" >
+				<?php 
+				foreach ($data_menu as $key) {
+					if(isset($_GET['barang_konversi']) &&  $_GET['barang_konversi'] == $key->id){
+						echo"<option value='".$key->id."' selected>".$key->nama."</option>";
+					}else{
+						echo"<option value='".$key->id."'>".$key->nama."</option>";
+					}
+				}
+				?>
+		  </select>
+		  <select class="form-control" name="konversi" >
+				<?php 
+				foreach ($data_satuan as $key) {
+					if(isset($_GET['konversi']) &&  $_GET['konversi'] == $key->id){
+						echo"<option value='".$key->id."' selected>".$key->nama."</option>";
+					}else{
+						echo"<option value='".$key->id."'>".$key->nama."</option>";
+					}
+				}
+				?>
+		  </select>
+		  <!-- <input type="text" name="konversi" placeholder="Satuan" value="<?php if(isset($_GET['edit_konversi'])){ echo $_GET['konversi'];}?>" class="form-control" required> -->
+		  <input type="number" name="harga" placeholder="Harga" value="<?php if(isset($_GET['edit_konversi'])){ echo $_GET['harga_konversi'];}?>" class="form-control" required>
+		  <input type="number" name="nilai" placeholder="Nilai" value="<?php if(isset($_GET['edit_konversi'])){ echo $_GET['nilai_konversi'];}?>" class="form-control" required>
+		  <div class="input-group-prepend">
+			<?php if(isset($_GET['edit_konversi'])){ ?>
+			  <button type="submit" name="update_konversi" class="input-group-text"><span  id="">Update</span></button>
+				<?php }else{ ?>
+			  <button type="submit" name="simpan_konversi" class="input-group-text"><span  id="">Simpan</span></button>
+				<?php } ?>
+		  </div>
+
+		</div>
+	</div>
+</form>
+		<div class="table-responsive">
+			<table class="display table table-bordered" id="table3" width="100%" cellspacing="0">
+				<thead>
+					<tr>
+						<th>Barang</th>
+						<th>Satuan</th>
+						<th>Banyak</th>
+						<th>Harga</th>
+						<th>Aksi</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+					foreach ($data_konversi as $row) {
+						?>
+					<tr>
+						<td><?php echo $row->nama_barang;?></td>
+						<td><?php echo $row->nama_satuan;?></td>
+						<td><?php echo $row->nilai;?></td>
+						<td><?php echo $row->harga;?></td>
+						<td>
+						<center>
+							<a href="toko_setting.php?edit_konversi=<?php echo $row->id;?>&&barang_konversi=<?php echo $row->id_barang;?>&&konversi=<?php echo $row->id_satuan;?>&&nilai_konversi=<?php echo $row->nilai;?>&&harga_konversi=<?php echo $row->harga;?>"><i class="fa-solid fa-pen-to-square"></i></a>
+							&nbsp
+							<a href="toko_setting.php?hapus_konversi=<?php echo $row->id;?>"><i class="fa-solid fa-trash-can"></i></a>
+						</center>
+						</td>
+					</tr>
+					<?php } ?>
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
 </div>
 
 <?php require "partials/footer.php"; ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+  $('table.display').DataTable();
+} );
+</script>
