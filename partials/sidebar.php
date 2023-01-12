@@ -91,7 +91,9 @@
             else if($page == 'input_nilai.php' && $nilai == 0){header("Location: home.php");}
             // transaksi
             else if($page == 'topup.php' && $topup == 0){header("Location: home.php");}
+
             else if($page == 'merchan.php' && $merchan == 0){header("Location: home.php");}
+            else if($page == 'pembelian.php' && $merchan == 0){header("Location: home.php");}
             // spp
             else if($page == 'spp.php' && $spp == 0){header("Location: home.php");}
             else if($page == 'akses_gerbang.php' && $akses_gerbang == 0){header("Location: home.php");}
@@ -418,8 +420,8 @@
 
             <?php 
         }
-            if($topup == 1 || $merchan == 1 ){
-            if($page=='topup.php' || $page=='merchan.php'){
+        if($topup == 1){
+            if($page=='topup.php'){
                 echo '<li class="nav-item active">';
             }else{
                 echo '<li class="nav-item">';}
@@ -432,7 +434,7 @@
                 </a>
                 <div id="collapseTwo" 
                 <?php 
-                if($page=='topup.php' || $page=='merchan.php'){
+                if($page=='topup.php'){
                     echo 'class="collapse show"';
                 }else{
                     echo 'class="collapse"';}
@@ -449,15 +451,52 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="topup.php">Topup</a>
-                        <?php }if($merchan == 1 ){ ?>
+                        <?php } ?>
+                    </div>
+                </div>
+            </li>
+            <?php 
+        }
+        if($merchan == 1 ){
+            if($page=='merchan.php'){
+                echo '<li class="nav-item active">';
+            }else{
+                echo '<li class="nav-item">';}
+            ?>
+            <!-- <li class="nav-item active"> -->
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsetoko"
+                    aria-expanded="true" aria-controls="collapsetoko">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Toko</span>
+                </a>
+                <div id="collapsetoko" 
+                <?php 
+                if($page=='merchan.php' || $page=='pembelian.php'){
+                    echo 'class="collapse show"';
+                }else{
+                    echo 'class="collapse"';}
+                ?>
+                aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <?php if($merchan == 1 ){ ?>
                         <a 
                         <?php 
-                        if($page=='merchan.php'){
+                        if($page=='merchan.php' || $page=='pembelian.php'){
                             echo 'class="collapse-item active"';
                         }else{
                             echo 'class="collapse-item"';}
                         ?> 
-                        href="merchan.php">Toko</a>
+                        href="merchan.php">Penjualan</a>
+                        <?php } if($merchan == 1 ){ ?>
+                        <a 
+                        <?php 
+                        if($page=='pembelian.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="pembelian.php">Pembelian</a>
                         <?php } ?>
                     </div>
                 </div>

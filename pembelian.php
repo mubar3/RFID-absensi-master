@@ -40,44 +40,16 @@
 	} ?>
 		<h2 class="text-primary mt-4">Debet Saldo </h2>
 
-
-        <script type="text/javascript">
-        function Check() {
-            if (document.getElementById('yesCheck').checked) {
-                document.getElementById('ifYes').style.display = 'block';
-                document.getElementById('ifNo').style.display = 'none';
-            } 
-            else {
-                document.getElementById('ifYes').style.display = 'none';
-                document.getElementById('ifNo').style.display = 'block';
-
-           }
-        }
-
-        </script>
-        <input type="radio" onclick="Check();" class="" id="yesCheck" value="1" name="pakai_resep[]" ><label>Manual</label>
-        <input type="radio" onclick="Check();" class="" value="0" name="pakai_resep[]" checked><label>Tidak</label>
-        <!-- <input type="radio" name="pakai_resep[]" checked><label>Tidak</label> -->
-
-		<div class="form-group" id="ifYes" style="display:none">
-			<label for="rfidnumber">Keperluan</label>
-			<input type="text" class="form-control" id="keperluan" aria-describedby="rfidnumber" placeholder="Keperluan">
-			<label for="rfidnumber">Banyak (Rp)</label>
-			<input type="text" class="form-control" id="rp" aria-describedby="rfidnumber" placeholder="Rp.">
-			<label for="rfidnumber">RFID Tag Number</label>
-			<input type="text" class="form-control" id="inputs" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
-			<small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Abscence</small>
-		</div>
-
-		<div class="form-group" id="ifNo" style="display:block">
+		<div class="form-group">
 			<label for="rfidnumber">Qrcode</label>
 			<input type="text" id="qrcode" class="form-control" class="form-control">
 			<label for="rfidnumber">Data Barang</label>
 			<div id="newinput"></div>
 			<!-- <input type="text" id="datas" class="form-control" data-role="tagsinput"  name="tags" class="form-control"> -->
-			<label for="rfidnumber">RFID Tag Number</label>
-			<input type="text" class="form-control" id="inputs2" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
-			<small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Abscence</small>
+			<label for="rfidnumber">Tanggal Bayar</label>
+			<input type="date" class="form-control" id="tgl_bayar" placeholder="Tanggal" required>
+			<center><button href="javascript:void(0);" onclick="simpan_penj()" class="btn btn-primary" >Simpan</button></center>
+			<!-- <small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Abscence</small> -->
 			<div class="card shadow mb-4">
         <div class="card-body">
 						<center><h5>Daftar Barang</h5></center>
@@ -180,6 +152,26 @@
 			<h3 id="classInformation"></h3>
 			<!-- <div class="p-3 mb-2 text-white" id="tampilMessage"> -->
 			<div class="p-3" id="tampilMessage">
+				<?php 
+				if(isset($_GET['hapus_id'])){
+					$aksi = $qb->RAW("SELECT * FROM pembelian_detail WHERE id_pembelian=?",[$_GET['hapus_id']]);
+					foreach ($aksi as $value) {
+						$barang = $qb->RAW("SELECT * FROM toko_menu WHERE id=?",[$value->barang]);
+						$barang=$barang[0];
+						$dt=$barang->stok - $value->jumlah;
+						$qb->RAW("UPDATE toko_menu set stok=? WHERE id=?",[$dt,$value->barang]);
+					}
+
+					$qb->RAW("DELETE from pembelian_detail where id_pembelian=?",[$_GET['hapus_id']]);
+					$aksi=$qb->RAW("DELETE from pembelian where id=?",[$_GET['hapus_id']]);
+					if($aksi){
+						echo "<div class='p-3 mb-2 bg-success'>Hapus transaksi berhasil</div>";
+					}else{
+						echo "<div class='p-3 mb-2 bg-danger'>Hapus transaksi gagal<div>";
+					}
+					
+				}
+				?>
 				<!-- <b>Name</b> : Daniel Aditama <b>Course</b> : ERP Planning <b>Date/Time</b> : Mon,9-10-17/07:59:59 <b>Status</b>: Early -->
 			</div>
 			<div class="alert" role="alert"></div>
@@ -188,7 +180,7 @@
 		$tanggal='Hari Ini';
 		if(isset($_POST['cari_transaksi'])){$tanggal='';}
 		?>
-	<h1 class="h3 mb-2 text-gray-800">Riwayat Transaksi Toko <?php echo $tanggal; ?></h1>
+	<h1 class="h3 mb-2 text-gray-800">Riwayat Pembelian <?php echo $tanggal; ?></h1>
 	<div class="col-lg-12 mb-2">
 		<form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
 		<div class="input-group">
@@ -200,27 +192,15 @@
 		</div>
 		</form>
 	</div>
-    <div class="card shadow mb-4" id='here'>
-        <div class="card-body">
+    <div class="card shadow mb-4">
+        <div class="card-body" id='here'>
         	<div class="table-responsive">
         	<table class="table table-bordered" width="100%" cellspacing="0">
 	            <thead>
 	                <tr>
-	                    <!-- <th>Nama</th>
-	                    <th>NIS</th>
-	                    <th>Lembaga/Sekolah Siswa</th>
-	                    <th>Lembaga/Sekolah Transaksi</th>
-	                    <th>SubUser Transaksi</th>
-	                    <th>Toko</th>
-	                    <th>Pembelian</th>
-	                    <th>Banyak</th>
-	                    <th>Harga</th> -->
-
-	                    <th>Nama</th>
-	                    <th>NIS</th>
-	                    <th>Lembaga/Sekolah</th>
-	                    <th>Toko</th>
-	                    <th>Total</th>
+	                    <th>Jumlah</th>
+	                    <th>Tanggal Pembelian</th>
+	                    <th>Tanggal pembayaran</th>
 	                    <th>Aksi</th>
 	                </tr>
 	            </thead>
@@ -229,65 +209,27 @@
 	            	$id_user="user='".$_SESSION['id_user']."'";
 	            	if($_SESSION['role'] == 3){$id_user="subuser='".$_SESSION['sub_user']."'";}
 	            	if(isset($_POST['cari_transaksi'])){
-	            	// $saldo_log = $qb->RAW("SELECT (select count(id_log) from saldo_log x where ket=saldo_log.ket) as banyak_pemb,u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
-	            	// 	left join siswa on siswa.norf=saldo_log.id_rfid
-	            	// 	left join user on siswa.user_input=user.id_user
-	            	// 	left join user u1 on saldo_log.user=u1.id_user
-	            	// 	left join user u2 on saldo_log.subuser=u2.id_user
-	            	// 	where saldo_log.".$id_user." and DATE(saldo_log.waktu) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."' and saldo_log.jenis='keluar' 
-	            	// 	group by saldo_log.ket",[]);
-            		$saldo_log = $qb->RAW("select 
-            			u1.lembaga as userutama,u2.lembaga as subuser,siswa.nama,siswa.nis,t_toko.jumlah,user.lembaga,t_toko.id
-            			from t_toko
-            			left join siswa on siswa.norf=t_toko.rfid
-            			left join user on siswa.user_input=user.id_user
-            			left join user u1 on t_toko.user=u1.id_user
-            			left join user u2 on t_toko.subuser=u2.id_user
-            			where t_toko.".$id_user." and DATE(t_toko.waktu) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."'",[]);
+						$saldo_log = $qb->RAW("select *,date(waktu) as waktu from pembelian
+							where ".$id_user." and DATE(waktu) between '".$_POST['tanggal_awal']."' and '".$_POST['tanggal_akhir']."'",[]);
 	            	}else{
-	            	// $saldo_log = $qb->RAW("SELECT (select count(id_log) from saldo_log y where ket=saldo_log.ket) as banyak_pemb,u1.lembaga as userutama,u2.lembaga as subuser,user.lembaga,siswa.nama,siswa.nis,saldo_log.ket,saldo_log.banyak FROM saldo_log 
-	            	// 	left join siswa on siswa.norf=saldo_log.id_rfid
-	            	// 	left join user on siswa.user_input=user.id_user
-	            	// 	left join user u1 on saldo_log.user=u1.id_user
-	            	// 	left join user u2 on saldo_log.subuser=u2.id_user
-	            	// 	where saldo_log.".$id_user." and DATE(saldo_log.waktu) = CURDATE() and saldo_log.jenis='keluar' 
-	            	// 	group by saldo_log.ket",[]);
-            		$saldo_log = $qb->RAW("select 
-            			u1.lembaga as userutama,u2.lembaga as subuser,siswa.nama,siswa.nis,t_toko.jumlah,user.lembaga,t_toko.id
-            			from t_toko
-            			left join siswa on siswa.norf=t_toko.rfid
-            			left join user on siswa.user_input=user.id_user
-            			left join user u1 on t_toko.user=u1.id_user
-            			left join user u2 on t_toko.subuser=u2.id_user
-            			where t_toko.".$id_user." and DATE(t_toko.waktu) = CURDATE()",[]);
+						$saldo_log = $qb->RAW("select *,date(waktu) as waktu from pembelian
+							where ".$id_user." and DATE(waktu) = CURDATE()",[]);
 	            	}
 	            ?>
 	            <tbody>
 	            	
 
 	            	<?php foreach ($saldo_log as $log) { 
-	            		// $harga=enkripsiDekripsi($log->banyak, $kunciRahasia);
-	            		// $total=$total+($harga*$log->banyak_pemb);
 	            		$total=$total+(enkripsiDekripsi($log->jumlah, $kunciRahasia));
 	            		?>
 	                <tr>
-	                    <!-- <td><?php echo $log->nama; ?></td>
-	                    <td><?php echo $log->nis; ?></td>
-	                    <td><?php echo $log->lembaga; ?></td>
-	                    <td><?php echo $log->userutama; ?></td>
-	                    <td><?php echo $log->subuser; ?></td>
-	                    <td><?php echo $log->ket; ?></td>
-	                    <td><?php echo $log->banyak_pemb; ?></td>
-	                    <td><?php echo convertToRupiah($harga); ?></td> -->
 
-	                    <td><?php echo $log->nama; ?></td>
-	                    <td><?php echo $log->nis; ?></td>
-	                    <td><?php echo $log->lembaga; ?></td>
-	                    <td><?php echo $log->subuser; ?></td>
 	                    <td><?php echo convertToRupiah(enkripsiDekripsi($log->jumlah, $kunciRahasia)); ?></td>
+	                    <td><?php echo $log->waktu; ?></td>
+	                    <td><?php echo $log->pembayaran; ?></td>
 	                    <td>
                         <center>
-                            <a href="faktur_toko.php?id=<?php echo $log->id;?>" target="_blank"><i class="fa-solid fa-print"></i></a>
+                            <a href="pembelian.php?hapus_id=<?php echo $log->id;?>"><i class="fa-solid fa-trash-can"></i></a>
                         </center>
                     	</td>
 	                </tr>
@@ -322,101 +264,44 @@ $(document).ready(function() {
   // Input field langsung fokus
   // $('#inputs2').focus();
 
-  // jika ada perubahan di input field [ENTER], akan mentrigger
-  $("#inputs").change(function() {
-    var id = $('#inputs').val();
-    var isi = $('#rp').val();
-    var keperluan = $('#keperluan').val();
-    isi=isi.replace(/Rp. /g,'')
-		isi=isi.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'')
+  
+  
 
-    $.ajax({
-        url: 'aksimerchan.php',
-        type: 'post',
-        data: {
-          id: id,
-          isi: isi,
-          keperluan: keperluan
-        }
-      })
-      .done(function(data1) {
-        // console.log(data1);
-
-        // hapus alert danger dan sukses agar bisa bergantian class
-        // $('.alert').removeClass('alert-danger alert-success');
-        $('#tampilMessage').removeClass('bg-danger bg-success');
-
-        // if (data1 <= 0) {
-        //   // $('.alert').addClass('alert-danger').html("RFID belum terdaftar di dalam system kami: " + "<b>{ " + id + " }</b>");
-        //   $('#classInformation').html("Whoops, there was an error").addClass('display-4');
-        //   $('#tampilMessage').addClass('bg-danger').html("Saldo tidak cukup");
-        // } else {
-        //   // $('.alert').addClass('alert-success').html(data);
-        //   $('#classInformation').html("Class Information").addClass('display-4');
-          $('#tampilMessage').html(data1);
-        // }
-
-    	$('#rp').val("");
-    	$('#keperluan').val("");
-        $('#inputs').val(""); //Mengkosongkan input field
-        $('#inputs').focus(); //mengembalikan cursor ke input field
-
-      })
-      .fail(function(data1) {
-        console.log(data1);
-      });
-      updateDiv()
-  });
-
-  $("#inputs2").change(function() {
-
-	var harga = $('input[name="harga[]"]').map(function(){ return this.value;}).get();
-	var satuan = $('select[name="satuan[]"]').map(function(){ return this.value;}).get();
-	var jumlah = $('input[name="jumlah[]"]').map(function(){ return this.value;}).get();
-	var barang = $('input[name="barang[]"]').map(function(){ return this.value;}).get();
-    var id = $('#inputs2').val();
-
-    $.ajax({
-        url: 'aksimerchan.php',
-        type: 'post',
-        data: {
-          id2: id,
-          harga: harga,
-          satuan: satuan,
-          jumlah: jumlah,
-          barang: barang,
-        }
-      })
-      .done(function(data1) {
-        // console.log(data1);
-
-        // hapus alert danger dan sukses agar bisa bergantian class
-        // $('.alert').removeClass('alert-danger alert-success');
-        $('#tampilMessage').removeClass('bg-danger bg-success');
-
-        // if (data1 <= 0) {
-        //   // $('.alert').addClass('alert-danger').html("RFID belum terdaftar di dalam system kami: " + "<b>{ " + id + " }</b>");
-        //   $('#classInformation').html("Whoops, there was an error").addClass('display-4');
-        //   $('#tampilMessage').addClass('bg-danger').html("Saldo tidak cukup");
-        // } else {
-        //   // $('.alert').addClass('alert-success').html(data);
-        //   $('#classInformation').html("Class Information").addClass('display-4');
-          $('#tampilMessage').html(data1);
-        // }
-
-		$("#datas").tagsinput('removeAll');
-        $('#inputs2').val(""); //Mengkosongkan input field
-        $('#inputs2').focus(); //mengembalikan cursor ke input field
-
-		$('#row').remove();
-
-      })
-      .fail(function(data1) {
-        // console.log(data1);
-      });
-      updateDiv()
-  });
 });
+
+	function simpan_penj(){
+
+		var harga = $('input[name="harga[]"]').map(function(){ return this.value;}).get();
+		var satuan = $('select[name="satuan[]"]').map(function(){ return this.value;}).get();
+		var jumlah = $('input[name="jumlah[]"]').map(function(){ return this.value;}).get();
+		var barang = $('input[name="barang[]"]').map(function(){ return this.value;}).get();
+		var tgl_bayar = $('#tgl_bayar').val();
+
+		$.ajax({
+			url: 'aksi_pembelian.php',
+			type: 'post',
+			data: {
+			tgl_bayar: tgl_bayar,
+			harga: harga,
+			satuan: satuan,
+			jumlah: jumlah,
+			barang: barang,
+			}
+		})
+		.done(function(data1) {
+			$('#tampilMessage').removeClass('bg-danger bg-success');
+
+			$('#tampilMessage').html(data1);
+			
+			$('#row').remove();
+			$('#tgl_bayar').val("");
+
+		})
+		.fail(function(data1) {
+			// console.log(data1);
+		});
+		updateDiv()
+	};
 
   function updateDiv()
 	{ 
