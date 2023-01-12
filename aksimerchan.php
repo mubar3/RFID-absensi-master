@@ -126,23 +126,18 @@ if (isset($_POST['id'])) {
     }
 }
 else {
-  // $_POST['id2']
-  // $_POST['id_isi']
-  // $_POST['id_isi']=str_replace("on", "", $_POST['id_isi']);
-  // print_r($_POST['id_isi']);die();
-  if(empty($_POST['id_isi'])){echo "<div class='p-3 mb-2 bg-danger'>Pembelian Kosong<div>"; die();}
+  if(empty($_POST['barang'])){echo "<div class='p-3 mb-2 bg-danger'>Pembelian Kosong<div>"; die();}
     else{
-      $data_menu=explode(',', $_POST['id_isi']);
-      $banyak_pesanan=array_count_values($data_menu);
-      $total_menu=count($data_menu);
-      $total=0;
-            for($x=0;$x<$total_menu;$x++) {
-              $data_harga_menu= $qb->RAW(
-              "SELECT * FROM toko_menu where id=".$data_menu[$x],[]);
-              $data_harga_menu=$data_harga_menu[0];
-              // print_r($data_harga_menu[0]);die();
-              $total=$total+$data_harga_menu->harga;
-            }
+      $jumlah=$_POST['jumlah'];
+      $satuan=$_POST['satuan'];
+      $harga=$_POST['harga'];
+      $barang=$_POST['barang'];
+      $stok=array();
+        // CARI TOTAL
+        $total=0;
+        for ($i=0; $i <  count($barang); $i++) { 
+          $total=$total+($harga[$i]*$jumlah[$i]);
+        }
 
         $data = $qb->RAW(
         "SELECT * from siswa where norf = ?",
@@ -161,22 +156,36 @@ else {
 
         if($isi < 0){echo "<div class='p-3 mb-2 bg-danger'>Saldo Kurang<div>"; die();}
         
-        $stok=array();
-        $id_stok=array();
-        foreach ($banyak_pesanan as $key => $value) {
-          $data = $qb->RAW("SELECT * from toko_menu where id =?",[$key]);
-            if (!array_key_exists(0, $data)) {echo "<div class='p-3 mb-2 bg-danger'>Barang tidak tersedia<div>";die();}
-            $data = $data[0];
-            if($value > $data->stok){echo "<div class='p-3 mb-2 bg-danger'>Stok ".$data->nama." kurang<div>";die();}
-            array_push($stok,$data->stok);;
-            array_push($id_stok,$data->id);;
+        // CEK BARANG DAN STOK
+        for ($i=0; $i <  count($barang); $i++) { 
+          $data = $qb->RAW("SELECT * from toko_menu where id =?",[$barang[$i]]);
+          if (!array_key_exists(0, $data)) {echo "<div class='p-3 mb-2 bg-danger'>Barang tidak tersedia<div>";die();}
+          $data = $data[0];
+          if($data->satuan == $satuan[$i] && $data->satuan != ''){
+            if($jumlah[$i] > $data->stok){
+              echo "<div class='p-3 mb-2 bg-danger'>Stok ".$data->nama." kurang<div>";die();
+            }
+            array_push($stok,$jumlah[$i]);
+          }else{
+            $data2 = $qb->RAW("SELECT * from konversi where konversi =?",[$satuan[$i]]);
+            if (!array_key_exists(0, $data2)) {echo "<div class='p-3 mb-2 bg-danger'>Satuan tidak valid<div>";die();}
+            $data2 = $data2[0];
+            $jumlah_p=$jumlah[$i]/$data2->nilai;
+            array_push($stok,$jumlah_p);
+            if($jumlah_p > $data->stok){
+              echo "<div class='p-3 mb-2 bg-danger'>Stok ".$data->nama." kurang<div>";die();
+            }        
+
+          }
+        
         }
-        $i=0;
-        foreach ($banyak_pesanan as $key => $value){
-          $stok_akhir=(int)$stok[$i]-$value;
-          // echo $stok[$i];die();
-          $data = $qb->RAW( "UPDATE toko_menu SET stok=? where id =?",[$stok_akhir,$id_stok[$i]]);
-          $i++;
+        
+        // KURANGI STOK
+        for ($i=0; $i <  count($barang); $i++) { 
+          $data = $qb->RAW("SELECT * from toko_menu where id =?",[$barang[$i]]);
+          $data = $data[0];
+          $stok_akhir=$data->stok - $stok[$i];
+          $data = $qb->RAW( "UPDATE toko_menu SET stok=? where id =?",[$stok_akhir,$barang[$i]]);
         }
 
         $isi=strval($isi);
@@ -196,24 +205,24 @@ else {
                   'subuser' => $subuser
                 ]);
               $transaksi=$qb->pdo->lastInsertId();
-        $jumlah=0;
-        for($x=0;$x<$total_menu;$x++) {
+
+            for ($i=0; $i <  count($barang); $i++) { 
               $data_harga_menu = $qb->RAW(
-              "SELECT * FROM toko_menu where id=".$data_menu[$x],[]);
+              "SELECT * FROM toko_menu where id=?",[$barang[$i]]);
               $data_harga_menu=$data_harga_menu[0];
-              $qb->insert('saldo_log', [
-                  'id_rfid' => $_POST['id2'],
-                  'banyak' => enkripsiDekripsi(strval($data_harga_menu->harga), $kunciRahasia),
-                  'ket' => $data_harga_menu->nama,
-                  'jenis' => 'keluar',
-                  'user' => $_SESSION['id_user'],
-                  'subuser' => $subuser,
-                  'id_transaksi' => $transaksi
-                ]);     
-              $jumlah=$jumlah+$data_harga_menu->harga;
+              for ($x=0; $x < $jumlah[$i]; $x++) { 
+                $qb->insert('saldo_log', [
+                    'id_rfid' => $_POST['id2'],
+                    'banyak' => enkripsiDekripsi(strval($harga[$i]), $kunciRahasia),
+                    'ket' => $data_harga_menu->nama,
+                    'jenis' => 'keluar',
+                    'user' => $_SESSION['id_user'],
+                    'subuser' => $subuser,
+                    'id_transaksi' => $transaksi,
+                    'satuan' => $satuan[$i]
+                  ]);     
+              }
             }
-        $qb->RAW("UPDATE t_toko set jumlah=? where id = ?",[enkripsiDekripsi(strval($jumlah), $kunciRahasia),$transaksi]);
-        // input log
 
         $merchan=$total;
         //topup merhcan
@@ -243,8 +252,8 @@ else {
             "SELECT kelas.kelas as nama_kelas ,nama, last_update, NOW()
             AS absen from siswa 
             left join kelas on kelas.id_kelas=siswa.kelas
-            where siswa.user_input=".$_SESSION['id_user']." and siswa.norf =".$_POST['id2'],
-             []);
+            where siswa.user_input= ? and siswa.norf = ?",
+             [$_SESSION['id_user'],$_POST['id2']]);
             $nama='';
             $kelas='';
             if(array_key_exists(0, $siswa)){

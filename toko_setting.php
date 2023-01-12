@@ -404,7 +404,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 			  <input type="file" name="gambar" placeholder="gambar" class="form-control">
 			  <input type="text" name="nama" placeholder="Nama*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['menu'];}?>" class="form-control" required>
 			  <input type="number" name="harga" placeholder="Harga*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['harga'];}?>" class="form-control" required>
-			  <input type="number" name="stok" placeholder="Stok*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['stok'];}?>" class="form-control" required>
+			  <input type="text" name="stok" placeholder="Stok*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['stok'];}?>" class="form-control" required>
 
 			</div>
 			<div class="input-group">

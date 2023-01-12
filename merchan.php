@@ -73,7 +73,8 @@
 			<label for="rfidnumber">Qrcode</label>
 			<input type="text" id="qrcode" class="form-control" class="form-control">
 			<label for="rfidnumber">Data Barang</label>
-			<input type="text" id="datas" class="form-control" data-role="tagsinput"  name="tags" class="form-control">
+			<div id="newinput"></div>
+			<!-- <input type="text" id="datas" class="form-control" data-role="tagsinput"  name="tags" class="form-control"> -->
 			<label for="rfidnumber">RFID Tag Number</label>
 			<input type="text" class="form-control" id="inputs2" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
 			<small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Abscence</small>
@@ -115,7 +116,7 @@
 									<th>Gambar</th>
 									<th>Barang</th>
 									<th>Stok</th>
-									<th>Satuan Konversi</th>
+									<!-- <th>Satuan Konversi</th> -->
 									<th>Harga</th>
 									<th>Aksi</th>
 								</tr>
@@ -130,16 +131,17 @@
 									</td>
 									<td><?php echo $menu->nama; ?></td>
 									<td><?php echo $menu->stok; ?></td>
-									<td>
+									<!-- <td>
 										<?php $dt = $qb->RAW("SELECT * FROM konversi where barang=?",[$menu->id]);?>
 										<select>
 											<?php foreach ($dt as $row) {?>
 												<option value="<?php echo $row->id ?>"><?php echo $row->konversi ?></option>
 											<?php } ?>
 										</select>
-									</td>
+									</td> -->
 									<td><?php echo convertToRupiah($menu->harga); ?></td>
-									<td><button href="javascript:void(0);" value="<?php echo $menu->nama.','.$menu->id;?>" class="datas btn btn-primary"style=" font-size:12px!important;">Tambah</button></td>
+									<!-- <td><button href="javascript:void(0);" value="<?php echo $menu->nama.','.$menu->id;?>" class="datas btn btn-primary"style=" font-size:12px!important;">Tambah</button></td> -->
+									<td><button href="javascript:void(0);" onclick="add_barang(<?php echo $menu->id;?>)" class="datas btn btn-primary"style=" font-size:12px!important;">Tambah</button></td>
 								</tr>
 							<?php } ?>
 								
@@ -367,16 +369,22 @@ $(document).ready(function() {
   });
 
   $("#inputs2").change(function() {
-  	// alert('aaaa');
+
+	var harga = $('input[name="harga[]"]').map(function(){ return this.value;}).get();
+	var satuan = $('select[name="satuan[]"]').map(function(){ return this.value;}).get();
+	var jumlah = $('input[name="jumlah[]"]').map(function(){ return this.value;}).get();
+	var barang = $('input[name="barang[]"]').map(function(){ return this.value;}).get();
     var id = $('#inputs2').val();
-    var id_isi = $('#datas').val();
 
     $.ajax({
         url: 'aksimerchan.php',
         type: 'post',
         data: {
           id2: id,
-          id_isi: id_isi
+          harga: harga,
+          satuan: satuan,
+          jumlah: jumlah,
+          barang: barang,
         }
       })
       .done(function(data1) {
@@ -452,21 +460,65 @@ var rupiah = document.getElementById('rp');
 	    });
 		let text = '';
 		$("#qrcode").change(function() {
+			add_barang($('#qrcode').val());
+		});
+
+		function add_barang(id){
 			// let text = '';
 			$.ajax({
-				url: 'name_toko.php?id='+$('#qrcode').val(),
-				type: 'get'
+				url: 'name_toko.php?id='+id,
+				type: 'get',
+				dataType:'json',
 			})
 			.done(function(data1) {
-				// console.log(data1);
-				text = data1;
-				// processResult(data1);
-				
-				if(text == ''){
+				// console.log(data1[0]);
+				// return;
+				if(data1.length < 1){
 					alert('Data Kosong');
 				}else{
-					const myArray = text.split(",");
-					$("#datas").tagsinput('add', { id:myArray[1] , label: myArray[0] });
+					// const myArray = text.split(",");
+					// $("#datas").tagsinput('add', { id:myArray[1] , label: myArray[0] });
+
+					newRowAdd =
+					'<div class="input-group" id="row">'+
+							'<input type="hidden" id="barang'+data1[0].id+'" class="form-control" name="barang[]" value="'+data1[0].id+'" required>'+
+							'<input type="text" class="form-control" placeholder="Barang" value="'+data1[0].nama+'" readonly>'+
+							'<input type="text" class="form-control" placeholder="Stok" value="Stok : '+data1[0].stok+'" readonly>'+
+							'<span class="input-group-text">Jumlah :</span>'+
+							'<input type="number" class="form-control" placeholder="Jumlah" name="jumlah[]" value="1" >'+
+							'<select id="satuan'+data1[0].id+'" onchange="myFunction'+data1[0].id+'()" class="form-control" name="satuan[]" required>'+
+								'<option value="'+data1[0].satuan+'">Satuan : '+data1[0].nama_satuan+'</option>';
+							// '@foreach($barang as $dt)'+
+							// '<option value="{{ $dt->id }}" >{{ $dt->kode_barang."-".$dt->nama."-stok:".$dt->stok }}</option>'+
+							// '@endforeach'+
+					konversi=data1[0].konversi;
+					for (let index = 0; index < konversi.length; index++) {
+						newRowAdd = newRowAdd+'<option value="'+konversi[index].konversi+'">'+konversi[index].nama_satuan+'</option>';
+					}
+					newRowAdd = newRowAdd+'</select>'+
+						'<span class="input-group-text">Harga :</span>'+
+							'<input type="number" id="harga'+data1[0].id+'" class="form-control" name="harga[]" placeholder="Harga" value="'+data1[0].harga+'" readonly>'+
+						'<div class="input-group-prepend">'+
+							'<button class="btn btn-danger form-control" id="DeleteRow" type="button"><i class="fa-solid fa-trash-can"></i>Delete</button>'+
+						'</div>'+
+					'</div>'+
+					'<script>'+
+						// '$("#satuan'+data1[0].id+'").on("change",function() {'+
+						'function myFunction'+data1[0].id+'() {'+
+							// 'alert("haha");'+
+							'$.ajax({'+
+										'url: "ajax_harga.php?barang="+$("#barang'+data1[0].id+'").val()+"&&id="+$("#satuan'+data1[0].id+'").val(),'+
+										'type: "get",'+
+										'dataType:"json",'+
+									'})'+
+							'.done(function(data1) {'+
+								'$("#harga'+data1[0].id+'").val(data1[0].harga);'+
+							'})'+
+						'};'+
+						// '});'+
+					'</\script>';
+
+					$('#newinput').append(newRowAdd);
 				}
 				
 				$('#qrcode').val(""); //Mengkosongkan input field
@@ -476,7 +528,11 @@ var rupiah = document.getElementById('rp');
 			// alert(text);
 			// return;
 
-		});
+		};
+
+		$("body").on("click", "#DeleteRow", function () {
+			$(this).parents("#row").remove();
+		})
 
 		// function processResult(result){
 		// 	// console.log("The result is: " + result)
