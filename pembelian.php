@@ -189,6 +189,9 @@
 			 <span class="input-group-text" id="basic-addon1">Sampai</span>
 			<input type="date" class="form-control" value="<?php echo $_POST['tanggal_akhir'];?>" name="tanggal_akhir">
 			<button type="submit" name="cari_transaksi" class="input-group-text"><span  id="">cari</span></button>
+			<?php if(isset($_POST['tanggal_akhir'])){ ?>
+				<a class="btn btn-primary" target="_Blank" href="download_excel_pembelian.php?awal=<?php echo $_POST['tanggal_awal']; ?>&&akhir=<?php echo $_POST['tanggal_akhir']; ?>"><span class="glyphicon glyphicon-download"></span>Download excel</a>
+			<?php } ?>
 		</div>
 		</form>
 	</div>
