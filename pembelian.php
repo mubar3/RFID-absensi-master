@@ -229,9 +229,41 @@
 	                    <td><?php echo $log->pembayaran; ?></td>
 	                    <td>
                         <center>
+							<a data-toggle="collapse" data-target="#demo<?php echo $log->id; ?>"><i class="fas fa-eye"></i></a>
+							||
                             <a href="pembelian.php?hapus_id=<?php echo $log->id;?>"><i class="fa-solid fa-trash-can"></i></a>
                         </center>
                     	</td>
+	                </tr>
+	                <tr  class="collapse" id="demo<?php echo $log->id; ?>">
+						<?php $detail = $qb->RAW("select 
+								pembelian_detail.*, 
+								toko_menu.nama as nama_barang,
+								satuan.nama as satuan_konversi,
+								s2.nama as satuan_asli
+							from pembelian_detail
+							join toko_menu on toko_menu.id = pembelian_detail.barang
+							join satuan on satuan.id = pembelian_detail.satuan
+							join satuan s2 on s2.id = toko_menu.satuan
+							where pembelian_detail.id_pembelian = ? ",[$log->id]); ?>
+						<td></td>
+						<td>
+							<b>Barang</b> <br>
+							<?php 
+								foreach ($detail as $key) {
+									echo $key->nama_barang.'<br>';
+								}
+							?>
+						</td>
+						<td>
+							<b>Banyak</b> <br>
+							<?php 
+								foreach ($detail as $key) {
+									echo $key->jumlah.' '.$key->satuan_asli.' / '.$key->jumlah_satuan.' '.$key->satuan_konversi.'<br>';
+								}
+							?>
+						</td>
+						<td></td>
 	                </tr>
 	                `<?php } ?>
 	            </tbody>

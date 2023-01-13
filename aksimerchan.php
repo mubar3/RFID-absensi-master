@@ -202,6 +202,7 @@ else {
               $transaksi = $qb->insert('t_toko', [
                   'rfid' => $_POST['id2'],
                   'user' => $_SESSION['id_user'],
+                  'jumlah' => enkripsiDekripsi(strval($total), $kunciRahasia),
                   'subuser' => $subuser
                 ]);
               $transaksi=$qb->pdo->lastInsertId();

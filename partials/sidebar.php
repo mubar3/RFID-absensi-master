@@ -458,7 +458,7 @@
             <?php 
         }
         if($merchan == 1 ){
-            if($page=='merchan.php'){
+            if($page=='merchan.php' || $page=='pembelian.php'){
                 echo '<li class="nav-item active">';
             }else{
                 echo '<li class="nav-item">';}
@@ -482,7 +482,7 @@
                         <?php if($merchan == 1 ){ ?>
                         <a 
                         <?php 
-                        if($page=='merchan.php' || $page=='pembelian.php'){
+                        if($page=='merchan.php'){
                             echo 'class="collapse-item active"';
                         }else{
                             echo 'class="collapse-item"';}
