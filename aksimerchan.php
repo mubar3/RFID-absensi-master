@@ -220,7 +220,10 @@ else {
                     'user' => $_SESSION['id_user'],
                     'subuser' => $subuser,
                     'id_transaksi' => $transaksi,
-                    'satuan' => $satuan[$i]
+                    'satuan' => $satuan[$i],
+                    'jumlah' => $stok[$i],
+                    'jumlah_satuan' => $jumlah[$i],
+                    'barang' => $barang[$i]
                   ]);     
               }
             }
