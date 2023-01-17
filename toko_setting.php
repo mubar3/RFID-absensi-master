@@ -93,6 +93,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 				
 				$aksi = $qb->insert('toko_menu', [
 				'harga' => $_POST['harga'],
+				'harga_pokok' => $_POST['harga_pokok'],
 				'nama' => $_POST['nama'],
 				'stok' => $_POST['stok'],
 				'satuan' => $_POST['satuan'],
@@ -132,7 +133,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 				$cek = $qb->RAW("SELECT * FROM toko_menu where qr = ? and qr != '' and id != ? ",[$_POST['qr'],$_POST['id_menu']]);
 			}
 
-			if(array_key_exists(0, $cek)){
+			if($cek != '' && array_key_exists(0, $cek)){
 	        	echo '<div class="col-lg-12 mb-4">
 		        <div class="card bg-danger text-white shadow">
 		            <div class="card-body">
@@ -170,7 +171,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 					}
 				}
 
-				$aksi = $qb->RAW("UPDATE toko_menu set harga=?,nama=?,gambar=?,stok=?,satuan=?,jenis=?,qr=? WHERE id=?",[$_POST['harga'],$_POST['nama'],$filename,$_POST['stok'],$_POST['satuan'],$_POST['jenis'],$_POST['qr'],$_POST['id_menu']]);
+				$aksi = $qb->RAW("UPDATE toko_menu set harga=?,harga_pokok=?,nama=?,gambar=?,stok=?,satuan=?,jenis=?,qr=? WHERE id=?",[$_POST['harga'],$_POST['harga_pokok'],$_POST['nama'],$filename,$_POST['stok'],$_POST['satuan'],$_POST['jenis'],$_POST['qr'],$_POST['id_menu']]);
 
 				if($aksi){
 					echo '<div class="col-lg-12 mb-4">
@@ -271,6 +272,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 								'satuan' => $data->val($i, 4),
 								'jenis' => $data->val($i, 5),
 								'qr' => $data->val($i, 6),
+								'harga_pokok' => $data->val($i, 7),
 								'id_user' => $_SESSION['id_user']
 								]);
 
@@ -408,6 +410,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 			</div>
 			<div class="input-group">
+			    <input type="number" name="harga_pokok" placeholder="Harga pokok*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['harga_pokok'];}?>" class="form-control" required>
 				<select class="form-control" name="satuan">
 					<option value="">Satuan</option>
 					<?php foreach ($data_satuan as $row) {
@@ -465,7 +468,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             <td><?php echo $data_user->stok;?></td>
                             <td>
                             <center>
-                            	<a href="toko_setting.php?edit_menu=<?php echo $data_user->id;?>&&menu=<?php echo $data_user->nama;?>&&harga=<?php echo $data_user->harga;?>&&foto=<?php echo $data_user->gambar;?>&&stok=<?php echo $data_user->stok;?>&&satuan=<?php echo $data_user->satuan;?>&&jenis=<?php echo $data_user->jenis;?>&&qr=<?php echo $data_user->qr;?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                            	<a href="toko_setting.php?edit_menu=<?php echo $data_user->id;?>&&menu=<?php echo $data_user->nama;?>&&harga=<?php echo $data_user->harga;?>&&harga_pokok=<?php echo $data_user->harga_pokok;?>&&foto=<?php echo $data_user->gambar;?>&&stok=<?php echo $data_user->stok;?>&&satuan=<?php echo $data_user->satuan;?>&&jenis=<?php echo $data_user->jenis;?>&&qr=<?php echo $data_user->qr;?>"><i class="fa-solid fa-pen-to-square"></i></a>
                             	&nbsp
                             	<a href="toko_setting.php?hapus_menu=<?php echo $data_user->id;?>&&foto_menu=<?php echo $data_user->gambar;?>"><i class="fa-solid fa-trash-can"></i></a>
                             </center>

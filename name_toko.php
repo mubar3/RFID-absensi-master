@@ -30,6 +30,7 @@ if (array_key_exists(0, $data_menu)) {
         'satuan' => $data_menu->satuan,
         'nama_satuan' => $data_menu->nama_satuan,
         'harga' => $data_menu->harga,
+        'harga_pokok' => $data_menu->harga_pokok,
         'stok' => $data_menu->stok,
         'konversi' => $data_konversi,
     );

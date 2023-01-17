@@ -58,6 +58,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
               $transaksi = $qb->insert('pembelian', [
                   'jumlah' => enkripsiDekripsi(strval($total), $kunciRahasia),
                   'pembayaran' => $_POST['tgl_bayar'],
+                  'dibayar' => enkripsiDekripsi(strval($_POST['dibayar']), $kunciRahasia),
                   'user' => $_SESSION['id_user'],
                   'subuser' => $subuser
                 ]);

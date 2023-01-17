@@ -26,19 +26,22 @@ $heading = false;
 
 $id_user="user='".$_SESSION['id_user']."'";
 if($_SESSION['role'] == 3){$id_user="subuser='".$_SESSION['sub_user']."'";}
-$saldo_log = $qb->RAW("select jumlah,date(waktu) as tgl_pembelian, pembayaran as tgl_pembayaran from pembelian
+$saldo_log = $qb->RAW("select jumlah, dibayar as terbayar, date(waktu) as tgl_pembelian, pembayaran as tgl_pembayaran from pembelian
 							where ".$id_user." and DATE(waktu) between '".$_GET['awal']."' and '".$_GET['akhir']."'",[]);
 
 $total=0;
+$total_terbayar=0;
 foreach ($saldo_log as $value) {
   $value->jumlah=enkripsiDekripsi($value->jumlah, $kunciRahasia);
+  $value->terbayar=enkripsiDekripsi($value->terbayar, $kunciRahasia);
+  $total_terbayar=$total_terbayar+$value->terbayar;
   $total=$total+$value->jumlah;
 
 }
 
 $saldo_log[]=(object)[
   'TOTAL3' =>$total,
-  'TOTAL2' =>'',
+  'TOTAL2' =>$total_terbayar,
   'TOTAL1' =>'TOTAL',
 ];            
 //Add the MySQL table data to excel file

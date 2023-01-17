@@ -44,10 +44,16 @@
 			<label for="rfidnumber">Qrcode</label>
 			<input type="text" id="qrcode" class="form-control" class="form-control">
 			<label for="rfidnumber">Data Barang</label>
+			<div class="input-group" id="row">
+				<span class="input-group-text">Total :</span>
+				<input type="number" class="form-control" id="total_pembelian" placeholder="Total" value="0" >
+			</div>
 			<div id="newinput"></div>
 			<!-- <input type="text" id="datas" class="form-control" data-role="tagsinput"  name="tags" class="form-control"> -->
 			<label for="rfidnumber">Tanggal Bayar</label>
 			<input type="date" class="form-control" id="tgl_bayar" placeholder="Tanggal" required>
+			<label for="rfidnumber">Telah dibayar (Rp)</label>
+			<input type="number" class="form-control" id="dibayar" placeholder="Dibayar" value="0" required>
 			<center><button href="javascript:void(0);" onclick="simpan_penj()" class="btn btn-primary" >Simpan</button></center>
 			<!-- <small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Abscence</small> -->
 			<div class="card shadow mb-4">
@@ -202,6 +208,7 @@
 	            <thead>
 	                <tr>
 	                    <th>Jumlah</th>
+	                    <th>Sudah terbayar</th>
 	                    <th>Tanggal Pembelian</th>
 	                    <th>Tanggal pembayaran</th>
 	                    <th>Aksi</th>
@@ -228,6 +235,14 @@
 	                <tr>
 
 	                    <td><?php echo convertToRupiah(enkripsiDekripsi($log->jumlah, $kunciRahasia)); ?></td>
+	                    <td>
+							<!-- <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data"> -->
+								<input type="hidden" id="id_dibayar" value="<?php echo $log->id; ?>">
+								<input type="text" id="jumlah_dibayar" value="<?php echo enkripsiDekripsi($log->dibayar, $kunciRahasia); ?>">
+								<!-- <button type="submit" name="simpan_dibayar" class="btn btn-primary"><span  id="">Simpan</span></button></center> -->
+								<button href="javascript:void(0);" onclick="simpan_dibayar()" class="btn btn-primary" >Simpan</button>
+            				<!-- </form> -->
+						</td>
 	                    <td><?php echo $log->waktu; ?></td>
 	                    <td><?php echo $log->pembayaran; ?></td>
 	                    <td>
@@ -304,6 +319,33 @@ $(document).ready(function() {
 
 });
 
+	function simpan_dibayar(){
+
+		var id_dibayar = $('#id_dibayar').val();
+		var jumlah_dibayar = $('#jumlah_dibayar').val();
+
+		$.ajax({
+			url: 'aksi_ubah_dibayar.php',
+			type: 'post',
+			data: {
+			id_dibayar: id_dibayar,
+			jumlah_dibayar: jumlah_dibayar,
+			}
+		})
+		.done(function(data1) {
+			$('#tampilMessage').removeClass('bg-danger bg-success');
+
+			$('#tampilMessage').html(data1);
+			
+			$('#row').remove();
+
+		})
+		.fail(function(data1) {
+			// console.log(data1);
+		});
+		updateDiv()
+	};
+
 	function simpan_penj(){
 
 		var harga = $('input[name="harga[]"]').map(function(){ return this.value;}).get();
@@ -311,6 +353,7 @@ $(document).ready(function() {
 		var jumlah = $('input[name="jumlah[]"]').map(function(){ return this.value;}).get();
 		var barang = $('input[name="barang[]"]').map(function(){ return this.value;}).get();
 		var tgl_bayar = $('#tgl_bayar').val();
+		var dibayar = $('#dibayar').val();
 
 		$.ajax({
 			url: 'aksi_pembelian.php',
@@ -321,6 +364,7 @@ $(document).ready(function() {
 			satuan: satuan,
 			jumlah: jumlah,
 			barang: barang,
+			dibayar: dibayar,
 			}
 		})
 		.done(function(data1) {
@@ -369,9 +413,10 @@ var rupiah = document.getElementById('rp');
 		}
 	</script>
 <?php require "partials/footer.php"; ?>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js" integrity="sha512-VvWznBcyBJK71YKEKDMpZ0pCVxjNuKwApp4zLF3ul+CiflQi6aIJR+aZCP/qWsoFBA28avL5T5HA+RE+zrGQYg==" crossorigin="anonymous"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-angular.min.js" integrity="sha512-KT0oYlhnDf0XQfjuCS/QIw4sjTHdkefv8rOJY5HHdNEZ6AmOh1DW/ZdSqpipe+2AEXym5D0khNu95Mtmw9VNKg==" crossorigin="anonymous"></script> -->
-	<script type="text/javascript">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js" integrity="sha512-VvWznBcyBJK71YKEKDMpZ0pCVxjNuKwApp4zLF3ul+CiflQi6aIJR+aZCP/qWsoFBA28avL5T5HA+RE+zrGQYg==" crossorigin="anonymous"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-angular.min.js" integrity="sha512-KT0oYlhnDf0XQfjuCS/QIw4sjTHdkefv8rOJY5HHdNEZ6AmOh1DW/ZdSqpipe+2AEXym5D0khNu95Mtmw9VNKg==" crossorigin="anonymous"></script> -->
+<script type="text/javascript">
+		total_pembelian=0;
 				// $("#datas").tagsinput('add','');
 				// $("#datas").tagsinput('remove', 'on');
 		$(".datas-barang").on('click','.datas',function(){
@@ -413,35 +458,23 @@ var rupiah = document.getElementById('rp');
 							// '@foreach($barang as $dt)'+
 							// '<option value="{{ $dt->id }}" >{{ $dt->kode_barang."-".$dt->nama."-stok:".$dt->stok }}</option>'+
 							// '@endforeach'+
-					konversi=data1[0].konversi;
-					for (let index = 0; index < konversi.length; index++) {
-						newRowAdd = newRowAdd+'<option value="'+konversi[index].konversi+'">'+konversi[index].nama_satuan+'</option>';
-					}
+					// konversi=data1[0].konversi;
+					// for (let index = 0; index < konversi.length; index++) {
+					// 	newRowAdd = newRowAdd+'<option value="'+konversi[index].konversi+'">'+konversi[index].nama_satuan+'</option>';
+					// }
 					newRowAdd = newRowAdd+'</select>'+
 						'<span class="input-group-text">Harga :</span>'+
-							'<input type="number" id="harga'+data1[0].id+'" class="form-control" name="harga[]" placeholder="Harga" value="'+data1[0].harga+'" readonly>'+
+							'<input type="number" id="harga'+data1[0].id+'" class="form-control" name="harga[]" placeholder="Harga" value="'+data1[0].harga_pokok+'" readonly>'+
 						'<div class="input-group-prepend">'+
-							'<button class="btn btn-danger form-control" id="DeleteRow" type="button"><i class="fa-solid fa-trash-can"></i>Delete</button>'+
+							'<button class="btn btn-danger form-control" id="DeleteRow" value="'+data1[0].harga_pokok+'" type="button"><i class="fa-solid fa-trash-can"></i>Delete</button>'+
 						'</div>'+
-					'</div>'+
-					'<script>'+
-						// '$("#satuan'+data1[0].id+'").on("change",function() {'+
-						'function myFunction'+data1[0].id+'() {'+
-							// 'alert("haha");'+
-							'$.ajax({'+
-										'url: "ajax_harga.php?barang="+$("#barang'+data1[0].id+'").val()+"&&id="+$("#satuan'+data1[0].id+'").val(),'+
-										'type: "get",'+
-										'dataType:"json",'+
-									'})'+
-							'.done(function(data1) {'+
-								'$("#harga'+data1[0].id+'").val(data1[0].harga);'+
-							'})'+
-						'};'+
-						// '});'+
-					'</\script>';
+					'</div>';
 
 					$('#newinput').append(newRowAdd);
+					total_pembelian=parseInt(total_pembelian)+parseInt(data1[0].harga_pokok);
+					$('#total_pembelian').val(total_pembelian);
 				}
+				
 				
 				$('#qrcode').val(""); //Mengkosongkan input field
 			})
@@ -453,6 +486,9 @@ var rupiah = document.getElementById('rp');
 		};
 
 		$("body").on("click", "#DeleteRow", function () {
+			total_pembelian=total_pembelian-$(this).val();
+			$('#total_pembelian').val(total_pembelian);
+			// alert($(this).val());
 			$(this).parents("#row").remove();
 		})
 
