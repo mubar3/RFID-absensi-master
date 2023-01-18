@@ -861,7 +861,7 @@ if(isset($_GET['hapus_konversi'])){
 
 $data_konversi = $qb->RAW(
 "SELECT
-	 *
+	 konversi.*
 	,toko_menu.id as id_barang
 	,toko_menu.nama as nama_barang
 	, konversi.id as id
@@ -915,7 +915,7 @@ where konversi.id_user=?",[$_SESSION['id_user']]);
 		  </select>
 		  <!-- <input type="text" name="konversi" placeholder="Satuan" value="<?php if(isset($_GET['edit_konversi'])){ echo $_GET['konversi'];}?>" class="form-control" required> -->
 		  <input type="number" name="harga" placeholder="Harga" value="<?php if(isset($_GET['edit_konversi'])){ echo $_GET['harga_konversi'];}?>" class="form-control" required>
-		  <input type="number" name="nilai" placeholder="Nilai" value="<?php if(isset($_GET['edit_konversi'])){ echo $_GET['nilai_konversi'];}?>" class="form-control" required>
+		  <input type="number" name="nilai" placeholder="Banyak" value="<?php if(isset($_GET['edit_konversi'])){ echo $_GET['nilai_konversi'];}?>" class="form-control" required>
 		  <div class="input-group-prepend">
 			<?php if(isset($_GET['edit_konversi'])){ ?>
 			  <button type="submit" name="update_konversi" class="input-group-text"><span  id="">Update</span></button>

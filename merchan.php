@@ -38,7 +38,7 @@
 	}else{
 		header("Location: index.php");
 	} ?>
-		<h2 class="text-primary mt-4">Debet Saldo </h2>
+		<h2 class="text-primary mt-4">Penjualan Barang </h2>
 
 
         <script type="text/javascript">
@@ -117,7 +117,7 @@
 									<th>Barang</th>
 									<th>Stok</th>
 									<!-- <th>Satuan Konversi</th> -->
-									<th>Harga</th>
+									<th>Harga Jual</th>
 									<th>Aksi</th>
 								</tr>
 							</thead>

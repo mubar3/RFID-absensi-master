@@ -38,22 +38,24 @@
 	}else{
 		header("Location: index.php");
 	} ?>
-		<h2 class="text-primary mt-4">Debet Saldo </h2>
+		<h2 class="text-primary mt-4">Pembelian Barang </h2>
 
 		<div class="form-group">
 			<label for="rfidnumber">Qrcode</label>
 			<input type="text" id="qrcode" class="form-control" class="form-control">
 			<label for="rfidnumber">Data Barang</label>
-			<div class="input-group" id="row">
+			<!-- <div class="input-group" id="row">
 				<span class="input-group-text">Total :</span>
 				<input type="number" class="form-control" id="total_pembelian" placeholder="Total" value="0" >
-			</div>
+			</div> -->
 			<div id="newinput"></div>
 			<!-- <input type="text" id="datas" class="form-control" data-role="tagsinput"  name="tags" class="form-control"> -->
 			<label for="rfidnumber">Tanggal Bayar</label>
-			<input type="date" class="form-control" id="tgl_bayar" placeholder="Tanggal" required>
+			<input type="date" class="form-control" id="tgl_bayar" placeholder="Tanggal">
 			<label for="rfidnumber">Telah dibayar (Rp)</label>
 			<input type="number" class="form-control" id="dibayar" placeholder="Dibayar" value="0" required>
+			<label for="rfidnumber">Biaya Lainnya (Rp)</label>
+			<input type="number" class="form-control" id="b_lainnya" placeholder="Lainnya" value="0" required>
 			<center><button href="javascript:void(0);" onclick="simpan_penj()" class="btn btn-primary" >Simpan</button></center>
 			<!-- <small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Abscence</small> -->
 			<div class="card shadow mb-4">
@@ -74,7 +76,9 @@
 						$qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 							$data_menu = $qb->RAW(
-    						"SELECT * FROM toko_menu where id_user=?",[$_SESSION['id_user']]);
+    						"SELECT toko_menu.*,satuan.nama as nama_satuan FROM toko_menu 
+							left join satuan on satuan.id=toko_menu.satuan
+							where toko_menu.id_user=?",[$_SESSION['id_user']]);
 						?>
   					
   					<!-- <div class="col-sm-2">        	
@@ -95,7 +99,8 @@
 									<th>Barang</th>
 									<th>Stok</th>
 									<!-- <th>Satuan Konversi</th> -->
-									<th>Harga</th>
+									<th>Harga Jual</th>
+									<th>Harga Pokok</th>
 									<th>Aksi</th>
 								</tr>
 							</thead>
@@ -108,7 +113,7 @@
 										<?php } ?>
 									</td>
 									<td><?php echo $menu->nama; ?></td>
-									<td><?php echo $menu->stok; ?></td>
+									<td><?php echo $menu->stok.' '.$menu->nama_satuan; ?></td>
 									<!-- <td>
 										<?php $dt = $qb->RAW("SELECT * FROM konversi where barang=?",[$menu->id]);?>
 										<select>
@@ -118,6 +123,7 @@
 										</select>
 									</td> -->
 									<td><?php echo convertToRupiah($menu->harga); ?></td>
+									<td><?php echo convertToRupiah($menu->harga_pokok); ?></td>
 									<!-- <td><button href="javascript:void(0);" value="<?php echo $menu->nama.','.$menu->id;?>" class="datas btn btn-primary"style=" font-size:12px!important;">Tambah</button></td> -->
 									<td><button href="javascript:void(0);" onclick="add_barang(<?php echo $menu->id;?>)" class="datas btn btn-primary"style=" font-size:12px!important;">Tambah</button></td>
 								</tr>
@@ -175,6 +181,7 @@
 					}else{
 						echo "<div class='p-3 mb-2 bg-danger'>Hapus transaksi gagal<div>";
 					}
+					echo '<script>setTimeout(function(){location.replace("pembelian.php"); }, 1000);</script>';
 					
 				}
 				?>
@@ -207,9 +214,9 @@
         	<table class="table table-bordered" width="100%" cellspacing="0">
 	            <thead>
 	                <tr>
-	                    <th>Jumlah</th>
-	                    <th>Sudah terbayar</th>
 	                    <th>Tanggal Pembelian</th>
+	                    <th>Tagihan (Rp)</th>
+	                    <th>Sudah terbayar</th>
 	                    <th>Tanggal pembayaran</th>
 	                    <th>Aksi</th>
 	                </tr>
@@ -234,16 +241,16 @@
 	            		?>
 	                <tr>
 
+						<td><?php echo $log->waktu; ?></td>
 	                    <td><?php echo convertToRupiah(enkripsiDekripsi($log->jumlah, $kunciRahasia)); ?></td>
 	                    <td>
 							<!-- <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data"> -->
 								<input type="hidden" id="id_dibayar" value="<?php echo $log->id; ?>">
 								<input type="text" id="jumlah_dibayar" value="<?php echo enkripsiDekripsi($log->dibayar, $kunciRahasia); ?>">
 								<!-- <button type="submit" name="simpan_dibayar" class="btn btn-primary"><span  id="">Simpan</span></button></center> -->
-								<button href="javascript:void(0);" onclick="simpan_dibayar()" class="btn btn-primary" >Simpan</button>
+								<button href="javascript:void(0);" onclick="simpan_dibayar()" class="btn btn-primary" >Update</button>
             				<!-- </form> -->
 						</td>
-	                    <td><?php echo $log->waktu; ?></td>
 	                    <td><?php echo $log->pembayaran; ?></td>
 	                    <td>
                         <center>
@@ -277,10 +284,12 @@
 							<b>Banyak</b> <br>
 							<?php 
 								foreach ($detail as $key) {
-									echo $key->jumlah.' '.$key->satuan_asli.' / '.$key->jumlah_satuan.' '.$key->satuan_konversi.'<br>';
+									// echo $key->jumlah.' '.$key->satuan_asli.' / '.$key->jumlah_satuan.' '.$key->satuan_konversi.'<br>';
+									echo $key->jumlah.' '.$key->satuan_asli.'<br>';
 								}
 							?>
 						</td>
+						<td></td>
 						<td></td>
 	                </tr>
 	                `<?php } ?>
@@ -354,6 +363,7 @@ $(document).ready(function() {
 		var barang = $('input[name="barang[]"]').map(function(){ return this.value;}).get();
 		var tgl_bayar = $('#tgl_bayar').val();
 		var dibayar = $('#dibayar').val();
+		var b_lainnya = $('#b_lainnya').val();
 
 		$.ajax({
 			url: 'aksi_pembelian.php',
@@ -365,6 +375,7 @@ $(document).ready(function() {
 			jumlah: jumlah,
 			barang: barang,
 			dibayar: dibayar,
+			b_lainnya: b_lainnya,
 			}
 		})
 		.done(function(data1) {

@@ -394,7 +394,7 @@
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilitiesnilai"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Nilai</span>
+                    <span>Raport</span>
                 </a>
                 <div id="collapseUtilitiesnilai" 
                 <?php 
