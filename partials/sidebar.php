@@ -421,7 +421,7 @@
             <?php 
         }
         if($topup == 1){
-            if($page=='topup.php'){
+            if($page=='topup.php' || $page=='spp.php'){
                 echo '<li class="nav-item active">';
             }else{
                 echo '<li class="nav-item">';}
@@ -434,7 +434,7 @@
                 </a>
                 <div id="collapseTwo" 
                 <?php 
-                if($page=='topup.php'){
+                if($page=='topup.php' || $page=='spp.php'){
                     echo 'class="collapse show"';
                 }else{
                     echo 'class="collapse"';}
@@ -451,6 +451,15 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="topup.php">Topup</a>
+                        <?php } if($spp == 1 ){ ?>
+                        <a
+                        <?php 
+                        if($page=='spp.php'){
+                            echo 'class="collapse-item active"';
+                        }else{
+                            echo 'class="collapse-item"';}
+                        ?> 
+                        href="spp.php">Sumbangan Komite</a>
                         <?php } ?>
                     </div>
                 </div>
@@ -503,20 +512,21 @@
             </li>
             <?php 
         }
-        if($spp == 1 ){
-            if($page=='spp.php'){
-                echo '<li class="nav-item active">';
-            }else{
-                echo '<li class="nav-item">';}
+        // if($spp == 1 ){
+        //     if($page=='spp.php'){
+        //         echo '<li class="nav-item active">';
+        //     }else{
+        //         echo '<li class="nav-item">';}
             ?>
-                <a class="nav-link"  href="spp.php" >
+                <!-- <a class="nav-link"  href="spp.php" >
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Sumbangan Komite</span>
                 </a>
-            </li>
+            </li> -->
 
             <?php
-        }if($akses_parkir == 1 ){ 
+        // }
+        if($akses_parkir == 1 ){ 
             if($page=='akses_parkir.php'){
                 echo '<li class="nav-item active">';
             }else{

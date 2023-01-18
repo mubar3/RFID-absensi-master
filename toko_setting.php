@@ -1,4 +1,5 @@
 <?php 
+require "partial/head.php";
 require "partials/head.php";
 require "partials/sidebar.php";
 require "asset/phpqrcode/qrlib.php"; ?>
@@ -405,7 +406,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	        		<?php } ?>
 			  <input type="file" name="gambar" placeholder="gambar" class="form-control">
 			  <input type="text" name="nama" placeholder="Nama*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['menu'];}?>" class="form-control" required>
-			  <input type="number" name="harga" placeholder="Harga*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['harga'];}?>" class="form-control" required>
+			  <input type="number" name="harga" placeholder="Harga jual*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['harga'];}?>" class="form-control" required>
 			  <input type="text" name="stok" placeholder="Stok*" value="<?php if(isset($_GET['edit_menu'])){ echo $_GET['stok'];}?>" class="form-control" required>
 
 			</div>
@@ -448,11 +449,11 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         <tr>
                             <th>Gambar</th>
                             <th>Nama</th>
-                            <th>Satuan</th>
-                            <th>Jenis</th>
-                            <th>Harga</th>
+                            <th>Jenis Barang</th>
+                            <th>Harga Jual</th>
+                            <th>Harga Pokok</th>
                             <th>Stok</th>
-                            <th>Hapus</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -462,10 +463,10 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         <tr>
                             <td><?php if($data_user->gambar != ''){?><img style="display: block; margin-left: auto;  margin-right: auto;   width: 70px;" class="img-responsive img" src="asset/menu/<?php echo $data_user->gambar;?>"><?php } ?></td>
                             <td><?php echo $data_user->nama;?></td>
-                            <td><?php echo $data_user->nama_satuan;?></td>
                             <td><?php echo $data_user->nama_jenis;?></td>
-                            <td><?php echo $data_user->harga;?></td>
-                            <td><?php echo $data_user->stok;?></td>
+                            <td><?php echo convertToRupiah($data_user->harga);?></td>
+                            <td><?php echo convertToRupiah($data_user->harga_pokok);?></td>
+                            <td><?php echo $data_user->stok.' '.$data_user->nama_satuan; ?></td>
                             <td>
                             <center>
                             	<a href="toko_setting.php?edit_menu=<?php echo $data_user->id;?>&&menu=<?php echo $data_user->nama;?>&&harga=<?php echo $data_user->harga;?>&&harga_pokok=<?php echo $data_user->harga_pokok;?>&&foto=<?php echo $data_user->gambar;?>&&stok=<?php echo $data_user->stok;?>&&satuan=<?php echo $data_user->satuan;?>&&jenis=<?php echo $data_user->jenis;?>&&qr=<?php echo $data_user->qr;?>"><i class="fa-solid fa-pen-to-square"></i></a>
@@ -945,7 +946,7 @@ where konversi.id_user=?",[$_SESSION['id_user']]);
 						<td><?php echo $row->nama_barang;?></td>
 						<td><?php echo $row->nama_satuan;?></td>
 						<td><?php echo $row->nilai;?></td>
-						<td><?php echo $row->harga;?></td>
+						<td><?php echo convertToRupiah($row->harga);?></td>
 						<td>
 						<center>
 							<a href="toko_setting.php?edit_konversi=<?php echo $row->id;?>&&barang_konversi=<?php echo $row->id_barang;?>&&konversi=<?php echo $row->id_satuan;?>&&nilai_konversi=<?php echo $row->nilai;?>&&harga_konversi=<?php echo $row->harga;?>"><i class="fa-solid fa-pen-to-square"></i></a>

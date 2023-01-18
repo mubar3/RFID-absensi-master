@@ -104,7 +104,7 @@
 								<tr>
 									<td>
 										<?php if($menu->gambar != ''){?>
-											<img class="card-img-top" style="display: block; margin-left: auto; margin-right: auto; " src="asset/menu/<?php echo $menu->gambar;?>">
+											<img class="card-img-top" style="display: block; margin-left: auto;  margin-right: auto;   width: 70px;" class="img-responsive img" src="asset/menu/<?php echo $menu->gambar;?>">
 										<?php } ?>
 									</td>
 									<td><?php echo $menu->nama; ?></td>
