@@ -70,7 +70,7 @@
 		</div>
 
 		<div class="form-group" id="ifNo" style="display:block">
-			<label for="rfidnumber">Qrcode</label>
+			<label for="rfidnumber">Qrcode Barang</label>
 			<input type="text" id="qrcode" class="form-control" class="form-control">
 			<label for="rfidnumber">Data Barang</label>
 			<div id="newinput"></div>

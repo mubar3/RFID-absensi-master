@@ -60,6 +60,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                   'pembayaran' => $_POST['tgl_bayar'],
                   'dibayar' => enkripsiDekripsi(strval($_POST['dibayar']), $kunciRahasia),
                   'b_lainnya' => enkripsiDekripsi(strval($_POST['b_lainnya']), $kunciRahasia),
+                  'b_ket' => $_POST['b_ket'],
                   'user' => $_SESSION['id_user'],
                   'subuser' => $subuser
                 ]);

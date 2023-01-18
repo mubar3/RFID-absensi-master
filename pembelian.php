@@ -41,7 +41,7 @@
 		<h2 class="text-primary mt-4">Pembelian Barang </h2>
 
 		<div class="form-group">
-			<label for="rfidnumber">Qrcode</label>
+			<label for="rfidnumber">Qrcode Barang</label>
 			<input type="text" id="qrcode" class="form-control" class="form-control">
 			<label for="rfidnumber">Data Barang</label>
 			<!-- <div class="input-group" id="row">
@@ -56,6 +56,8 @@
 			<input type="number" class="form-control" id="dibayar" placeholder="Dibayar" value="0" required>
 			<label for="rfidnumber">Biaya Lainnya (Rp)</label>
 			<input type="number" class="form-control" id="b_lainnya" placeholder="Lainnya" value="0" required>
+			<label for="rfidnumber">Ket</label>
+			<input type="text" class="form-control" id="b_ket" placeholder="Keterangan">
 			<center><button href="javascript:void(0);" onclick="simpan_penj()" class="btn btn-primary" >Simpan</button></center>
 			<!-- <small id="rfidnumber" class="form-text text-muted">This System Automatically Record Your Abscence</small> -->
 			<div class="card shadow mb-4">
@@ -364,6 +366,7 @@ $(document).ready(function() {
 		var tgl_bayar = $('#tgl_bayar').val();
 		var dibayar = $('#dibayar').val();
 		var b_lainnya = $('#b_lainnya').val();
+		var b_ket = $('#b_ket').val();
 
 		$.ajax({
 			url: 'aksi_pembelian.php',
@@ -376,6 +379,7 @@ $(document).ready(function() {
 			barang: barang,
 			dibayar: dibayar,
 			b_lainnya: b_lainnya,
+			b_ket: b_ket,
 			}
 		})
 		.done(function(data1) {

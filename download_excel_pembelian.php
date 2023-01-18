@@ -26,7 +26,7 @@ $heading = false;
 
 $id_user="user='".$_SESSION['id_user']."'";
 if($_SESSION['role'] == 3){$id_user="subuser='".$_SESSION['sub_user']."'";}
-$saldo_log = $qb->RAW("select id,jumlah as tagihan, dibayar as terbayar, date(waktu) as tgl_pembelian, pembayaran as tgl_pembayaran from pembelian
+$saldo_log = $qb->RAW("select id,jumlah as tagihan, dibayar as terbayar, date(waktu) as tgl_pembelian, pembayaran as tgl_pembayaran, b_lainnya as biaya_lainnya, b_ket as keterangan from pembelian
 							where ".$id_user." and DATE(waktu) between '".$_GET['awal']."' and '".$_GET['akhir']."'",[]);
 
 $total=0;
@@ -34,6 +34,7 @@ $total_terbayar=0;
 foreach ($saldo_log as $value) {
   $value->tagihan=enkripsiDekripsi($value->tagihan, $kunciRahasia);
   $value->terbayar=enkripsiDekripsi($value->terbayar, $kunciRahasia);
+  $value->biaya_lainnya=enkripsiDekripsi($value->biaya_lainnya, $kunciRahasia);
   $total_terbayar=$total_terbayar+$value->terbayar;
   $total=$total+$value->tagihan;
 
@@ -54,7 +55,7 @@ foreach($saldo_log as $item) {
     // echo implode("\t", array_keys($items)) . "\r\n";
     echo implode("\t", array_keys($items));
     echo  "\t Barang";
-    echo  "\t Jumlah";
+    echo  "\t Banyak";
     echo  "\r\n";
     $heading = true;
   }
@@ -74,6 +75,8 @@ foreach($saldo_log as $item) {
     $i=1;
     foreach ($detail as $key) {
       if($i!=1){
+        echo  "\t";
+        echo  "\t";
         echo  "\t";
         echo  "\t";
         echo  "\t";
