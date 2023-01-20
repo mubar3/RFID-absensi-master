@@ -247,7 +247,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 		// cek data
 		$cek=true;
 		for ($i=2; $i<=$jumlah_baris; $i++){
-            if($data->val($i, 2) == ''){break;}
+            if($data->val($i, 1) == ''){break;}
 			IF($data->val($i, 6) != ''){
 				$cek = $qb->RAW("SELECT * FROM toko_menu where qr = ? and qr != '' ",[$data->val($i, 6)]);
 				if(array_key_exists(0, $cek)){$cek=false;break;}
