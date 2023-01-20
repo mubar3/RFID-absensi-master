@@ -230,6 +230,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
      	 if(isset($_POST['Upload'])){
         require "asset/excel_reader2.php";
+		ini_set('max_execution_time', 1000000);
         // upload file xls
         $target = strtotime(date("Y-m-d H:i:s")).$_SESSION['id_user'].basename($_FILES['excel']['name']);
         // print_r(strtotime(date("Y-m-d H:i:s")).$target);die();
