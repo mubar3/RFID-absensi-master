@@ -265,7 +265,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
         // jumlah default data yang berhasil di import
 		if($cek){
 			for ($i=2; $i<=$jumlah_baris; $i++){
-				if($data->val($i, 2) == ''){break;}
+				if($data->val($i, 1) == ''){break;}
 
 						$qb->insert('toko_menu', [
 								'nama' => $data->val($i, 1),
