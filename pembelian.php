@@ -239,7 +239,7 @@
 	            	
 
 	            	<?php foreach ($saldo_log as $log) { 
-	            		$total=$total+(enkripsiDekripsi($log->jumlah, $kunciRahasia));
+	            		$total=$total+(enkripsiDekripsi($log->jumlah, $kunciRahasia))+(enkripsiDekripsi($log->b_lainnya, $kunciRahasia));
 	            		?>
 	                <tr>
 
@@ -291,7 +291,17 @@
 								}
 							?>
 						</td>
-						<td></td>
+						<td>
+							<b>Biaya lainnya</b> <br>
+							<?php 
+								if($log->b_ket != ''){
+									echo $log->b_ket;
+								}
+								if($log->b_lainnya != ''){
+									echo convertToRupiah(enkripsiDekripsi($log->b_lainnya, $kunciRahasia));
+								}
+							?>
+						</td>
 						<td></td>
 	                </tr>
 	                `<?php } ?>

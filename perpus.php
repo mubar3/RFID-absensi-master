@@ -73,7 +73,7 @@
         <h2 class="text-primary mt-4">Peminjaman Perpustakaan </h2>
 
 		<div class="form-group">
-			<label for="rfidnumber">RFID Buku</label>
+			<label for="rfidnumber">RFID/Qrcode Buku</label>
 			<input type="text" id="books" class="form-control" data-role="tagsinput"  name="tags" class="form-control">
 			<label for="rfidnumber">RFID Tag Number</label>
 			<input type="text" class="form-control" id="inputs" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">
@@ -287,7 +287,7 @@
                     <h2 class="text-primary mt-4">Pengembalian Perpus </h2>
 
         <div class="form-group">
-            <label for="rfidnumber">RFID Buku</label>
+            <label for="rfidnumber">RFID/Qrcode Buku</label>
             <input type="text" id="books_p" class="form-control" data-role="tagsinput"  name="tags" class="form-control">
             <label for="rfidnumber">RFID Tag Number</label>
             <input type="text" class="form-control" id="inputs_p" aria-describedby="rfidnumber" placeholder="RFID Number will shown here">

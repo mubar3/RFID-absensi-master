@@ -72,7 +72,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 				$cek = $qb->RAW("SELECT * FROM toko_menu where qr = ? and qr != '' ",[$_POST['qr']]);
 				$isiqr=$_POST['qr'];
 			}
-			if(array_key_exists(0, $cek)){
+			if($cek != '' && array_key_exists(0, $cek)){
 	        	echo '<div class="col-lg-12 mb-4">
 		        <div class="card bg-danger text-white shadow">
 		            <div class="card-body">
@@ -566,6 +566,22 @@ if(isset($_GET['hapus_jenis'])){
    echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
 }
 
+	$data_menu = $qb->RAW(
+		"SELECT 
+			toko_menu.*,
+			jenis.nama as nama_jenis,
+			satuan.nama as nama_satuan
+		FROM toko_menu
+		left join satuan on satuan.id=toko_menu.satuan 
+		left join jenis on jenis.id=toko_menu.jenis 
+		where toko_menu.id_user=?",[$_SESSION['id_user']]);
+
+	$data_satuan = $qb->RAW(
+	"SELECT * FROM satuan where id_user=?",[$_SESSION['id_user']]);
+
+	$data_jenis = $qb->RAW(
+	"SELECT * FROM jenis where id_user=?",[$_SESSION['id_user']]);
+
 ?>
 
 <!-- Page Heading -->
@@ -711,6 +727,22 @@ if(isset($_GET['hapus_satuan'])){
    }
    echo '<script>setTimeout(function(){location.replace("toko_setting.php"); }, 1000);</script>';
 }
+
+$data_menu = $qb->RAW(
+	"SELECT 
+		toko_menu.*,
+		jenis.nama as nama_jenis,
+		satuan.nama as nama_satuan
+	FROM toko_menu
+	left join satuan on satuan.id=toko_menu.satuan 
+	left join jenis on jenis.id=toko_menu.jenis 
+	where toko_menu.id_user=?",[$_SESSION['id_user']]);
+
+$data_satuan = $qb->RAW(
+"SELECT * FROM satuan where id_user=?",[$_SESSION['id_user']]);
+
+$data_jenis = $qb->RAW(
+"SELECT * FROM jenis where id_user=?",[$_SESSION['id_user']]);
 
 ?>
 

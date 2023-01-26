@@ -31,12 +31,14 @@ $saldo_log = $qb->RAW("select id,jumlah as tagihan, dibayar as terbayar, date(wa
 
 $total=0;
 $total_terbayar=0;
+$total_b_lainnya=0;
 foreach ($saldo_log as $value) {
   $value->tagihan=enkripsiDekripsi($value->tagihan, $kunciRahasia);
   $value->terbayar=enkripsiDekripsi($value->terbayar, $kunciRahasia);
   $value->biaya_lainnya=enkripsiDekripsi($value->biaya_lainnya, $kunciRahasia);
   $total_terbayar=$total_terbayar+$value->terbayar;
   $total=$total+$value->tagihan;
+  $total_b_lainnya=$total_b_lainnya+$value->biaya_lainnya;
 
 }
 // echo '<pre>';print_r($saldo_log);echo '</pre>';die();
@@ -90,6 +92,11 @@ foreach($saldo_log as $item) {
   }
   echo  $total;
   echo  "\t".$total_terbayar;
+  echo  "\t";
+  echo  "\t";
+  echo  "\t".$total_b_lainnya;
+  echo  "\t";
+  echo  "\t";
   echo  "\t TOTAL";
 exit();
         

@@ -209,7 +209,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $ext = pathinfo($_FILES['file_kirim']['name'], PATHINFO_EXTENSION);
             $filename = $nisn_baru.'.'.$ext;
             // $filename=$filename.rand(111,9999);
-            unlink('asset/foto/'.$_POST['foto_lama']);
+            if($_POST['foto_lama'] != ''){
+                unlink('asset/foto/'.$_POST['foto_lama']);
+            }
             $upload=move_uploaded_file($_FILES['file_kirim']['tmp_name'],  "asset/foto/".$filename);
                 for($x=0;$x<20;$x++){
                     if(filesize("asset/foto/".$filename)>50000)
@@ -268,26 +270,29 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $set=array();
             foreach ($data as $key => $value) {
                 // $code=$key."=".$value;
-                $code=$key.'="'.$value.'"';
-                array_push($set, $code);
+                if($value != ''){
+                    $code=$key.'="'.$value.'"';
+                    array_push($set, $code);
+                }
             }
             $set=implode(',',$set);
+            // echo "UPDATE siswa SET ".$set." where id=".$_POST['id_siswa'];die();
             $aksi = $qb->RAW(
-            "UPDATE siswa SET ".$set." where id=".$_POST['id_siswa'],[]);
+            "UPDATE siswa SET ".$set." where id=?",[$_POST['id_siswa']]);
 
 
             $qb->RAW(
-            "UPDATE saldo_rfid SET id_rfid='".$rfid_baru."' where id_rfid=".$rfid_lama,[]);
+            "UPDATE saldo_rfid SET id_rfid=? where id_rfid=?",[$rfid_baru,$rfid_lama]);
             $qb->RAW(
-            "UPDATE saldo_log SET id_rfid='".$rfid_baru."' where id_rfid=".$rfid_lama,[]);
+            "UPDATE saldo_log SET id_rfid=? where id_rfid=?",[$rfid_baru,$rfid_lama]);
             $qb->RAW(
-            "UPDATE peminjaman SET peminjam='".$rfid_baru."' where peminjam=".$rfid_lama,[]);
+            "UPDATE peminjaman SET peminjam=? where peminjam=?",[$rfid_baru,$rfid_lama]);
             $qb->RAW(
-            "UPDATE kunjungan SET siswa='".$rfid_baru."' where siswa=".$rfid_lama,[]);
+            "UPDATE kunjungan SET siswa=? where siswa=?",[$rfid_baru,$rfid_lama]);
             $qb->RAW(
-            "UPDATE rekap_absen SET norf='".$rfid_baru."' where norf=".$rfid_lama,[]);
+            "UPDATE rekap_absen SET norf=? where norf=?",[$rfid_baru,$rfid_lama]);
             $qb->RAW(
-            "UPDATE rekap_parkir SET norf='".$rfid_baru."' where norf=".$rfid_lama,[]);
+            "UPDATE rekap_parkir SET norf=? where norf=?",[$rfid_baru,$rfid_lama]);
 
             // $nameqrcode    = $rfid_baru.'.png';              
             // $tempdir        = "asset/qrcode/"; 
@@ -340,7 +345,9 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             $aksi = $qb->RAW(
             "DELETE from siswa where id=".$_GET['hapus_siswa'],[]);
             if($aksi){
-                unlink('asset/foto/'.$_GET['foto_siswa']);
+                if($_GET['foto_siswa'] != ''){
+                    unlink('asset/foto/'.$_GET['foto_siswa']);
+                }
                 echo '<div class="col-lg-12 mb-4">
                     <div class="card bg-success text-white shadow">
                         <div class="card-body">
@@ -833,7 +840,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                           var desa="<?php echo $data_edit_siswa->desa; ?>";
                           var elt=$('#kecamatan').val();
                           // alert(elt);
-                          alert(desa);
+                        //   alert(desa);
                             $.ajax({
                             type: "POST",
                             url : "select_desa.php",
