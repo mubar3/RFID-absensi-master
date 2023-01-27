@@ -411,7 +411,8 @@ $(document).ready(function() {
         $('#inputs2').val(""); //Mengkosongkan input field
         $('#inputs2').focus(); //mengembalikan cursor ke input field
 
-		$('#row').remove();
+		// $('#row').remove();
+		$('.rowid').remove();
 
       })
       .fail(function(data1) {
@@ -485,7 +486,7 @@ var rupiah = document.getElementById('rp');
 					// $("#datas").tagsinput('add', { id:myArray[1] , label: myArray[0] });
 
 					newRowAdd =
-					'<div class="input-group" id="row">'+
+					'<div class="input-group rowid" id="row">'+
 							'<input type="hidden" id="barang'+data1[0].id+'" class="form-control" name="barang[]" value="'+data1[0].id+'" required>'+
 							'<input type="text" class="form-control" placeholder="Barang" value="'+data1[0].nama+'" readonly>'+
 							'<input type="text" class="form-control" placeholder="Stok" value="Stok : '+data1[0].stok+'" readonly>'+

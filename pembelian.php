@@ -397,7 +397,8 @@ $(document).ready(function() {
 
 			$('#tampilMessage').html(data1);
 			
-			$('#row').remove();
+			// $('#row').remove();
+			$('.rowid').remove();
 			$('#tgl_bayar').val("");
 
 		})
@@ -413,11 +414,11 @@ $(document).ready(function() {
 	}
 
 var rupiah = document.getElementById('rp');
-		rupiah.addEventListener('keyup', function(e){
-			// tambahkan 'Rp.' pada saat form di ketik
-			// gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-			rupiah.value = formatRupiah(this.value, 'Rp. ');
-		});
+		// rupiah.addEventListener('keyup', function(e){
+		// 	// tambahkan 'Rp.' pada saat form di ketik
+		// 	// gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+		// 	rupiah.value = formatRupiah(this.value, 'Rp. ');
+		// });
  
 		/* Fungsi formatRupiah */
 		function formatRupiah(angka, prefix){
@@ -472,7 +473,7 @@ var rupiah = document.getElementById('rp');
 					// $("#datas").tagsinput('add', { id:myArray[1] , label: myArray[0] });
 
 					newRowAdd =
-					'<div class="input-group" id="row">'+
+					'<div class="input-group rowid" id="row">'+
 							'<input type="hidden" id="barang'+data1[0].id+'" class="form-control" name="barang[]" value="'+data1[0].id+'" required>'+
 							'<input type="text" class="form-control" placeholder="Barang" value="'+data1[0].nama+'" readonly>'+
 							'<input type="text" class="form-control" placeholder="Stok" value="Stok : '+data1[0].stok+'" readonly>'+
