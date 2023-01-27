@@ -36,7 +36,7 @@ if (isset($_POST['id'])) {
        6 => "Sabtu"
      ];
     $siswa_check= $qb->RAW(
-            "SELECT * FROM rekap_absen where tanggal_absen >= DATE(NOW()) and norf=?",[$id]);
+            "SELECT * FROM rekap_absen where date(tanggal_absen) = DATE(NOW()) and norf=?",[$id]);
 
         
     // print_r($siswa_check[0]->norf);
@@ -52,6 +52,9 @@ if (isset($_POST['id'])) {
             if($now_time<$new_time){echo "Kartu telah absen";die();}
         }
     }
+    if (array_key_exists(1, $siswa_check)) {
+        echo "Kartu telah absen pulang";die();
+    }
     $status=0;
     if (array_key_exists(0, $siswa)) {
 
@@ -59,7 +62,7 @@ if (isset($_POST['id'])) {
 
         $hari=$HARI[$date->dayOfWeek];
 
-        $cariMakulabsen = $qb->RAW("SELECT * FROM jadwal where id_user=".$_SESSION['id_user']." and hari = ?", [$hari]);
+        $cariMakulabsen = $qb->RAW("SELECT * FROM jadwal where id_user=? and hari = ?", [$_SESSION['id_user'],$hari]);
         // $makul='';
         if (!array_key_exists(0, $cariMakulabsen)) {echo "Tidak ada Kelas Hari Ini";die();}
         foreach ($cariMakulabsen as $index => $value) {
@@ -73,11 +76,13 @@ if (isset($_POST['id'])) {
             $akhir_add = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->addHour();
             // $akhir_sub = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->subHour();
             
-        if(!isset($_POST['izin'])){    
-            if($mulai_sub < $sekarang && $sekarang < $mulai){
-                $status=1;
-            }else{
-                echo "Harap absen sesuai jam masuk";die();
+        if(!isset($_POST['izin'])){
+            if (!array_key_exists(0, $siswa_check)) {    
+                if($mulai_sub < $sekarang && $sekarang < $mulai){
+                    $status=1;
+                }else{
+                    echo "Harap absen sesuai jam masuk";die();
+                }
             }
             if($akhir < $sekarang){
                 if($akhir < $sekarang && $sekarang < $akhir_add){
@@ -131,9 +136,9 @@ if (isset($_POST['id'])) {
             $telat=$_POST['telat'];
         }
         $rekapAbsen = $qb->insert('rekap_absen', [
-          'id' => '',
+        //   'id' => '',
           'norf' => $id,
-          'makul_absen' => '',
+        //   'makul_absen' => '',
           'ket' => $ket,
           'telat' => $telat
         ]);
