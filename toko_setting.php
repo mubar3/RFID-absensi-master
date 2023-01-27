@@ -517,7 +517,7 @@ if(isset($_POST['simpan_jenis'])){
 
 if(isset($_POST['update_jenis'])){
 
-	$aksi = $qb->RAW("UPDATE jenis set nama=?,id=? WHERE id=?",[$_POST['jenis'],$_POST['kode'],$_POST['id_jenis']]);
+	$aksi = $qb->RAW("UPDATE jenis set nama=?,id=? WHERE id=? and id_user=?",[$_POST['jenis'],$_POST['kode'],$_POST['id_jenis'],$_SESSION['id_user']]);
 
    if($aksi){
 	   echo '<div class="col-lg-12 mb-4">
@@ -679,7 +679,7 @@ if(isset($_POST['simpan_satuan'])){
 
 if(isset($_POST['update_satuan'])){
 
-	$aksi = $qb->RAW("UPDATE satuan set nama=?,id=? WHERE id=?",[$_POST['satuan'],$_POST['kode'],$_POST['id_satuan']]);
+	$aksi = $qb->RAW("UPDATE satuan set nama=?,id=? WHERE id=? and id_user=?",[$_POST['satuan'],$_POST['kode'],$_POST['id_satuan'],$_SESSION['id_user']]);
 
    if($aksi){
 	   echo '<div class="col-lg-12 mb-4">
