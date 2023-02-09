@@ -50,6 +50,8 @@
 			</div> -->
 			<div id="newinput"></div>
 			<!-- <input type="text" id="datas" class="form-control" data-role="tagsinput"  name="tags" class="form-control"> -->
+			<label for="rfidnumber">Tanggal Beli</label>
+			<input type="date" class="form-control" id="tgl_beli" placeholder="Tanggal">
 			<label for="rfidnumber">Tanggal Bayar</label>
 			<input type="date" class="form-control" id="tgl_bayar" placeholder="Tanggal">
 			<label for="rfidnumber">Telah dibayar (Rp)</label>
@@ -203,7 +205,7 @@
 			<input type="date" class="form-control" value="<?php echo $_POST['tanggal_awal'];?>" name="tanggal_awal">
 			 <span class="input-group-text" id="basic-addon1">Sampai</span>
 			<input type="date" class="form-control" value="<?php echo $_POST['tanggal_akhir'];?>" name="tanggal_akhir">
-			<button type="submit" name="cari_transaksi" class="input-group-text"><span  id="">cari</span></button>
+			<button type="submit" name="cari_transaksi" id="click_cari" class="input-group-text"><span  id="">cari</span></button>
 			<?php if(isset($_POST['tanggal_akhir'])){ ?>
 				<a class="btn btn-primary" target="_Blank" href="download_excel_pembelian.php?awal=<?php echo $_POST['tanggal_awal']; ?>&&akhir=<?php echo $_POST['tanggal_akhir']; ?>"><span class="glyphicon glyphicon-download"></span>Download excel</a>
 			<?php } ?>
@@ -211,7 +213,7 @@
 		</form>
 	</div>
     <div class="card shadow mb-4">
-        <div class="card-body" id='here'>
+        <div class="card-body">
         	<div class="table-responsive">
         	<table class="table table-bordered" width="100%" cellspacing="0">
 	            <thead>
@@ -235,7 +237,7 @@
 							where ".$id_user." and DATE(waktu) = CURDATE()",[]);
 	            	}
 	            ?>
-	            <tbody>
+	            <tbody id='here'>
 	            	
 
 	            	<?php foreach ($saldo_log as $log) { 
@@ -243,7 +245,11 @@
 	            		?>
 	                <tr>
 
-						<td><?php echo $log->waktu; ?></td>
+						<td>
+							<input type="hidden" id="id_tgl_beli_ajax" value="<?php echo $log->id; ?>">
+							<input type="date" id="tgl_beli_ajax" value="<?php echo $log->waktu; ?>">
+							<button href="javascript:void(0);" onclick="simpan_tgl_beli()" class="btn btn-primary" >Update</button>
+						</td>
 	                    <td><?php echo convertToRupiah(enkripsiDekripsi($log->jumlah, $kunciRahasia)); ?></td>
 	                    <td>
 							<!-- <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data"> -->
@@ -367,6 +373,34 @@ $(document).ready(function() {
 		updateDiv()
 	};
 
+	function simpan_tgl_beli(){
+
+		var id_dibayar = $('#id_dibayar').val();
+		var jumlah_dibayar = $('#jumlah_dibayar').val();
+
+		$.ajax({
+			url: 'aksi_ubah_tanggal_beli.php',
+			type: 'post',
+			data: {
+			id_tgl_beli_ajax: $('#id_tgl_beli_ajax').val(),
+			tgl_beli_ajax: $('#tgl_beli_ajax').val(),
+			}
+		})
+		.done(function(data1) {
+			$('#tampilMessage').removeClass('bg-danger bg-success');
+
+			$('#tampilMessage').html(data1);
+			
+			$('#row').remove();
+
+		})
+		.fail(function(data1) {
+			// console.log(data1);
+		});
+		updateDiv()
+		document.getElementById("click_cari").click();
+	};
+
 	function simpan_penj(){
 
 		var harga = $('input[name="harga[]"]').map(function(){ return this.value;}).get();
@@ -374,6 +408,7 @@ $(document).ready(function() {
 		var jumlah = $('input[name="jumlah[]"]').map(function(){ return this.value;}).get();
 		var barang = $('input[name="barang[]"]').map(function(){ return this.value;}).get();
 		var tgl_bayar = $('#tgl_bayar').val();
+		var tgl_beli = $('#tgl_beli').val();
 		var dibayar = $('#dibayar').val();
 		var b_lainnya = $('#b_lainnya').val();
 		var b_ket = $('#b_ket').val();
@@ -383,6 +418,7 @@ $(document).ready(function() {
 			type: 'post',
 			data: {
 			tgl_bayar: tgl_bayar,
+			tgl_beli: tgl_beli,
 			harga: harga,
 			satuan: satuan,
 			jumlah: jumlah,
