@@ -67,10 +67,10 @@
 
 					            $mulai = Carbon::parse($value->jam_mulai, 'Asia/Jakarta');
 					            // $mulai_add = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->addHour();
-					            $mulai_sub = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->subHour();
+					            $mulai_sub = Carbon::parse($value->jam_mulai, 'Asia/Jakarta')->subHour(2);
 					            
 					            $akhir = Carbon::parse($value->jam_akhir, 'Asia/Jakarta');
-					            $akhir_add = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->addHour();
+					            $akhir_add = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->addHour(2);
 					            // $akhir_sub = Carbon::parse($value->jam_akhir, 'Asia/Jakarta')->subHour();
 					            
 					            if($mulai_sub < $sekarang && $sekarang < $mulai){
