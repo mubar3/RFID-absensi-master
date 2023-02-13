@@ -514,7 +514,7 @@ var rupiah = document.getElementById('rp');
 							'<input type="text" class="form-control" placeholder="Barang" value="'+data1[0].nama+'" readonly>'+
 							'<input type="text" class="form-control" placeholder="Stok" value="Stok : '+data1[0].stok+'" readonly>'+
 							'<span class="input-group-text">Jumlah :</span>'+
-							'<input type="number" class="form-control" placeholder="Jumlah" name="jumlah[]" value="1" >'+
+							'<input type="number" class="form-control" placeholder="Jumlah" name="jumlah[]" value="0" >'+
 							'<select id="satuan'+data1[0].id+'" onchange="myFunction'+data1[0].id+'()" class="form-control" name="satuan[]" required>'+
 								'<option value="'+data1[0].satuan+'">Satuan : '+data1[0].nama_satuan+'</option>';
 							// '@foreach($barang as $dt)'+
