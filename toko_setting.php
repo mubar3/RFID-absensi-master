@@ -543,7 +543,7 @@ if(isset($_POST['update_jenis'])){
 
 if(isset($_GET['hapus_jenis'])){
    $aksi = $qb->RAW(
-   "DELETE from jenis where id=?",[$_GET['hapus_jenis']]);
+   "DELETE from jenis where id=? and id_user=?",[$_GET['hapus_jenis'],$_SESSION['id_user']]);
    if($aksi){
 	   echo '<div class="col-lg-12 mb-4">
 		   <div class="card bg-success text-white shadow">
@@ -705,7 +705,7 @@ if(isset($_POST['update_satuan'])){
 
 if(isset($_GET['hapus_satuan'])){
    $aksi = $qb->RAW(
-   "DELETE from satuan where id=?",[$_GET['hapus_satuan']]);
+   "DELETE from satuan where id=? and id_user=?",[$_GET['hapus_satuan'], $_SESSION['id_user']]);
    if($aksi){
 	   echo '<div class="col-lg-12 mb-4">
 		   <div class="card bg-success text-white shadow">
