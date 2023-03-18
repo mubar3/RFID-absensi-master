@@ -242,6 +242,15 @@
                             echo 'class="collapse-item"';}
                         ?> 
                         href="absen.php">Absensi</a>
+                        <a
+                        <?php 
+                        // if($page=='absen.php'){
+                        //     echo 'class="collapse-item active"';
+                        // }else{
+                            echo 'class="collapse-item"';
+                        // }
+                        ?> 
+                        >Absensi Guru<sup style="color:red;"> Akan rilis</sup></a>
                         <a 
                         <?php 
                         if($page=='rekap.php'){
@@ -341,7 +350,18 @@
             </li>
 
             <?php 
-        }if($data_siswa ==1 ){
+        } ?>
+        
+        <li class="nav-item">
+                <a class="nav-link">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Ujian<sup style="color:white;"> Akan rilis</sup></span>
+                </a>
+
+            </li>
+        
+        <?php 
+        if($data_siswa ==1 ){
             if($page=='input_siswa.php' || $page=='data_siswa.php'){
                 echo '<li class="nav-item active">';
             }else{
