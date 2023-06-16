@@ -368,6 +368,35 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
             }
             echo '<script>setTimeout(function(){location.replace("data_siswa.php"); }, 1000);</script>';
         }
+        if(isset($_POST['hapus_data'])){
+            for ($i=0; $i < count($_POST['selector']); $i++) { 
+                $aksi = $qb->RAW(
+                "DELETE from siswa where id=".$_POST['selector'][$i],[]);
+            }
+            if($aksi){
+                if($_POST['foto_siswa'] != ''){
+                    unlink('asset/foto/'.$_POST['foto_siswa']);
+                }
+                echo '<div class="col-lg-12 mb-4">
+                    <div class="card bg-success text-white shadow">
+                        <div class="card-body">
+                            Berhasil
+                            <div class="text-white-50 small">Data Terhapus</div>
+                        </div>
+                    </div>
+                </div>';
+            }else{
+                echo '<div class="col-lg-12 mb-4">
+                <div class="card bg-danger text-white shadow">
+                    <div class="card-body">
+                        Gagal
+                        <div class="text-white-50 small">Data Gagal Terhapus</div>
+                    </div>
+                 </div>
+                </div>';
+            }
+            // echo '<script>setTimeout(function(){location.replace("data_siswa.php"); }, 1000);</script>';
+        }
 
     $table='kelas';
      $data_user = $qb->RAW(
@@ -457,6 +486,8 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                         </div>
                     </form>
 
+                    <?php } ?>
+                    <br>
                     <h4 class="h5 mb-2 text-gray-800">Import Data Siswa</h4><a href="asset/sampel.xls">Template Excel</a>
                     <!-- <label>Import Data Siswa</label> -->
                     <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
@@ -470,12 +501,12 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                             </div>
                         </div>
                     </form>
-                    <?php } ?>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
+                            <form  role="form" action="" method="post" autocomplete="off" enctype="multipart/form-data">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
@@ -485,6 +516,7 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                                             <th>Kelas</th>
                                             <th>Saldo</th>
                                             <th>Aksi</th>
+                                            <th><center>Tandai <input type="checkbox" onclick="toggle(this);" /> </center></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -529,6 +561,12 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
     </div>
                                             </center>
                                             </td>
+                                            <td>
+                                                <center>
+                                                <input name='selector[]' type='checkbox' name='tandai' class='minimal flat' value='<?php echo $siswa->id; ?>'>
+                                                <input name='foto_siswa' type='hidden' name='tandai' class='minimal flat' value='<?php echo $siswa->foto; ?>'>
+                                                </center>
+                                            </td>
                                         </tr>
                                         <?php $i++;} ?>
                                         
@@ -538,10 +576,11 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                               <!-- <button class="btn btn-primary" onclick="exportData()">
                                     <span class="glyphicon glyphicon-download"></span>
                                     Download excel</button> -->
+                                <button name="hapus_data" type='submit' class="btn btn-danger">Hapus</button>
                               <a class="btn btn-primary" target="_Blank" href="download_excel.php">
                                     <span class="glyphicon glyphicon-download"></span>
                                     Download excel</a>
-
+                            </form>
                             </div>
     <script type="text/javascript">
           var rows =[];
@@ -809,6 +848,22 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript">
+        // Get all checkboxes in the table
+        var checkboxes = document.querySelectorAll('#dataTable .checkbox');
+
+        // Function to check all checkboxes
+        function checkAll() {
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = true;
+        });
+        }
+
+        // Function to uncheck all checkboxes
+        function uncheckAll() {
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = false;
+        });
+        }
         var desa="<?php echo $data_edit_siswa->desa; ?>";
                           var elt=$('#kecamatan').val();
                           // alert(elt);
@@ -882,6 +937,13 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
                     $('#umur').val(age);
                 });
             }
+        function toggle(source) {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i] != source)
+                    checkboxes[i].checked = source.checked;
+            }
+        }
     </script>
 
     <script src="asset/js/jquery-1.10.2.min.js"></script>
