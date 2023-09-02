@@ -34,63 +34,52 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 	          'username' => $_POST['username'],
 	          'pass' => md5($_POST['password']),
 	          'lembaga' => $_POST['lembaga'],
-	          'role' => 3
-
+	          'role' => 3,
+	          'saldo' => 4
 	        ]);
 	        $user = $qb->RAW(
 	    			"SELECT * FROM user WHERE username='".$_POST['username']."' and pass=?",[md5($_POST['password'])]);
-				if($user){
-					echo '<div class="col-lg-12 mb-4">
-						<div class="card bg-danger text-white shadow">
-							<div class="card-body">
-								Gagal
-								<div class="text-white-50 small">Password salah</div>
-							</div>
-						</div>
-					</div>';
-				}else{
-						$user = $user[0]; 
+	     		$user = $user[0]; 
 
-					$qb->insert('subuser', [
-					'user_id' => $user->id_user,
-					'create_id' => $_SESSION['id_user'],
-					'data' => implode(",",$datas),
-					'status' => implode(",",$status)
+	        $qb->insert('subuser', [
+	          'user_id' => $user->id_user,
+	          'create_id' => $_SESSION['id_user'],
+	          'data' => implode(",",$datas),
+	          'status' => implode(",",$status)
 
-					]);
+	        ]);
 
 
-					if($aksi){
-						echo '<div class="col-lg-12 mb-4">
-							<div class="card bg-success text-white shadow">
-								<div class="card-body">
-									Berhasil
-									<div class="text-white-50 small">Data Tersimpan</div>
-								</div>
-							</div>
-						</div>';
-					}else{
-						echo '<div class="col-lg-12 mb-4">
-						<div class="card bg-danger text-white shadow">
-							<div class="card-body">
-								Gagal
-								<div class="text-white-50 small">Data Gagal Tersimpan</div>
-							</div>
-						</div>
-						</div>';
-					}
-				}
-			}else{
-				echo '<div class="col-lg-12 mb-4">
-				<div class="card bg-danger text-white shadow">
-					<div class="card-body">
-						Gagal
-						<div class="text-white-50 small">Username Sudah Ada</div>
-					</div>
-				</div>
-				</div>';
+	        if($aksi){
+	        	echo '<div class="col-lg-12 mb-4">
+			        <div class="card bg-success text-white shadow">
+			            <div class="card-body">
+			                Berhasil
+			                <div class="text-white-50 small">Data Tersimpan</div>
+			            </div>
+			        </div>
+			    </div>';
+	        }else{
+	        	echo '<div class="col-lg-12 mb-4">
+		        <div class="card bg-danger text-white shadow">
+		            <div class="card-body">
+		                Gagal
+		                <div class="text-white-50 small">Data Gagal Tersimpan</div>
+		            </div>
+		       	 </div>
+		    	</div>';
+	        }
+	    	}else{
+	        	echo '<div class="col-lg-12 mb-4">
+		        <div class="card bg-danger text-white shadow">
+		            <div class="card-body">
+		                Gagal
+		                <div class="text-white-50 small">Username Sudah Ada</div>
+		            </div>
+		       	 </div>
+		    	</div>';
 
-			}
+	    	}
      	}
      	if(isset($_POST['update_user'])){
      		$kabupaten='';
