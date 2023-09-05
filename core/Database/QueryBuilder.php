@@ -105,6 +105,7 @@ class QueryBuilder implements IQuery
                 $parameter[$key]='"'.$parameter[$key].'"';
             }
         }
+        // fix insert
         return $this->RAW("insert into ".$table." (".implode(', ', array_keys($parameter)).") values (".implode(',', array_values($parameter)).")",[]);
 
         // return $this->pdo->lastInsertId(); 
