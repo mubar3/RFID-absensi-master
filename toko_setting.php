@@ -736,7 +736,7 @@ $data_menu = $qb->RAW(
 	FROM toko_menu
 	left join satuan on satuan.id=toko_menu.satuan 
 	left join jenis on jenis.id=toko_menu.jenis 
-	where toko_menu.id_user=? and jenis.id_user=?",[$_SESSION['id_user'],$_SESSION['id_user']]);
+	where toko_menu.id_user=? and jenis.id_user=? and satuan.id_user=?",[$_SESSION['id_user'],$_SESSION['id_user'],$_SESSION['id_user']]);
 
 $data_satuan = $qb->RAW(
 "SELECT * FROM satuan where id_user=?",[$_SESSION['id_user']]);
