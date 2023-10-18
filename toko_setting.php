@@ -321,14 +321,14 @@ $qb = new QueryBuilder(\StelinDB\Database\Connection::Connect());
 
 
     $data_menu = $qb->RAW(
-    "SELECT 
+	"SELECT 
 		toko_menu.*,
 		jenis.nama as nama_jenis,
 		satuan.nama as nama_satuan
 	FROM toko_menu
-	left join satuan on satuan.id=toko_menu.satuan 
-	left join jenis on jenis.id=toko_menu.jenis 
-	where toko_menu.id_user=?",[$_SESSION['id_user']]);
+	left join satuan on satuan.id=toko_menu.satuan and satuan.id_user=?  
+	left join jenis on jenis.id=toko_menu.jenis and  jenis.id_user=?
+	where toko_menu.id_user=? ",[$_SESSION['id_user'],$_SESSION['id_user'],$_SESSION['id_user']]);
 
 	$data_satuan = $qb->RAW(
 	"SELECT * FROM satuan where id_user=?",[$_SESSION['id_user']]);
@@ -567,14 +567,14 @@ if(isset($_GET['hapus_jenis'])){
 }
 
 	$data_menu = $qb->RAW(
-		"SELECT 
-			toko_menu.*,
-			jenis.nama as nama_jenis,
-			satuan.nama as nama_satuan
-		FROM toko_menu
-		left join satuan on satuan.id=toko_menu.satuan 
-		left join jenis on jenis.id=toko_menu.jenis 
-		where toko_menu.id_user=?",[$_SESSION['id_user']]);
+	"SELECT 
+		toko_menu.*,
+		jenis.nama as nama_jenis,
+		satuan.nama as nama_satuan
+	FROM toko_menu
+	left join satuan on satuan.id=toko_menu.satuan and satuan.id_user=?  
+	left join jenis on jenis.id=toko_menu.jenis and  jenis.id_user=?
+	where toko_menu.id_user=? ",[$_SESSION['id_user'],$_SESSION['id_user'],$_SESSION['id_user']]);
 
 	$data_satuan = $qb->RAW(
 	"SELECT * FROM satuan where id_user=?",[$_SESSION['id_user']]);
@@ -734,9 +734,9 @@ $data_menu = $qb->RAW(
 		jenis.nama as nama_jenis,
 		satuan.nama as nama_satuan
 	FROM toko_menu
-	left join satuan on satuan.id=toko_menu.satuan 
-	left join jenis on jenis.id=toko_menu.jenis 
-	where toko_menu.id_user=? and jenis.id_user=? and satuan.id_user=?",[$_SESSION['id_user'],$_SESSION['id_user'],$_SESSION['id_user']]);
+	left join satuan on satuan.id=toko_menu.satuan and satuan.id_user=?  
+	left join jenis on jenis.id=toko_menu.jenis and  jenis.id_user=?
+	where toko_menu.id_user=? ",[$_SESSION['id_user'],$_SESSION['id_user'],$_SESSION['id_user']]);
 
 $data_satuan = $qb->RAW(
 "SELECT * FROM satuan where id_user=?",[$_SESSION['id_user']]);
