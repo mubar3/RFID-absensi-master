@@ -81,8 +81,8 @@
 
 							$data_menu = $qb->RAW(
     						"SELECT toko_menu.*,satuan.nama as nama_satuan FROM toko_menu 
-							left join satuan on satuan.id=toko_menu.satuan
-							where toko_menu.id_user=?",[$_SESSION['id_user']]);
+							left join satuan on satuan.id=toko_menu.satuan and satuan.id_user=?  
+							where toko_menu.id_user=?",[$_SESSION['id_user'],$_SESSION['id_user']]);
 						?>
   					
   					<!-- <div class="col-sm-2">        	
