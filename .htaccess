@@ -1,4 +1,5 @@
 RewriteEngine on
 
+php_value output_buffering 4096
 RewriteRule ^data$ detail.php [L]
 RewriteRule ^form$ input_siswa_privat.php [L]
