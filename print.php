@@ -88,7 +88,7 @@ require "vendor/autoload.php";
         // }
     }
     for($i=0; $i < $N; $i++) {
-        mysqli_query($koneksi, "UPDATE siswa SET cetak=1 WHERE id= '$id[$i]'");
+        // mysqli_query($koneksi, "UPDATE siswa SET cetak=1 WHERE id= '$id[$i]'");
         $qb->RAW("UPDATE siswa SET cetak=1 WHERE id=".$id[$i],[]);
 		// $sql = "SELECT * FROM siswa WHERE siswa.id='$id[$i]'";
         $rr = $qb->RAW(
